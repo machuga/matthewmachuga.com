@@ -1,0 +1,109 @@
+- title: Building Multitenant Apps in Laravel
+  type: series
+  series: Building Multitenant Apps in Laravel
+  description: >
+    In fall of 2014, in response to dozens of questions from the Laravel IRC
+    channel regarding multitenant apps, I proposed this course to Tuts+.  The
+    course acts as a primer for someone converting (or starting) an application
+    into a multitenant architecture while keeping business concerns in mind.
+    The course covers both single-database and multiple-database styles of
+    multitenancy, and demonstrates the intricacies of each with Laravel.
+  topics:
+    - PHP
+    - Laravel
+    - Multitenancy
+    - Design Patterns
+  url: https://code.tutsplus.com/courses/building-multitenant-apps-in-laravel
+  embed_code: '<img alt="" class="products__course-thumbnail-image" src="https://cms-assets.tutsplus.com/uploads/users/71/courses/431/preview_image/laravel4multi.png">'
+  tags: [Laravel, Vim, PHP, Multitenancy, CLI]
+  published_at: 2014-10-09
+
+- title: Object-Oriented Design in PHP
+  type: series
+  series: Object-Oriented Design in PHP
+  description: >
+    In winter of 2013-2014 I created Tuts+ Premium course targeted at teaching
+    PHP developers some basic and advanced OOD concepts. The goal was to
+    introduce the basic premise of OOD, demonstrate some examples of how to
+    potentially improve code quality and testability, and also introduce some
+    patterns and concepts to sharpen their skills. There were 16 episodes total
+    and the source files are provided with the course.
+  topics:
+    - PHP
+    - OOD
+    - Design Patterns
+    - Hexagonal Architecture
+  url: https://tutsplus.com/course/object-oriented-design-in-php/
+  embed_code: '<img src="//tutsplus-media.s3.amazonaws.com/tutsplus.com/uploads/2013/12/thumbnail2-100x100.png" alt="OOD in PHP" />'
+  tags: [OOD, git, Vim, PHP, PHPUnit, DesignPatterns, CLI]
+  published_at: 2013-12-13
+- title: 'Rails or Laravel: Building an App Twice'
+  type: series
+  series: 'Rails or Laravel: Building an App Twice'
+  description: >
+    In late winter 2012-2013, I created a course for Envato's Tuts+ Premium
+    where I built the same application in Rails and Laravel. The goal was to
+    demonstrate how the same application could be built with either framework
+    or language, along with present a survey of each platform. There are 15
+    lessons, and over an hour spent on each platform in total.  All source files
+    are provided in two git respositories with a Tuts+ Premium subscription.
+  topics:
+    - Laravel 3.2
+    - Rails 3.2
+    - Environments
+    - TDD
+    - Authentication
+    - Authorization
+    - CRUD
+  url: 'https://tutsplus.com/course/rails-vs-laravel/'
+  embed_code: '<img src="http://tutsplus-media.s3.amazonaws.com/tutsplus.com/uploads/2013/01/100x1001.jpg" alt="Rails or Laravel" />'
+  tags: [Laravel, git, Vim, PHP, PHPUnit, TDD, Rails, Rspec, Cancan]
+  published_at: 2013-01-22
+- title: Laravel 3.2 Application Walkthrough
+  type: single
+  series: null
+  description: >
+    I had to make an application to generate escort cards for my fiancée.
+    About half way through, a user on freenode #laravel expressed interest in
+    seeing what I was creating. I thought that overall this might make a good
+    screencast as it is extremely simplistic and touches on a few neat areas
+    of Laravel, and shows how fast you can get up and running. My screencast
+    software wasn't too great so it clipped some audio at the beginning and
+    makes reds appear awkwardly.
+  topics:
+    - Vim
+    - iTerm2
+    - MySQL
+    - Apache 2
+    - PHP 5.4
+    - Laravel 3.2
+    - Firefox 12
+  url: 'https://vimeo.com/43014286'
+  embed_code: '<iframe src="http://player.vimeo.com/video/43014286" width="500" height="300" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+  tags: [Laravel, PHP, MySQL, Walkthrough, Shell]
+  published_at: 2012-05-29
+- title: Laravel 3.2 Pagination Demo
+  type: single
+  series: null
+  description: Demonstration of using Pagination in Laravel. Largely just an excuse to test my new microphone.
+  topics:
+    - Laravel 3.2
+    - Pagination
+  url: 'http://www.screenr.com/PV68'
+  embed_code: '<iframe src="http://www.screenr.com/embed/PV68" width="500" height="313" frameborder="0"></iframe>'
+  tags: [Laravel, PHP, Pagination, Short, Shell]
+  published_at: 2012-05-29
+- title: 'Building Laravel Bundles with TDD'
+  type: series
+  series: Building Laravel Bundles with TDD
+  description: We begin building a bundle from scratch using TDD (test-driven development).
+  topics:
+    - Laravel 3.2
+    - Git
+    - Vim
+    - PHPUnit 3.6
+    - PHP 5.4
+  url: 'https://vimeo.com/43329219'
+  embed_code: '<iframe src="http://player.vimeo.com/video/43329219" width="500" height="313" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+  tags: [Laravel, git, Vim, PHP, PHPUnit, TDD]
+  published_at: 2012-06-03

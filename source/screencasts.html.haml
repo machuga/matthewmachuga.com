@@ -1,0 +1,26 @@
+---
+title: Screencasts
+---
+
+%h1 #{current_page.data.title}
+
+.row
+  .col-md-6
+    %h2 Series
+    - @series.each do |s|
+      %h3.title
+        %a{:href => s.url}= s.title
+      %p.description= s.description
+      %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
+      %h5 Topics Covered
+      %p.topics= s.topics.join ', '
+
+  .col-md-6
+    %h2 One-offs
+    - @singles.each do |s|
+      %h3.title
+        %a{:href => s.url}= s.title
+      %p.description= s.description
+      %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
+      %h5 Topics Covered
+      %p.topics= s.topics.join ', '
