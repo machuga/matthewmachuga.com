@@ -1,0 +1,21 @@
+---
+title: Talks
+---
+
+%h1 #{current_page.data.title}
+
+%hr
+
+.row
+  .col-md-12
+    - @talks.each do |talk|
+      %article
+        %h2
+          %i.fa.fa-microphone
+          %a{href: talk.url, target: '_blank'}= talk.title
+        %h4.event #{talk.event} | #{talk.location} | #{talk.given_at.strftime('%m/%d/%Y')}
+        %p.description= talk.description
+        %p.publish-date Released: #{talk.published_at.strftime('%m/%d/%Y')}
+        %h4 Topics Covered
+        %p.topics= talk.topics.join(', ') unless talk.topics.nil?
+        .video!= talk.embed_code

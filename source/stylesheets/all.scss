@@ -1,2 +1,38 @@
 @import "bootstrap.min";
 @import "font-awesome.min";
+
+body {
+  font-size: 16px;
+}
+.publish-date {
+  color: #999;
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.topics {
+  margin: 0 auto 10px 15px;
+  color: #777;
+  font-size: 13px;
+}
+
+.series {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ccc;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.footer {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+
+  .contact {
+    font-size: 20px;
+    margin-right: 25px;
+  }
+}

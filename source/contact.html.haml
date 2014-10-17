@@ -1,0 +1,62 @@
+---
+title: Contact
+---
+-#%form#form1.wufoo.form-horizontal.topLabel.page{"accept-charset" => "UTF-8", :action => "https://machuga.wufoo.com/forms/z11mobto14jbli2/#public", :autocomplete => "off", :enctype => "multipart/form-data", :method => "post", :name => "form1", :novalidate => "", :role => 'form'}
+%form.form-horizontal{"accept-charset" => "UTF-8", :action => "https://machuga.wufoo.com/forms/z11mobto14jbli2/#public", :autocomplete => "off", :enctype => "multipart/form-data", :method => "post", :name => "form1", :role => 'form'}
+  %header
+    %h2 Contact
+  .row
+    .form-group
+      %label.col-md-2
+        Name
+        %span.text-danger *
+      .col-md-5
+        %input.form-control{:name => "Field21", :required => true, :placeholder => 'First Name', :tabindex => "1", :type => "text", :value => ""}
+      .col-md-5
+        %input.form-control{:name => "Field22", :placeholder => 'Last Name', :required => true, :tabindex => "2", :type => "text", :value => ""}
+    .form-group
+      %label.col-md-2
+        Email
+        %span.text-danger *
+      .col-md-10
+        %input.form-control{:maxlength => "255", :name => "Field7", :required => "", :spellcheck => "false", :tabindex => "3", :type => "email", :value => ""}/
+    .form-group
+      %label.col-md-2
+        Subject
+        %span.text-danger *
+      .col-md-10
+        %select.form-control{:name => "Field5", :tabindex => "4"}
+          %option{:value => "Question or Comment"} Question or Comment
+          %option{:value => "Request a Topic"} Request a Topic
+          %option{:value => "Hire or Consulting"} Hire or Consulting
+          %option{:value => "Speaking Engagements"} Speaking Engagements
+    .form-group
+      %label.col-md-2
+        Message
+        %span.text-danger *
+      .col-md-10
+        %textarea.form-control{:cols => "50", :name => "Field3", :onkeyup => "validateRange(3, 'word');", :required => "", :rows => "10", :spellcheck => "true", :tabindex => "5"}
+    .form-controls
+      %input.form-control.btn.btn-primary{:name => "saveForm", :type => "submit", :value => "Send"}/
+      %label{:for => "comment"} Do Not Fill This Out
+      %textarea#comment{:cols => "1", :name => "comment", :rows => "1"}
+      %input#idstamp{:name => "idstamp", :type => "hidden", :value => "ChqiZJV80YepqDCgCWIy/TyE5RfRoU7TgnK1/9B0+AQ="}/
+
+-# #wufoo-z7x3p3
+-#   Fill out my
+-#   %a{href: "http://machuga.wufoo.com/forms/z7x3p3"} contact form
+-#   :javascript
+-#     var z7x3p3;(function(d, t) {
+-#     var s = d.createElement(t), options = {
+-#     'userName':'machuga',
+-#     'formHash':'z7x3p3',
+-#     'autoResize':true,
+-#     'height':'577',
+-#     'async':true,
+-#     'header':'show'};
+-#     s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'wufoo.com/scripts/embed/form.js';
+-#     s.onload = s.onreadystatechange = function() {
+-#     var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
+-#     try { z7x3p3 = new WufooForm();z7x3p3.initialize(options);z7x3p3.display(); } catch (e) {}};
+-#     var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);
+-#     })(document, 'script');

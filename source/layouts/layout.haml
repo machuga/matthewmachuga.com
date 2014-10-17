@@ -11,7 +11,6 @@
       - if current_page.data.title
         | #{current_page.data.title}
     = stylesheet_link_tag 'normalize', 'all'
-    = javascript_include_tag  'all'
 
   %body{ :class => page_classes }
     .navbar.navbar-default.navbar-static-top{:role => 'navigation'}
@@ -30,15 +29,48 @@
             - %w(contact screencasts talks).each do |link|
               %li{:class => current_page?("/#{link}") && 'active'}
                 %a{:href => "/#{link}.html"} #{link.capitalize}
+          %ul.nav.navbar-nav.navbar-right
+            %li
+              %a{:href => 'https://twitter.com/machuga'}
+                %i.fa.fa-twitter
+            %li
+              %a{:href => 'https://github.com/machuga'}
+                %i.fa.fa-github
+            %li
+              %a{:href => 'https://plus.google.com/+MatthewMachuga'}
+                %i.fa.fa-google-plus
+            %li
+              %a{:href => 'http://linkedin.com/in/machuga'}
+                %i.fa.fa-linkedin
+
     .container
       %header
       %main
         = yield
       %footer.footer
-        %h1 Copyright &copy; #{Date.today.year} Matthew Machuga
+        .container
+          .row
+            .col-md-6
+              %p Copyright &copy; #{Date.today.year} Matthew Machuga
+            .col-md-6
+              .contact.text-right
+                %ul.list-inline
+                  %li
+                    %a{:href => 'https://twitter.com/machuga'}
+                      %i.fa.fa-twitter
+                  %li
+                    %a{:href => 'https://github.com/machuga'}
+                      %i.fa.fa-github
+                  %li
+                    %a{:href => 'http://linkedin.com/in/machuga'}
+                      %i.fa.fa-google-plus
+                  %li
+                    %a{:href => 'http://linkedin.com/in/machuga'}
+                      %i.fa.fa-linkedin
 
-    %script{src: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
-    %script{src: '/javascripts/all.js'}
+    %script{src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'}
+    %script{src: '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'}
+    -#%script{src: "/javascripts/wufoo.js"}
     :javascript
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-17079773-1']);

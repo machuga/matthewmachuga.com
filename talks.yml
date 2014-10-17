@@ -1,0 +1,22 @@
+- title: Objects, Testing and Responsibility
+  event: Laracon EU
+  location: Amsterdam, Netherlands
+  type: talk
+  description: |
+               Object Oriented Design can add a lot to a project with just a little effort.
+               With a bit of OOD code flows more naturally, can be refactored easier and tests become simpler to write.
+               We will discuss these ideas as well as compare and contrast various design techniques.
+  topics:
+    - Laravel
+    - Object-Oriented Design
+    - Testing
+    - Responsibility
+    - PHP History
+    - Polymorphism
+    - Duck Typing
+    - Type Hinting
+  url: http://www.youtube.com/watch?v=EcBIzAHIYAw
+  embed_code: '<iframe width="640" height="480" src="//www.youtube.com/embed/EcBIzAHIYAw" frameborder="0" allowfullscreen></iframe>'
+  tags: [Laravel, OOD, Testing, TDD, ducktyping]
+  published_at: 2013-10-21
+  given_at: 2013-08-31

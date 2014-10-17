@@ -4,23 +4,29 @@ title: Screencasts
 
 %h1 #{current_page.data.title}
 
+%hr
+
 .row
-  .col-md-6
+  .col-md-5
     %h2 Series
     - @series.each do |s|
-      %h3.title
-        %a{:href => s.url}= s.title
-      %p.description= s.description
-      %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
-      %h5 Topics Covered
-      %p.topics= s.topics.join ', '
+      .series
+        %h3.title
+          %i.fa.fa-film
+          %a{:href => s.url}= s.title
+        %p.description= s.description
+        %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
+        %h4 Topics Covered
+        %p.topics= s.topics.join ', '
 
-  .col-md-6
+  .col-md-5.col-md-offset-1
     %h2 One-offs
     - @singles.each do |s|
-      %h3.title
-        %a{:href => s.url}= s.title
-      %p.description= s.description
-      %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
-      %h5 Topics Covered
-      %p.topics= s.topics.join ', '
+      .series
+        %h3.title
+          %i.fa.fa-film
+          %a{:href => s.url}= s.title
+        %p.description= s.description
+        %p.publish-date Released: #{s.published_at.strftime('%m/%d/%Y')}
+        %h4 Topics Covered
+        %p.topics= s.topics.join ', '
