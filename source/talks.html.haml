@@ -2,15 +2,14 @@
 title: Talks
 ---
 
-%h1 #{current_page.data.title}
+%header.header
+  %h1 #{current_page.data.title}
 
-%hr
-
-.row
+.row.compressed-top
   .col-md-12
     - @talks.each do |talk|
       %article
-        %h2
+        %h2.compressed-top
           %i.fa.fa-microphone
           %a{href: talk.url, target: '_blank'}= talk.title
         %h4.event #{talk.event} | #{talk.location} | #{talk.given_at.strftime('%m/%d/%Y')}

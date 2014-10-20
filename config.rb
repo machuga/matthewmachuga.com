@@ -9,11 +9,13 @@ require 'ostruct'
 # end
 
 page "/contact.html"
+
 page "/screencasts.html" do
   screencasts = YAML.load_file('./screencasts.yml').map { |series| OpenStruct.new series }
   @series  = screencasts.select { |c| c.type == 'series' }
   @singles = screencasts.select { |c| c.type == 'single' }
 end
+
 page "/talks.html" do
   @talks = YAML.load_file('./talks.yml').map { |talk| OpenStruct.new talk }
 end

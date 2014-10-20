@@ -24,15 +24,48 @@ body {
 
   &:last-child {
     border-bottom: none;
+    margin-bottom: 0;
   }
 }
 
 .footer {
   border-top: 1px solid #ddd;
-  padding-top: 10px;
+  padding-top: 18px;
+  margin-top: 20px;
 
   .contact {
     font-size: 20px;
-    margin-right: 25px;
   }
+}
+
+.hidden {
+  display: none;
+}
+
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.navbar {
+  margin-bottom: 10px;
+}
+
+.header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+}
+
+.compressed-top {
+  margin-top: 5px;
+}
+
+.img-circle {
+  //margin-top: 21px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  max-height: 115px;
+  max-width: 115px;
 }

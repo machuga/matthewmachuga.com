@@ -2,13 +2,12 @@
 title: Screencasts
 ---
 
-%h1 #{current_page.data.title}
+%header.header
+  %h1 #{current_page.data.title}
 
-%hr
-
-.row
+.row.compressed-top
   .col-md-5
-    %h2 Series
+    %h2.compressed-top Series
     - @series.each do |s|
       .series
         %h3.title
@@ -20,7 +19,7 @@ title: Screencasts
         %p.topics= s.topics.join ', '
 
   .col-md-5.col-md-offset-1
-    %h2 One-offs
+    %h2.compressed-top  One-offs
     - @singles.each do |s|
       .series
         %h3.title

@@ -48,29 +48,29 @@
       %main
         = yield
       %footer.footer
-        .container
-          .row
-            .col-md-6
-              %p Copyright &copy; #{Date.today.year} Matthew Machuga
-            .col-md-6
-              .contact.text-right
-                %ul.list-inline
-                  %li
-                    %a{:href => 'https://twitter.com/machuga'}
-                      %i.fa.fa-twitter
-                  %li
-                    %a{:href => 'https://github.com/machuga'}
-                      %i.fa.fa-github
-                  %li
-                    %a{:href => 'http://linkedin.com/in/machuga'}
-                      %i.fa.fa-google-plus
-                  %li
-                    %a{:href => 'http://linkedin.com/in/machuga'}
-                      %i.fa.fa-linkedin
+        .row
+          .col-md-6
+            %p Copyright &copy; #{Date.today.year} Matthew Machuga
+          .col-md-6
+            .contact.text-right
+              %ul.list-inline
+                %li
+                  %a{:href => 'https://twitter.com/machuga'}
+                    %i.fa.fa-twitter
+                %li
+                  %a{:href => 'https://github.com/machuga'}
+                    %i.fa.fa-github
+                %li
+                  %a{:href => 'http://linkedin.com/in/machuga'}
+                    %i.fa.fa-google-plus
+                %li
+                  %a{:href => 'http://linkedin.com/in/machuga'}
+                    %i.fa.fa-linkedin
 
     %script{src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'}
     %script{src: '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'}
-    -#%script{src: "/javascripts/wufoo.js"}
+    %script{src: '/javascripts/all.js'}
+
     :javascript
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-17079773-1']);
