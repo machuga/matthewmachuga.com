@@ -11,6 +11,7 @@
       - if current_page.data.title
         | #{current_page.data.title}
     = stylesheet_link_tag 'normalize', 'all'
+    = feed_tag :atom, "#{blog.options.prefix.to_s}/feed.xml", :title => "Atom Feed"
 
   %body{ :class => page_classes }
     .navbar.navbar-default.navbar-static-top{:role => 'navigation'}
@@ -44,7 +45,6 @@
                 %i.fa.fa-linkedin
 
     .container
-      %header
       %main
         = yield
       %footer.footer

@@ -19,6 +19,15 @@ end
 page "/talks.html" do
   @talks = YAML.load_file('./talks.yml').map { |talk| OpenStruct.new talk }
 end
+page "blog/*", layout: :blog
+
+activate :blog do |blog|
+  blog.prefix = "blog"
+  blog.layout = "blog"
+  blog.permalink = "blog/{year}/{title}.html"
+  blog.sources = "blog/{year}/{title}.html"
+  blog.year_link = "{year}.html"
+end
 
 ###
 # Page options, layouts, aliases and proxies

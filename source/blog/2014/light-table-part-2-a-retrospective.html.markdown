@@ -1,5 +1,5 @@
 ---
-title: Light Table Part 2: A Retrospective
+title: "Light Table Part 2: A Retrospective"
 date: 2014-06-16
 tags: editors, light table, foss editors
 ---

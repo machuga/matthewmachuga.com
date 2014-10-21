@@ -1,5 +1,5 @@
 ---
-title: Light Table Part 1: An Introduction
+title: "Light Table Part 1: An Introduction"
 date: 2014-06-08
 tags: editors, light table, foss editors
 ---
