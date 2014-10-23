@@ -1,4 +1,4 @@
 = wrap_layout :layout do
   %header.header
-    %h1 #{current_page.data.title}
+    %h1= link_to current_article.title, current_article
   = yield

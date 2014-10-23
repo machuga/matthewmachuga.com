@@ -4,7 +4,7 @@ date: 2014-06-08
 tags: editors, light table, foss editors
 ---
 
-# Light Table
+## Light Table
 
 My text editor journey began with Light Table.  It's not my first experience with the editor by a long shot, but this was the longest continuous streak I've spent exclusively editing with it (okay, technically I edited git messages in Vim because I forgot to assign `EDITOR` to the command line `light` app to launch the GUI). I've enjoyed a number of things about this editor and the plugins I've picked up, but we'll get to the pros and cons in a bit - let's start with basic information about the editor.
 

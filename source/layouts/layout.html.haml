@@ -25,11 +25,9 @@
           %a.navbar-brand{:href => '/'} Matthew Machuga
         .navbar-collapse.collapse
           %ul.nav.navbar-nav
-            %li
-              %a{:href => 'http://blog.matthewmachuga.com'} Blog
-            - %w(contact screencasts talks).each do |link|
-              %li{:class => current_page?("/#{link}") && 'active'}
-                %a{:href => "/#{link}.html"} #{link.capitalize}
+            - navigation.each do |name, uri|
+              %li{:class => current_page?(uri) && 'active'}
+                = link_to name.capitalize, uri
           %ul.nav.navbar-nav.navbar-right
             %li
               %a{:href => 'https://twitter.com/machuga'}

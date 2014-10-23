@@ -19,16 +19,43 @@ end
 page "/talks.html" do
   @talks = YAML.load_file('./talks.yml').map { |talk| OpenStruct.new talk }
 end
-page "blog/*", layout: :blog
+page "blog/*", layout: :archive
+page "blog", layout: :archive
+page "blog/archive.html", layout: :archive
+page "/feed.xml", layout: false
 
 activate :blog do |blog|
   blog.prefix = "blog"
   blog.layout = "blog"
-  blog.permalink = "blog/{year}/{title}.html"
-  blog.sources = "blog/{year}/{title}.html"
+  blog.permalink = "{year}/{title}.html"
+  blog.sources = "{year}/{title}.html"
+  blog.taglink = "tags/{tag}.html"
+  #blog.summary_separator = /(READMORE)/
+  blog.summary_length = 75
   blog.year_link = "{year}.html"
+  blog.month_link = "{year}/{month}.html"
+  blog.day_link = "{year}/{month}/{day}.html"
+
+  blog.tag_template = "blog/tag.html"
+  blog.calendar_template = "blog/calendar.html"
+
+  # Enable pagination
+  blog.paginate = true
+  blog.per_page = 10
+  blog.page_link = "page/{num}"
 end
 
+with_layout :layout do
+   page "blog/2014.html"
+end
+
+with_layout :blog do
+   page "blog/2014/*"
+end
+
+with_layout :blog do
+   page "/blog/tags/*"
+end
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -71,7 +98,8 @@ activate :livereload
 
 helpers do
   def current_page?(uri)
-    request.path_info == uri
+    puts request.path.inspect, uri
+    request.path.start_with? uri.sub('/', '')
   end
 
   def site_info
@@ -80,6 +108,15 @@ helpers do
       email: 'machuga@gmail.com',
       description: 'Lorem ipsum'
     )
+  end
+
+  def navigation
+    {
+      blog: '/blog',
+      contact: '/contact.html',
+      screencasts: '/screencasts.html',
+      talks: '/talks.html',
+    }
   end
 end
 
