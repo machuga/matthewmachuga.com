@@ -19,10 +19,8 @@ end
 page "/talks.html" do
   @talks = YAML.load_file('./talks.yml').map { |talk| OpenStruct.new talk }
 end
-page "blog/*", layout: :archive
-page "blog", layout: :archive
-page "blog/archive.html", layout: :archive
-page "/feed.xml", layout: false
+
+page "blog/feed.xml", layout: false
 
 activate :blog do |blog|
   blog.prefix = "blog"
@@ -33,8 +31,8 @@ activate :blog do |blog|
   #blog.summary_separator = /(READMORE)/
   blog.summary_length = 75
   blog.year_link = "{year}.html"
-  blog.month_link = "{year}/{month}.html"
-  blog.day_link = "{year}/{month}/{day}.html"
+  #blog.month_link = "{year}/{month}.html"
+  #blog.day_link = "{year}/{month}/{day}.html"
 
   blog.tag_template = "blog/tag.html"
   blog.calendar_template = "blog/calendar.html"
@@ -53,7 +51,7 @@ with_layout :blog do
    page "blog/2014/*"
 end
 
-with_layout :blog do
+with_layout :archive do
    page "/blog/tags/*"
 end
 ###
@@ -98,7 +96,6 @@ activate :livereload
 
 helpers do
   def current_page?(uri)
-    puts request.path.inspect, uri
     request.path.start_with? uri.sub('/', '')
   end
 

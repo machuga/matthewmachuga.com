@@ -30,6 +30,9 @@
                 = link_to name.capitalize, uri
           %ul.nav.navbar-nav.navbar-right
             %li
+              %a{:href => "#{blog.options.prefix.to_s}/feed.xml"}
+                %i.fa.fa-rss
+            %li
               %a{:href => 'https://twitter.com/machuga'}
                 %i.fa.fa-twitter
             %li
@@ -52,6 +55,9 @@
           .col-md-6
             .contact.text-right
               %ul.list-inline
+                %li
+                  %a{:href => "#{blog.options.prefix.to_s}/feed.xml"}
+                    %i.fa.fa-rss
                 %li
                   %a{:href => 'https://twitter.com/machuga'}
                     %i.fa.fa-twitter

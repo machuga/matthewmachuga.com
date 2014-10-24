@@ -1,4 +1,14 @@
 = wrap_layout :layout do
-  %header.header
-    %h1= link_to current_article.title, current_article
+  - if current_article
+    %header.header
+      .row
+        .col-md-8
+          %h1= link_to current_article.title, current_article
+        .col-md-4
+          %dl.dl-horizontal
+            %dt Tags:
+            %dd.topics= current_article.tags.join(', ')
+            %dt Published:
+            %dd.topics= current_article.date.strftime('%m/%d/%Y')
+
   = yield

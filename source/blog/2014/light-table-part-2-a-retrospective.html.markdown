@@ -4,34 +4,38 @@ date: 2014-06-16
 tags: editors, light table, foss editors
 ---
 
-###### Start from [Part 1: An Introduction](/light-table-part-1-an-introduction/)
+###### Start from [Part 1: An Introduction](/blog/2014/light-table-part-1-an-introduction.html)
 
 ## First Impressions
 
 Light table seems interesting upon first opening. It greets you with a brief splash-screen style intro before loading the "Welcome" tab which will give you some basic information on where to find the changelog, documentation, and the project on GitHub.  It is apparent right off the bat that the UI is custom (HTML and CSS), but in general it can be used *almost* like an app native to the OS.
 
 One thing that I found was a bit odd was that Light Table takes the standard `Cmd-o` keybinding and maps that to its fuzzy-finder open-file menu, which is similar to `Cmd-t` in TextMate or `Cmd-p` in Sublime Text.  Typically Apple applications would use the native OS X file-finder with this keybinding, but rather `Cmd-Shift-o` will toggle it.  This isn't a problem or anything, just a bit unexpected. It realistically probably makes more sense to keep the fuzzy-finder to less keystrokes, but I think the TextMate or Sublime Text bindings probably make more sense here.
-{<1>}![](/content/images/2014/Jun/fuzzyfile.png)
+![](light-table-part-2-a-retrospective/fuzzyfile.png)
 
 Workspaces are effectively Light Table's form of managing different projects in the environment.  You can search across multiple workspaces, but keep things organized under different top level directories.  This is also Light Table's version of a file tree, and while it performs largely the same as other file browsers it does offer the added benefit (or sometimes hinderance) that fuzzy-matching on opening files will cross multiple workspaces as added, and many workspaces may be visible at any given time.
-{<2>}![](/content/images/2014/Jun/workspaces.png)
+![](light-table-part-2-a-retrospective/workspaces.png)
 
 The next point of interest, and probably the primary point of access in Light Table, is the Command Bar.  It's quite similar to `Cmd-Shift-p` in Sublime Text.  This will be how you find or access most everything other than the files you want to edit, including key mappings, editor behaviors, plugin actions, etc.  It's quite handy and also supports fuzzy matching like its file-searching partner.
-{<3>}![](/content/images/2014/Jun/command-bar.png)
+![](light-table-part-2-a-retrospective/command-bar.png)
 
 ### Tweaking Keymaps
 
 The Command Bar is mapped to `Ctrl-Space` by default.  Since I have Alfred mapped to that binding across the OS, I wanted to remap this immediately so I don't have to click menu options every time I need to access it (which is a lot).  So I open up the Command Bar by clicking on the menu and type in `uk` which brings up the `User Keymap` as the first result, and press enter to open it.  When editing your keymappings, it may be beneficial to open up the default keymap in a new tabset (a pane in the Light Table window with its own tabs) so that you may look at both files side by side to ensure you place things in the right locations for proper overriding.
-{<4>}![](/content/images/2014/Jun/keymap.png)
+
+![](light-table-part-2-a-retrospective/keymap.png)
 
 With both keymaps side by side I can see that I need to add a new entry to the `app` map, adding my preferred keybinding of `alt-space` to the keyword `:show-commandbar-transient`.  As soon as the cursor enters the vector area (`[]`), we start seeing options for autocompletion since Light Table is able to analyze and present options for items in its running environment that it knows about.
-{<5>}![](/content/images/2014/Jun/keymap-completion.png)
+
+![](light-table-part-2-a-retrospective/keymap-completion.png)
 
 After a few keystrokes I found the option I needed and complete it.  After completion I now see an explanation of what my keymap does to the right, courtesy of Light Table and Clojure/ClojureScripts inline documentation in function declarations.  This is quite an awesome feature if you're in either of these languages.
-{<6>}![](/content/images/2014/Jun/keymap-info.png)
+
+![](light-table-part-2-a-retrospective/keymap-info.png)
 
 Upon saving the keymap will be evaluated into Light Table, so if we click the `View` menu in the menubar we can now see that `Commands` has our new keybinding added.
-{<7>}![](/content/images/2014/Jun/keymap-change.png)
+
+![](light-table-part-2-a-retrospective/keymap-change.png)
 
 That was pretty simple!  I mapped a few other things you can see in the screenshot or in my [dotfiles](https://github.com/machuga/dotfiles).
 
@@ -40,7 +44,7 @@ That was pretty simple!  I mapped a few other things you can see in the screensh
 With my fresh new keymapping for opening the Command Bar, I can select `Show Plugin Manager` and open up a list of my Installed and other Available plugins.
 As you can imagine, the first thing I want to install is the `Vim` plugin so I can get my Vim keybindings in place. When I hover over plugins I get the option to install them or view the source of the plugin on GitHub.  I figured I could check out the source later so selected `Install` and waited for it to complete.
 
-{<8>}![](/content/images/2014/Jun/plugin-manager.png)
+![](light-table-part-2-a-retrospective/plugin-manager.png)
 
 Since Light Table will automatically start up new plugins I was somewhat surprised to discover that I didn't have any Vim bindings ready yet.  After reloading to be sure, I headed back into the plugin manager and clicked on `Source` to see if there was any information.
 
@@ -48,7 +52,8 @@ Just below the introduction is a `Setup` [header](https://github.com/LightTable/
 
 Setting up the Vim plugin is incredibly easy though, only requiring copying and pasting a single line into the `:editor` key of my user behaviors file.
 So from the Command Bar I loaded my User Behaviors file and pasted the line into the `:editor` vector.  Upon save, viola; Vim bindings are active!  We also get to see a nice description that this line belongs to the Vim plugin and activates Vim.
-{<9>}![](/content/images/2014/Jun/activate-vim.png)
+
+![](light-table-part-2-a-retrospective/activate-vim.png)
 
 Some of the other helpful plugins I've installed include:
 
@@ -62,7 +67,8 @@ Some of the other helpful plugins I've installed include:
 * `Ctags` for ctag navigation
 
 #####Markdown Plugin
-{<10>}![](/content/images/2014/Jun/markdown-plugin.png)
+
+![](light-table-part-2-a-retrospective/markdown-plugin.png)
 
 There are a good amount of plugins with a varying degree of functionality in the manager, ranging from extremely simple highlighting to new Instarepls for Ruby or other languages.  It's also possible to install new themes via the plugin manager, such as the `base-16` themes. There isn't a huge selection in the plugin manager and it's not immediately available how to find more, but the community is growing so I'm hoping to see a better manager UI and experience come along in the future.  Discoverability of good plugins is kind of challenging as-is, so there is definitely room for improvement.
 
@@ -70,13 +76,16 @@ There are a good amount of plugins with a varying degree of functionality in the
 I changed up a few additional things in my user behaviors to get the environment more to my liking.  I wanted to display line numbers but wasn't entirely sure how to go about doing it.  Since I knew Light Table was doing some completion techniques in the keymaps file I decided to see if something similar would take effect in the user behaviors.
 
 So I clicked inside of the `:editor` vector and typed `linenum` and got a two pretty specific completion options to either hide or show line numbers.
-{<11>}![](/content/images/2014/Jun/linenum-completion.png)
+
+![](light-table-part-2-a-retrospective/linenum-completion.png)
 
 I selected the show option, pressed enter, and the text expanded into the correct keyword, `:lt.objs.editor/line-numbers`.
-{<12>}![](/content/images/2014/Jun/linenum-info.png)
+
+![](light-table-part-2-a-retrospective/linenum-info.png)
 
 Next I wanted to change my font to use `Inconsolata-g`, so typed `font` as a new entry in the vector, pressed enter when it gave me the option to set the font of the editor, and then I was presented with a slightly different display than I was used to.
-{<13>}![](/content/images/2014/Jun/font-settings.png)
+
+![](light-table-part-2-a-retrospective/font-settings.png)
 
 While this doesn't seem entirely obvious, the screenshot of the display is telling us the order of the arguments.  As such, the font family is the first argument, font size is the second, and line height is the third.  This is form of inline documentation is wildly helpful, so I entered my values, saved, and the editor updated itself and was ready to go. I saw this as Light Table pulling some influence from Emacs and Elisp, but putting a better interface on a similar technique.
 

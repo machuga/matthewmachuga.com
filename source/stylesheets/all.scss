@@ -30,7 +30,7 @@ body {
 
 .footer {
   border-top: 1px solid #ddd;
-  padding-top: 18px;
+  padding-top: 20px;
   margin-top: 20px;
 
   .contact {
@@ -74,6 +74,10 @@ hr {
   .article {
     padding-bottom: 15px;
     border-bottom: 1px dashed #ddd;
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     .description {
       padding-left: 20px;
