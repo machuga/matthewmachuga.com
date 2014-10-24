@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Matthew Machuga</title>
+  <subtitle>I like to build things and help people</subtitle>
+  <id>http://matthewmachuga.com/blog</id>
+  <link href="http://matthewmachuga.com/blog"/>
+  <link href="http://matthewmachuga.com/blog/feed.xml" rel="self"/>
+  <updated>2014-08-21T20:00:00-04:00</updated>
+  <author>
+    <name>Matthew Machuga</name>
+  </author>
+  <entry>
+    <title>Updates</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2014/updates.html"/>
+    <id>http://matthewmachuga.com/blog/2014/updates.html</id>
+    <published>2014-08-21T20:00:00-04:00</published>
+    <updated>2014-10-23T00:14:29-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h2 id="editor-survey-discontinued"&gt;Editor Survey Discontinued&lt;/h2&gt;
+&lt;p&gt;As you may have noticed, I have discontinued my editor survey series.  It was consuming a lot of time and I had taken on a new screencast series so it just wasn't a good fit.  If visitor interest had been higher I may have continued working on it, but at the moment it's just not a priority.  I did successfully try out all of my intended editors for my own personal benefit though, so I still got some gain.&lt;/p&gt;
+
+&lt;h2 id="authority-is-changing-owners"&gt;Authority is Changing Owners&lt;/h2&gt;
+
+&lt;p&gt;With the Authority 3.0 rewrite mostly done, I've decided that my lack of involvement in PHP these days was no longer a good fit for the project.  Since many people depend on Authority for their real world projects, I want someone who uses it in the real world to be in charge of maintaining it.  As such, Authority will now be fully in the charge of Jesse O'Brien, along with the help of some others.  It will also become part of the PHP League packages.  I will still give some friendly feedback and suggestions, but I'll be largely hands-off for the foreseeable future of the project.  It's been a fun package to work on, but it deserves better attention than I can give. I'll provide a link when the package has been launched in its new home.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Light Table Part 2: A Retrospective</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2014/light-table-part-2-a-retrospective.html"/>
+    <id>http://matthewmachuga.com/blog/2014/light-table-part-2-a-retrospective.html</id>
+    <published>2014-06-15T20:00:00-04:00</published>
+    <updated>2014-10-24T15:25:33-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h6 id="start-from-part-1-an-introductionblog2014light-table-part-1-an-introductionhtml"&gt;Start from &lt;a href="/blog/2014/light-table-part-1-an-introduction.html"&gt;Part 1: An Introduction&lt;/a&gt;&lt;/h6&gt;
+
+&lt;h2 id="first-impressions"&gt;First Impressions&lt;/h2&gt;
+
+&lt;p&gt;Light table seems interesting upon first opening. It greets you with a brief splash-screen style intro before loading the "Welcome" tab which will give you some basic information on where to find the changelog, documentation, and the project on GitHub.  It is apparent right off the bat that the UI is custom (HTML and CSS), but in general it can be used &lt;em&gt;almost&lt;/em&gt; like an app native to the OS.&lt;/p&gt;
+
+&lt;p&gt;One thing that I found was a bit odd was that Light Table takes the standard &lt;code&gt;Cmd-o&lt;/code&gt; keybinding and maps that to its fuzzy-finder open-file menu, which is similar to &lt;code&gt;Cmd-t&lt;/code&gt; in TextMate or &lt;code&gt;Cmd-p&lt;/code&gt; in Sublime Text.  Typically Apple applications would use the native OS X file-finder with this keybinding, but rather &lt;code&gt;Cmd-Shift-o&lt;/code&gt; will toggle it.  This isn't a problem or anything, just a bit unexpected. It realistically probably makes more sense to keep the fuzzy-finder to less keystrokes, but I think the TextMate or Sublime Text bindings probably make more sense here.
+&lt;img alt="" src="/images/light-table-part-2-a-retrospective/fuzzyfile.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Workspaces are effectively Light Table's form of managing different projects in the environment.  You can search across multiple workspaces, but keep things organized under different top level directories.  This is also Light Table's version of a file tree, and while it performs largely the same as other file browsers it does offer the added benefit (or sometimes hinderance) that fuzzy-matching on opening files will cross multiple workspaces as added, and many workspaces may be visible at any given time.
+&lt;img alt="" src="/images/light-table-part-2-a-retrospective/workspaces.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next point of interest, and probably the primary point of access in Light Table, is the Command Bar.  It's quite similar to &lt;code&gt;Cmd-Shift-p&lt;/code&gt; in Sublime Text.  This will be how you find or access most everything other than the files you want to edit, including key mappings, editor behaviors, plugin actions, etc.  It's quite handy and also supports fuzzy matching like its file-searching partner.
+&lt;img alt="" src="/images/light-table-part-2-a-retrospective/command-bar.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="tweaking-keymaps"&gt;Tweaking Keymaps&lt;/h3&gt;
+
+&lt;p&gt;The Command Bar is mapped to &lt;code&gt;Ctrl-Space&lt;/code&gt; by default.  Since I have Alfred mapped to that binding across the OS, I wanted to remap this immediately so I don't have to click menu options every time I need to access it (which is a lot).  So I open up the Command Bar by clicking on the menu and type in &lt;code&gt;uk&lt;/code&gt; which brings up the &lt;code&gt;User Keymap&lt;/code&gt; as the first result, and press enter to open it.  When editing your keymappings, it may be beneficial to open up the default keymap in a new tabset (a pane in the Light Table window with its own tabs) so that you may look at both files side by side to ensure you place things in the right locations for proper overriding.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;With both keymaps side by side I can see that I need to add a new entry to the &lt;code&gt;app&lt;/code&gt; map, adding my preferred keybinding of &lt;code&gt;alt-space&lt;/code&gt; to the keyword &lt;code&gt;:show-commandbar-transient&lt;/code&gt;.  As soon as the cursor enters the vector area (&lt;code&gt;[]&lt;/code&gt;), we start seeing options for autocompletion since Light Table is able to analyze and present options for items in its running environment that it knows about.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-completion.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;After a few keystrokes I found the option I needed and complete it.  After completion I now see an explanation of what my keymap does to the right, courtesy of Light Table and Clojure/ClojureScripts inline documentation in function declarations.  This is quite an awesome feature if you're in either of these languages.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-info.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Upon saving the keymap will be evaluated into Light Table, so if we click the &lt;code&gt;View&lt;/code&gt; menu in the menubar we can now see that &lt;code&gt;Commands&lt;/code&gt; has our new keybinding added.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-change.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;That was pretty simple!  I mapped a few other things you can see in the screenshot or in my &lt;a href="https://github.com/machuga/dotfiles"&gt;dotfiles&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id="installing-plugins"&gt;Installing Plugins&lt;/h3&gt;
+&lt;p&gt;With my fresh new keymapping for opening the Command Bar, I can select &lt;code&gt;Show Plugin Manager&lt;/code&gt; and open up a list of my Installed and other Available plugins.
+As you can imagine, the first thing I want to install is the &lt;code&gt;Vim&lt;/code&gt; plugin so I can get my Vim keybindings in place. When I hover over plugins I get the option to install them or view the source of the plugin on GitHub.  I figured I could check out the source later so selected &lt;code&gt;Install&lt;/code&gt; and waited for it to complete.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/plugin-manager.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since Light Table will automatically start up new plugins I was somewhat surprised to discover that I didn't have any Vim bindings ready yet.  After reloading to be sure, I headed back into the plugin manager and clicked on &lt;code&gt;Source&lt;/code&gt; to see if there was any information.&lt;/p&gt;
+
+&lt;p&gt;Just below the introduction is a &lt;code&gt;Setup&lt;/code&gt; &lt;a href="https://github.com/LightTable/Vim"&gt;header&lt;/a&gt;, which indicated to me that the plugins loaded into Light Table don't really have any setup scripts or instructions in the Plugin Manager UI itself.  To figure out if there are extra steps needed to install a plugin, you need to check out the project readme and hope the developer has documented everything.  This isn't the end of the world, but somewhat frustrating that I have to leave the UI to figure these things out.&lt;/p&gt;
+
+&lt;p&gt;Setting up the Vim plugin is incredibly easy though, only requiring copying and pasting a single line into the &lt;code&gt;:editor&lt;/code&gt; key of my user behaviors file.
+So from the Command Bar I loaded my User Behaviors file and pasted the line into the &lt;code&gt;:editor&lt;/code&gt; vector.  Upon save, viola; Vim bindings are active!  We also get to see a nice description that this line belongs to the Vim plugin and activates Vim.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/activate-vim.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Some of the other helpful plugins I've installed include:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;Workspace Nav&lt;/code&gt; which simply allows me to navigate the workspace file browser with keystrokes (and as a bonus with Vim bindings with the Vim plugin installed!).&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Trailing Whitespace&lt;/code&gt; to stop me from accidentally saving additional whitespace to lines in files.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Syntax Status Bar&lt;/code&gt; to let me know what syntax highlighting is currently active&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Rainbow&lt;/code&gt; for uniquely identifying pairs of parenthesis in ClojureScript code&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;match-highlighter&lt;/code&gt; to highlight closing parens, brackets, strings, etc to ensure I don't forget them&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Markdown&lt;/code&gt; which is a great way to write markdown files, watch them, and render them live in another tab as a preview&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Git Status Bar&lt;/code&gt; to show my current git branch and status in the status bar&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;Ctags&lt;/code&gt; for ctag navigation&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id="markdown-plugin"&gt;Markdown Plugin&lt;/h5&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/markdown-plugin.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are a good amount of plugins with a varying degree of functionality in the manager, ranging from extremely simple highlighting to new Instarepls for Ruby or other languages.  It's also possible to install new themes via the plugin manager, such as the &lt;code&gt;base-16&lt;/code&gt; themes. There isn't a huge selection in the plugin manager and it's not immediately available how to find more, but the community is growing so I'm hoping to see a better manager UI and experience come along in the future.  Discoverability of good plugins is kind of challenging as-is, so there is definitely room for improvement.&lt;/p&gt;
+
+&lt;h3 id="behavior-tweaks"&gt;Behavior Tweaks&lt;/h3&gt;
+&lt;p&gt;I changed up a few additional things in my user behaviors to get the environment more to my liking.  I wanted to display line numbers but wasn't entirely sure how to go about doing it.  Since I knew Light Table was doing some completion techniques in the keymaps file I decided to see if something similar would take effect in the user behaviors.&lt;/p&gt;
+
+&lt;p&gt;So I clicked inside of the &lt;code&gt;:editor&lt;/code&gt; vector and typed &lt;code&gt;linenum&lt;/code&gt; and got a two pretty specific completion options to either hide or show line numbers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/linenum-completion.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;I selected the show option, pressed enter, and the text expanded into the correct keyword, &lt;code&gt;:lt.objs.editor/line-numbers&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/linenum-info.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next I wanted to change my font to use &lt;code&gt;Inconsolata-g&lt;/code&gt;, so typed &lt;code&gt;font&lt;/code&gt; as a new entry in the vector, pressed enter when it gave me the option to set the font of the editor, and then I was presented with a slightly different display than I was used to.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/font-settings.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;While this doesn't seem entirely obvious, the screenshot of the display is telling us the order of the arguments.  As such, the font family is the first argument, font size is the second, and line height is the third.  This is form of inline documentation is wildly helpful, so I entered my values, saved, and the editor updated itself and was ready to go. I saw this as Light Table pulling some influence from Emacs and Elisp, but putting a better interface on a similar technique.&lt;/p&gt;
+
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+
+&lt;h3 id="overall-feeling"&gt;Overall Feeling&lt;/h3&gt;
+
+&lt;p&gt;In general, unless you are using Clojure, ClojureScript/JavaScript, or Python, Light Table will largely perform like any other general purpose editor.  It has all the essential functionality to get your work done.  I primarily used CoffeeScript and Ruby throughout my time with Light Table, so I don't really think I got to take full advatange of the potential gains LT could've provided.  Its ability to highlight CoffeeScript is limited to what CodeMirror's plugin provides, and while there is a CoffeeScript plugin available for Light Table to provide some live coding it has a few additional steps and seems error prone.  Ruby does indeed have an Instarepl available in the plugins section but it requires a fair bit of additional extra work to get it working that I wasn't really willing to dedicate time to complete.&lt;/p&gt;
+
+&lt;p&gt;So I'd say overall for CoffeeScript and Ruby the experience is less-than-great, but still passable.  One annoyance I experienced regarding auto-completion in Ruby was that if I came along to do a &lt;code&gt;do...end&lt;/code&gt; block, if I pressed enter at the end of typing &lt;code&gt;do&lt;/code&gt; it would just count that as trying to complete the word, not drop me to the next line.  I think I've seen Sublime Text experience a similar issue while pairing with coworkers, so I don't think this issue is only a Light Table one, but it's still an annoyance nonetheless.&lt;/p&gt;
+
+&lt;p&gt;I also thing changing the default theme to one of the base16 or alternative themes would be something I'd recommend to make things easier to see (setting the theme in user behaviors also supports tab completion for available themes for your convenience).  I found the default theme challenging for things like finding my cursor or distinguishing certain tokens in the code if I was in less-than-optimal lighting.&lt;/p&gt;
+
+&lt;h3 id="speed"&gt;Speed&lt;/h3&gt;
+
+&lt;p&gt;The speed of Light Table was where I found a fair bit of frustration. When you have only a file or two open without a heavy amount of syntax highlighting to do I think that LT runs fairly quickly overall, but I couldn't help but notice a sort of lag as I typed or performed screen-jumping actions sometimes.  This was primarily noticeable if I had more than a few files open or if the editor was open for a long duration.  I'll caveat that with the fact that my long-time usage of Vim has given me a very low tolerance for lag or delays of any sort.  If Vim gets sluggish at all I get disgruntled, so I'm quite in-tune to looking for such things. With that being said, I've had a few Sublime users tell me of similar frustrations with Light Table and Atom (both node-webkit powered projects), so I am inclined to believe this a general issue.&lt;/p&gt;
+
+&lt;p&gt;I also started noticing actions like saving start to hang for a while. This was mostly noticeable if I used &lt;code&gt;:w&lt;/code&gt; with the Vim bindings because it will open the command bar action as it operates.  It would sometimes freeze there for up to a second before writing to disk and closing the command bar. I'm not terribly familiar with the node-webkit process, but I believe the whole GUI locks up here due to the main thread being locked and that the JS is still running in single-thread mode as per usual.  I don't know how different workers could benefit this, or if something in LT could be tweaked in a non-blocking way, but there are a few other things like this in the editor that I don't think I'm too qualified to speculate much further on.&lt;/p&gt;
+
+&lt;p&gt;Ultimately the editor is quickish start off with but really seems to get bogged after a little bit.  Hopefully this is something that can be corrected in later releases.&lt;/p&gt;
+
+&lt;h3 id="stability"&gt;Stability&lt;/h3&gt;
+
+&lt;p&gt;From the best I can tell Light Table is pretty darn stable.  I didn't have it fall over on me even once, though I was able to hang its process as mentioned in my last post by running a &lt;code&gt;debugger&lt;/code&gt; statement in JS on the internal browser. This is due to the entire Chromium runtime being locked up according to an issue on GitHub I noticed.  While Light Table never actually crashed I did have certain plugins, instarepls, or watchers seemingly give out in some strange way and never recover.  I wholly admit that this could have been something silly I did, but it was frustrated when I was trying to experiment with them.  Also noticeable are the number of errors that LT or plugins can manage to throw in the app - none of them seem to effect the LT process.  In short, I give a big thumbs up on its stability.&lt;/p&gt;
+
+&lt;h3 id="user-experience"&gt;User Experience&lt;/h3&gt;
+
+&lt;p&gt;Another weird thing I experienced was loading of keymaps or behaviors being disrupted by a typo, but no discernable error message was given.  The only way I could tell something had gone wrong was that my vim bindings had stopped working.  I went through a heck of a debugging process to track down that cause, thinking it was a failing plugin at first.  Finally I searched around and found an issue on github indicating that it may be an issue in the behaviors/keymap.  I deleted a lot of code, noticed my missing &lt;code&gt;]&lt;/code&gt;, saved, and magically everything worked again.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, the UI/UX of Light Table is pretty lacking overall.  It looks great, but most things are not very obvious.  When I said before that the command bar would be the primary access point, I meant that very literally.  Most menus in LT only have the most basic of options, everything else must be discovered via the command bar (or keymaps and user experience file autocompletions).  While a mediocre UX isn't the end of the world (hell, Vim isn't very obvious, but it does come with &lt;code&gt;vimtutor&lt;/code&gt; and decent manpages), things could certainly stand to be a lot better.  A great example I will cover more next iteration is how Emacs encourages discoverability.  If you enter a command the long way, Emacs will give you a friendly notice that you can also do the same action via a simple keychord.  Since LT is guaranteed to be run via a GUI I think they could do a lot more to increase and improve the overall experience.&lt;/p&gt;
+
+&lt;p&gt;Now this isn't to say that LT doesn't care about the developer experience.  Quite the contrary, Chris Granger actually strives to improve the way developers write applications in generally.  That's why Light Table ships with watchers, instarepls, etc.  He's trying to give you excellent ways to vibe with your code, but the current issue that stands is we still want our editors to be very discoverable as applications themselves.  Sometimes it's harder to get up and running without that focus in place, but not everything will get top focus right out of the gate.&lt;/p&gt;
+
+&lt;h3 id="vim-emulation"&gt;Vim Emulation&lt;/h3&gt;
+
+&lt;p&gt;This is an area that will openly admit will be horrendously critical and biased in every editor review.  I am insanely picky about Vim emulation.  If an editor offers a Vim or Vi emulation, I expect it to work with all of the things I use on a daily basis.  I am not saying I expect a full Vim to be available, but all of the primary key bindings and most traditional commands should be in place.  In short, I'm very reluctant to give up my muscle memory and concepts I no longer think about.&lt;/p&gt;
+
+&lt;p&gt;As for Light Table, its Vim mode is really only going to be as good as CodeMirror's plugin, which is to say not very good.  It has a few odd behaviors which irk me enough to be fairly disgruntled.  For example, if you happen to be in normal mode and highlight some code to start a LT watcher, it doesn't seem to select the last character under your cursor due to the way it emulates Vim cursor position.  This also happens if you try to copy text via mouse or &lt;code&gt;Cmd-c&lt;/code&gt; in normal mode.  Another example is that visual line mode isn't active for some reason, even after Light Table updated part way through my review and added multi-cursor support a la Sublime.  As a less important, but still annoying issue, the plugin doesn't seem to give me an easy way to make mode-specific keybindings which is a shame (like &lt;code&gt;map&lt;/code&gt;, &lt;code&gt;vmap&lt;/code&gt; in Vim).  After my review wrapped up a &lt;a href="https://github.com/LightTable/Vim/commit/76ea3b56b1d1f04e7021cc5a64666c718b0fa4c2"&gt;new version&lt;/a&gt; of the plugin came out which looked like it may addressed some of my concerns like visual line mode, key mapping per modes, etc, but it seems like the plugin does not yet support everything added to the CodeMirror plugin.  It did seem to correct my issues with being able to select blocks of code to the bottom of a file with &lt;code&gt;G&lt;/code&gt;, which I was having issues with last release.&lt;/p&gt;
+
+&lt;p&gt;So while the plugin definitely helped me adopt Light Table faster and help me work at nearly my normal pace, it came with enough oddities that I'm not entirely sure I'd stick with it without heavily modifying it myself in the long run.  It's certainly doable, the rough edges are just kind of annoying.&lt;/p&gt;
+
+&lt;h3 id="areas-for-improvement"&gt;Areas for Improvement&lt;/h3&gt;
+
+&lt;p&gt;I have high expectations from editors. I want them to allow me to modify my text in a performant manner and provide me effective mechanisms to do so while also preventing them from getting in my way.  It's not an easy task, but something I expect nonetheless.  For CoffeeScript and Ruby code, at least, I don't think Light Table is the right fit.  I'm not sure that Light Table is quite yet ready to be an all purpose editor due to it's lack of selling features, discoverability, and its heavy reliance for its awesome features to utilize ClojureScript.  JavaScript and Python have pretty high level support but I think ClojureScript and Clojure see the most benefit from the additional functionality provided by Light Table.&lt;/p&gt;
+
+&lt;p&gt;I also think some of the awesome features like code watchers, live editors, and instarepls are a little finicky.  As mentioned before it could easily just be doing something wrong, but I had a lot of issues with these features.  Most inline evaluation worked perfectly except for a set of issues I kept having one day where it didn't seem able to follow my changes any longer and kept complaining about things that weren't involved in my code.&lt;/p&gt;
+
+&lt;p&gt;The speed of the editor and the UX, as mentioned, could definitely see some improvement.  I don't want to beat on this too much, but they are pretty important areas in my opinion.  I'd really love the plugin manager to be a bit more transparent and allow for instructions to be available in-editor (or even set up as much as they can on their own).  It'd also be great for the search to be improved and for the listing to allow for overall better discoverability - categories, featured plugins, etc.&lt;/p&gt;
+
+&lt;h2 id="conclusion-and-score"&gt;Conclusion and Score&lt;/h2&gt;
+
+&lt;p&gt;I really wanted to like Light Table since I have strong interest in Clojure and ClojureScript, but I hit quite a few annoyances along the way that make it a less-than-great editor for the two languages I used throughout most of my time - Ruby and CoffeeScript.  Some are completely correctable by installing or tweaking plugins/themes, but others are pretty core-level concerns - whether it be Light Table, CodeMirror, or node-webkit.  I believe that if progress keeps being made on it that Light Table could have a lot of interesting things in the future.  However, I have some concerns on its future due to a recent &lt;a href="http://www.reddit.com/r/vim/comments/1ztxgd/why_atom_cant_replace_vim/cfx0kyq"&gt;comment&lt;/a&gt; by the author allegedly made on a private mailing list regarding the future of Light Table.  It's not really clear what he has in store for Light Table, but now that it's fully open source it could still stay alive even if he chooses to move onto other projects like &lt;a href="https://www.youtube.com/watch?v=L6iUm_Cqx2s"&gt;Aurora&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To someone getting involved with ClojureScript I think this would be the best place to start.  It lets you just start using it right off the bat, even against its own UI, which is pretty awesome.  Maybe even try it out with some regular JS development, or Clojure.&lt;/p&gt;
+
+&lt;p&gt;For those who are coming in planning to use other languages - be wary.  When reaching out to other languages that do not receive first class support, you may not see many gains over alternative editors with better internal or plugin support for those languages.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Light Table Part 1: An Introduction</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2014/light-table-part-1-an-introduction.html"/>
+    <id>http://matthewmachuga.com/blog/2014/light-table-part-1-an-introduction.html</id>
+    <published>2014-06-07T20:00:00-04:00</published>
+    <updated>2014-10-24T00:15:23-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h6 id="continue-to-part-2-a-retrospectiveblog2014light-table-part-2-a-retrospectivehtml"&gt;Continue to &lt;a href="/blog/2014/light-table-part-2-a-retrospective.html"&gt;Part 2: A Retrospective&lt;/a&gt;&lt;/h6&gt;
+
+&lt;h2 id="light-table"&gt;Light Table&lt;/h2&gt;
+
+&lt;p&gt;My text editor journey began with Light Table.  It's not my first experience with the editor by a long shot, but this was the longest continuous streak I've spent exclusively editing with it (okay, technically I edited git messages in Vim because I forgot to assign &lt;code&gt;EDITOR&lt;/code&gt; to the command line &lt;code&gt;light&lt;/code&gt; app to launch the GUI). I've enjoyed a number of things about this editor and the plugins I've picked up, but we'll get to the pros and cons in a bit - let's start with basic information about the editor.&lt;/p&gt;
+
+&lt;h2 id="about-light-table"&gt;About Light Table&lt;/h2&gt;
+&lt;p&gt;Light Table was initially developed by Chris Granger in 2012 - receiving over $316K in a Kickstarter program.  While initially rough around the edges and requiring boot from a Java jar file, Light Table is continuously being polished up and has a pretty solid UI.  It uses the node-webkit library as a foundation for the interface/application, and uses CodeMirror as the editor. Light Table is almost entirely written in ClojureScript.  As such, it does a &lt;em&gt;really&lt;/em&gt; good job of providing an interactive environment for ClojureScript, JavaScript, and Clojure.  Despite being largely popular in, and targeted for, the Clojure community, the only component still written in Clojure is the set of bindings to load up a Clojure REPL.&lt;/p&gt;
+
+&lt;h2 id="highlights"&gt;Highlights&lt;/h2&gt;
+
+&lt;h3 id="watchers-and-connections"&gt;Watchers and Connections&lt;/h3&gt;
+&lt;p&gt;Light Table has watchers available in JavaScript, ClojureScript, and Python to track values in real time.  Choose a connection (what runtime you want to evaluate your watches/code), Set a watch, start making changes or run your application and the watchers will update the values as they run.  I personally had an issue with this working reliably in testing, but it was likely something I was doing wrong.&lt;/p&gt;
+
+&lt;p&gt;The connections allow you to bind to different runtimes and environments to your REPLs or watches, as previously mentioned.  Some of the defaults include an embedded or external browser, a local or remote Clojure REPL, the Light Table UI itself, Node, or Python.  You can also include additional connections from the plugin manager or write your own for your favorite runtime.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/connections.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="embedded-repls"&gt;Embedded REPLs&lt;/h3&gt;
+&lt;p&gt;Those familiar with Emacs will appreciate the fact of being able to fire up REPLs on the fly.  Light Table's REPLs are typically in Live mode - where you'll get inline evaluation without performing any commands to eval your code.  It's quite a nice way to write your code if you're working on an application in one of the supported languages.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/live-repl.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="inline-evaluation"&gt;Inline Evaluation&lt;/h3&gt;
+&lt;p&gt;Rather than using console logging or a dedicated debugger, Light Table lets you evaluate a line of code right there in the editor with a simple keychord.  This is great for figuring out where your code is going to throw exceptions or return slightly incorrect values without breaking your focus. As mentioned before - just select the connection you want to eval against and it's good to go.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/inline-eval.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="embeded-webkit-browser"&gt;Embeded Webkit Browser&lt;/h3&gt;
+&lt;p&gt;Since Light Table is built on &lt;code&gt;node-webkit&lt;/code&gt;, it supports the ability to call up a browser right inside of the editor.  This is great for working on a JS/ClojureScript application since you can control nearly every aspect of your code without even leaving your editor.  The biggest caveat I've found with this feature I want to document, which I should've considered prior to attempting, was that if you enter a &lt;code&gt;debugger&lt;/code&gt; statement in your JavaScript it will hang the entire editor since it will halt the JS runtime.  As such, you'll be forced to force quit Light Table and restart it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/embedded-webkit.png" /&gt;&lt;/p&gt;
+
+&lt;h3 id="completely-flexible"&gt;Completely Flexible&lt;/h3&gt;
+&lt;p&gt;Keybindings are super easy to manipulate for various parts of the editor, and the general behavior and functionality of the editor is just as easy to configure.  Light Table's architecture (and ClojureScript as a language) lend themselves well to creating an extensible and introspectable environment.  Since the functionality is treated as data, it makes reconfiguring or extending the editor or platform quite simple in any language that can compile down to JS.  Of course, you'll almost always need a bit of ClojureScript to hook it into the platform, but much of that can be copypasta'ed from the web.&lt;/p&gt;
+
+&lt;p&gt;LT seems to borrow partially from Emacs and partially from Sublime Text as far as keymapping and behavior goes.  Both keymapping and behaviors have &lt;code&gt;system&lt;/code&gt; and &lt;code&gt;user&lt;/code&gt; files where all of the configuation belongs, much like Sublime. Similarly, both keymappings and behaviors are using ClojureScript to configure, manly maps - this is similar to how all Emacs scripting is done in Emacs Lisp.
+&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/configs.png" /&gt;&lt;/p&gt;
+
+&lt;h2 id="plugins"&gt;Plugins&lt;/h2&gt;
+&lt;p&gt;Light Table's plugin ecosystem is still pretty small but it seems to be growing slowly. Its plugin manage is built into the OS and as such makes management and discoverability fairly easy.  That being said, the flat index listing of all packages and the search are not the greatest ways to find packages in my opinion, but it is better than what some other editors provide out of the box.  Additionally some of the packages have many unseen dependencies or behind-the-scenes gotchas; however, these issues could be made more obvious with some UI tweaks, although complete resolution may be more involved.&lt;/p&gt;
+
+&lt;p&gt;One notable thing about the Light Table plugin system is that you also have access to any CodeMirror plugin, so long as there is a small adapter for it to be plugged into LT. Even Vim mode is one of these CodeMirror plugins; they're quite common since reinventing the wheel would be a bit unnecessary, and CodeMirror has quite a few plugins already.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-1-an-introduction/plugins.png" /&gt;&lt;/p&gt;
+
+&lt;h2 id="overall"&gt;Overall&lt;/h2&gt;
+
+&lt;p&gt;Light Table is largely capable and seems to contiously get more and more solid. Also, considering it was only open sourced a few months ago, it has made a lot of progress in a short time. If it continues picking up speed I have high hopes of LT becoming a premier choice for Clojure and ClojureScript development.  It has some loose ends to tie up, but I'm looking forward to see what the future has in store for it.&lt;/p&gt;
+
+&lt;p&gt;Next post I'll give a review of my experiences with Light Table, both good and bad.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>The FOSS Text Editor Tour</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2014/the-foss-text-editor-tour.html"/>
+    <id>http://matthewmachuga.com/blog/2014/the-foss-text-editor-tour.html</id>
+    <published>2014-05-25T20:00:00-04:00</published>
+    <updated>2014-10-22T22:28:12-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;One of my buddies likes to give me a hard time about my constant tinkering with new or different text editors.  I've always had my preference of editor, but I love to see how others implement various concepts and what different ideas each one may have.&lt;/p&gt;
+
+&lt;p&gt;Since I do this stuff for my own entertainment and education anyway, I figured I may as well make this information useful to others as well. Starting Monday, May 26th, I'll be using an reviewing one of four free and open source text editors in two week sprints and blogging about my findings with each editor.&lt;/p&gt;
+
+&lt;p&gt;The criteria of my text editor selections is that each one is free to use, completely open source, and is cross platform.  The four text editors I've found that have made this list are Vim, Emacs, Light Table, and Atom. First up will be Light Table.&lt;/p&gt;
+
+&lt;p&gt;I'll cover everything I can think of including acquiring the editor and configuring, day to day usage, and writing some type of plugin for each editor in its native scripting language.&lt;/p&gt;
+
+&lt;p&gt;Hopefully people find this helpful when evaluating their choices in editors.&lt;/p&gt;
+</content>
+  </entry>
+</feed>
