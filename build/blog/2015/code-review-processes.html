@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+    <meta charset='utf-8'>
+    <meta content='Lorem ipsum' name='description'>
+    <meta content='Matthew Machuga' name='author'>
+    <title>
+      Matthew Machuga
+      | Code Review Processes
+    </title>
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" />
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/blog/feed.xml" />
+  </head>
+  <body class='blog blog_2015 blog_2015_code-review-processes'>
+    <div class='navbar navbar-default navbar-static-top' role='navigation'>
+      <div class='container'>
+        <div class='navbar-header'>
+          <button class='navbar-toggle collapsed' data-target='.navbar-collapse' data-toggle='collapse' type='button'>
+            <span class='sr-only'>Toggle navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a class='navbar-brand' href='/'>Matthew Machuga</a>
+        </div>
+        <div class='navbar-collapse collapse'>
+          <ul class='nav navbar-nav'>
+            <li class='active'>
+              <a href="/blog">Blog</a>
+            </li>
+            <li>
+              <a href="/contact.html">Contact</a>
+            </li>
+            <li>
+              <a href="/screencasts.html">Screencasts</a>
+            </li>
+            <li>
+              <a href="/talks.html">Talks</a>
+            </li>
+          </ul>
+          <ul class='nav navbar-nav navbar-right'>
+            <li>
+              <a href='/blog/feed.xml'>
+                <i class='fa fa-rss'></i>
+              </a>
+            </li>
+            <li>
+              <a href='https://twitter.com/machuga'>
+                <i class='fa fa-twitter'></i>
+              </a>
+            </li>
+            <li>
+              <a href='https://github.com/machuga'>
+                <i class='fa fa-github'></i>
+              </a>
+            </li>
+            <li>
+              <a href='https://plus.google.com/+MatthewMachuga'>
+                <i class='fa fa-google-plus'></i>
+              </a>
+            </li>
+            <li>
+              <a href='http://linkedin.com/in/machuga'>
+                <i class='fa fa-linkedin'></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <main>
+        <header class='header'>
+          <div class='row'>
+            <div class='col-md-8'>
+              <h1><a href="/blog/2015/code-review-processes.html">Code Review Processes</a></h1>
+            </div>
+            <div class='col-md-4'>
+              <dl class='dl-horizontal'>
+                <dt>Tags:</dt>
+                <dd class='topics'>code-review, process, meta</dd>
+                <dt>Published:</dt>
+                <dd class='topics'>01/09/2015</dd>
+              </dl>
+            </div>
+          </div>
+        </header>
+        <p>Pushing code to production without a review process in place, to me, feels like a game of Jenga.  The code <em>could</em> be completely fine, but there's also that chance that someone's going to move the wrong piece and everything will come crashing down.  Having any sort of review process or tooling in place can greatly reduce the chance you're going to ship something risky, whether it's a continuous integration service, peer code reviews, quality assurance reviews, or a combination of all of these solutions.</p>
+        
+        <h2 id="the-program-smith-has-grown-beyond-your-control">The Program Smith has Grown Beyond Your Control</h2>
+        
+        <p>At my job at <a href="http://thinkthroughmath.com">Think Through Math</a> we have an engineering team of about 18 developers, two of which are QA specialists.  This is a lot of people (relatively speaking) to be working on code at the same time.  We have a few various different services in our architecture, so not everyone is intimately knowledgable of every corner of the code.  We have some people who prefer to work in the front-end, some who focus on data warehousing and reporting, and others who hack away at the back-end Ruby code.  We all tend to mix and match with pairs regularly to try to spread our knowledge around, but the fact remains that we still have a number of people working on different projects at any given time, and no one person can hold our entire system in their head.</p>
+        
+        <p>I know we aren't alone in this area - there are other developers out there in similar situations.  Some are simply trying to work on their app day-to-day, some are trying to break up their monolithic Rails app into smaller services, and some are on legacy rescue projects.  Regardless of the type of project, each one could greatly benefit from sort of review process being in place.  Day-to-day work could verify that everything is going to keep working while making changes or adding features, monorail breakups could ensure that each new service retains functionality but the code is of higher quality and separated correctly, and rescue projects can ensure that needed functionality persists while areas of the code beging to follow new guidelines.  Even better, under the right process some of these things can be automated.</p>
+        
+        <h2 id="the-current-ttm-review-process">The Current TTM Review Process</h2>
+        
+        <p>Throughout the numerous iterations of our review process at Think Through Math I can't remember a single one flat out "not working", but some were more effective than others.  The latest iteration seems to be the best to date (as one would hope), but still could be improved.  In a later post I'd love to explain our new method of coming to agreements and changes to our processes, but that's pretty out of scope for this post.  Here is a brief rundown of how our current review process works.</p>
+        
+        <h3 id="code-review">Code Review</h3>
+        
+        <p>First the developer, or typically a pair, completes a bugfix, feature, or refactor and pushes the code up to GitHub.  If they're pushing just to let our CI server run the test suite on their branch, they will use our <code>WIP</code> label to let other developers and bots know that no actions need to be taken at this time.  During this time (and anytime code is pushed to the PR) our Hound service will run and check our code styles to make sure that the code that has been submitted is up-to-par with the styles we've selected.</p>
+        
+        <p>Once the code is ready to go the developer will attach a <code>Needs Code Review</code> label to the PR. She or he will also include complete instructions as a checklist on how QA should test the PR.  At given intervals our helpful chat bot, <code>mathbot</code> will come through to check for PR's with the <code>Needs Code Review</code> label, and then assign two other developers to review the code.  In the event that one of the reviewers isn't comfortable reviewing an area of code they haven't been in before, they simply request for someone else familiar with the code to swap PR's with them in our chat room.</p>
+        
+        <p>We typically ask our developers to review the code pretty thoroughly rather than simply acting as human linters or compilers. Straight from our process definition page, the requested style of review is:</p>
+        
+        <ul>
+          <li>Be inquisitive and look into why the author of the PR did things certain ways</li>
+          <li>Look for flaws in their logic; reversed booleans, potential bad selection of objects, type mismatches</li>
+          <li>Look for clear naming and intent of code</li>
+          <li>Look for areas that could be optimized.  Micro-optimizations aren't always needed, but some things should be avoided
+            <ul>
+              <li>Accidental DB calls inside of loops</li>
+              <li>Heavy work inside of loops if it can be avoided</li>
+              <li>Not caching or memoizing results of heavily used and expensive operations</li>
+            </ul>
+          </li>
+        </ul>
+        
+        <p>If one or both of the reviewers feel that the code could use some tweaks, they will leave inline comments in the Pull Request on GitHub so that the developer has a clear point of reference for which areas of code were questionable.  The reviewer will then remove the <code>Needs Code Review</code> label and replace it with our <code>Needs Work</code> label, signifying that the developer(s) should review the comments and either implement the needed changes or justify why they've chosen to write the code that way.</p>
+        
+        <p>An important thing to note here is that all comments are done in a very respectful and positive manner.  We're never out to judge each other.  We're here to help each other write the best code possible and keep the integrity of our system together.  Self-improvement is a common goal we all share on the team, and being a company about learning, we're all about helping eachother new techniques and practices.</p>
+        
+        <p>After the requested changes have been made or justified, the developer will remove the <code>Needs Work</code> label and reflag it to <code>Needs Code Review</code> so that the reviewers know they have more work to do.  Once they both sign off on the changes, the <code>Needs Code Review</code> label will be appropriated flipped to <code>Passed Code Review</code> to signal that no more review is needed. The <code>Needs QA</code> flag will then be appended assuming that UX review is not needed.</p>
+        
+        <h3 id="ux-review">UX Review</h3>
+        
+        <p>Our product hits a very diverse audience - students, school faculty, administrators, etc., so we are very conscious of our copy changes and UI/UX style changes.  As such, if we perform any changes to the front end of the system that could change the appearance of something on the site we need to apply a <code>Needs UX</code> label to our PR in order to have someone from the UX team review our changes.  This step is generally done simultaneously with the code review process since if UX needs something to be changed it may affect the code.  If changes need to be made they remove their label and set it to <code>Needs Work</code>, the same way that is done for code review.  Once all is well they will remove the <code>Needs UX</code> label and apply the <code>Needs QA</code> flag.</p>
+        
+        <h3 id="qa-review">QA Review</h3>
+        
+        <p>The QA team is small, but heavily relied upon to ensure our code meets the requested business requirements and does not fall apart at first usage.  We link our PRs up to stories from our project management tool so that the person QA'ing the PR can quickly reference what the acceptance criteria is, along with goals and nuances, while they try to break it.  They use the specs provided by the developers on what to test, then use their own abilities to try to creatively blow up the system.  If something broke or did not meet acceptance criteria, they'll once again remove all labels and apply the <code>Needs Work</code> label, which almost always will force a new code review (usually just on the changed parts) once the changes have been applied by the developer.  Once everything is complete and it functions properly, the code will receive the <code>Passed QA</code> label and then finally get merged into our release candidate branch.  From here it will eventually be promoted to master and pushed up to production once QA and the product team have determined what features and fixes should go into a release.</p>
+        
+        <p>Here is a flow chart if all of that label talk was confusing for you.</p>
+        
+        <p><img alt="Review Process Flow Chart" src="/images/code-review-processes/ttm-flow.png" /></p>
+        
+        <h1 id="why">Why?</h1>
+        
+        <p>If this seems like a lot of process, it's really pretty minimal in real world usage.  The entire workflow can even be completed in as little as ten minutes if it's a small review and a feature that needs pushed ASAP, but typically it's longer and not rushed.  Everything flows together naturally now and it ensures that we have three different people at least look at our code from different perspectives and ensure that it is high quality and does what it claims.  This helps us keep our codebase and tests clean, readable, and self-documenting.</p>
+        
+        <p>The benefits outweigh any potential cons of feeling like you have a <strong>Process</strong> with a capital <code>P</code>.  We release fewer bugs, we are happy with the code that goes into the repositories, and we have people help use improve daily.  I cannot stress how many times a second set of eyes has prevented a dumb error or performance degredation in my own code, and QA has saved me countless times in cases I hadn't checked.  I never feel like any comments or criticisms are made with malice or judgement, just genuine care in keeping the code clean and helping me fix mistakes, clean my code, or learn something new.</p>
+        
+        <h1 id="tldr">tl;dr</h1>
+        
+        <p>Create some of sort of review process at your job, or take time to analyze, review, and improve your existing strategy.  Iterate on it and be open to potential changes, because the next idea may improve your results even further.  Having both software and real humans review your code will save you from releasing silly mistakes to production or littering your codebase with unmanageable code.</p>
+      </main>
+      <footer class='footer'>
+        <div class='row'>
+          <div class='col-md-6'>
+            <p>Copyright &copy; 2015 Matthew Machuga</p>
+          </div>
+          <div class='col-md-6'>
+            <div class='contact text-right'>
+              <ul class='list-inline'>
+                <li>
+                  <a href='/blog/feed.xml'>
+                    <i class='fa fa-rss'></i>
+                  </a>
+                </li>
+                <li>
+                  <a href='https://twitter.com/machuga'>
+                    <i class='fa fa-twitter'></i>
+                  </a>
+                </li>
+                <li>
+                  <a href='https://github.com/machuga'>
+                    <i class='fa fa-github'></i>
+                  </a>
+                </li>
+                <li>
+                  <a href='https://plus.google.com/+MatthewMachuga'>
+                    <i class='fa fa-google-plus'></i>
+                  </a>
+                </li>
+                <li>
+                  <a href='http://linkedin.com/in/machuga'>
+                    <i class='fa fa-linkedin'></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+    <script src='/javascripts/all.js'></script>
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17079773-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>
