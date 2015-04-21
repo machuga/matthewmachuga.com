@@ -103,7 +103,7 @@ helpers do
     OpenStruct.new(
       author: 'Matthew Machuga',
       email: 'machuga@gmail.com',
-      description: 'Lorem ipsum'
+      description: 'The website for Matthew Machuga.  Available for consulting, tutoring, and mentoring.'
     )
   end
 
