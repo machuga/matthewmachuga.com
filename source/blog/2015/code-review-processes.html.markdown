@@ -48,7 +48,7 @@ The QA team is small, but heavily relied upon to ensure our code meets the reque
 
 Here is a flow chart if all of that label talk was confusing for you.
 
-![Review Process Flow Chart](code-review-processes/ttm-flow.png)
+![Review Process Flow Chart](blog/2015/code-review-processes/ttm-flow.png)
 
 # Why?
 

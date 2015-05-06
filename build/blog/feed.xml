@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://matthewmachuga.com/blog/2015/code-review-processes.html"/>
     <id>http://matthewmachuga.com/blog/2015/code-review-processes.html</id>
     <published>2015-01-09T14:57:00-05:00</published>
-    <updated>2015-01-10T00:47:22-05:00</updated>
+    <updated>2015-05-06T06:29:30-04:00</updated>
     <author>
       <name>Article Author</name>
     </author>
@@ -67,7 +67,7 @@
 
 &lt;p&gt;Here is a flow chart if all of that label talk was confusing for you.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Review Process Flow Chart" src="/images/code-review-processes/ttm-flow.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Review Process Flow Chart" src="/blog/2015/code-review-processes/ttm-flow.png" /&gt;&lt;/p&gt;
 
 &lt;h1 id="why"&gt;Why?&lt;/h1&gt;
 
