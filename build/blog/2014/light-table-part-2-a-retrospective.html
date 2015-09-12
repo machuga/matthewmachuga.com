@@ -10,7 +10,7 @@
       Matthew Machuga
       | Light Table Part 2: A Retrospective
     </title>
-    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/normalize.css" rel="stylesheet" /><link href="/stylesheets/all.css" rel="stylesheet" />
     <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/blog/feed.xml" />
   </head>
   <body class='blog blog_2014 blog_2014_light-table-part-2-a-retrospective'>
@@ -94,31 +94,31 @@
         <p>Light table seems interesting upon first opening. It greets you with a brief splash-screen style intro before loading the "Welcome" tab which will give you some basic information on where to find the changelog, documentation, and the project on GitHub.  It is apparent right off the bat that the UI is custom (HTML and CSS), but in general it can be used <em>almost</em> like an app native to the OS.</p>
         
         <p>One thing that I found was a bit odd was that Light Table takes the standard <code>Cmd-o</code> keybinding and maps that to its fuzzy-finder open-file menu, which is similar to <code>Cmd-t</code> in TextMate or <code>Cmd-p</code> in Sublime Text.  Typically Apple applications would use the native OS X file-finder with this keybinding, but rather <code>Cmd-Shift-o</code> will toggle it.  This isn't a problem or anything, just a bit unexpected. It realistically probably makes more sense to keep the fuzzy-finder to less keystrokes, but I think the TextMate or Sublime Text bindings probably make more sense here.
-        <img alt="" src="/images/light-table-part-2-a-retrospective/fuzzyfile.png" /></p>
+        <img alt="" src="/blog/2014/light-table-part-2-a-retrospective/fuzzyfile.png" /></p>
         
         <p>Workspaces are effectively Light Table's form of managing different projects in the environment.  You can search across multiple workspaces, but keep things organized under different top level directories.  This is also Light Table's version of a file tree, and while it performs largely the same as other file browsers it does offer the added benefit (or sometimes hinderance) that fuzzy-matching on opening files will cross multiple workspaces as added, and many workspaces may be visible at any given time.
-        <img alt="" src="/images/light-table-part-2-a-retrospective/workspaces.png" /></p>
+        <img alt="" src="/blog/2014/light-table-part-2-a-retrospective/workspaces.png" /></p>
         
         <p>The next point of interest, and probably the primary point of access in Light Table, is the Command Bar.  It's quite similar to <code>Cmd-Shift-p</code> in Sublime Text.  This will be how you find or access most everything other than the files you want to edit, including key mappings, editor behaviors, plugin actions, etc.  It's quite handy and also supports fuzzy matching like its file-searching partner.
-        <img alt="" src="/images/light-table-part-2-a-retrospective/command-bar.png" /></p>
+        <img alt="" src="/blog/2014/light-table-part-2-a-retrospective/command-bar.png" /></p>
         
         <h3 id="tweaking-keymaps">Tweaking Keymaps</h3>
         
         <p>The Command Bar is mapped to <code>Ctrl-Space</code> by default.  Since I have Alfred mapped to that binding across the OS, I wanted to remap this immediately so I don't have to click menu options every time I need to access it (which is a lot).  So I open up the Command Bar by clicking on the menu and type in <code>uk</code> which brings up the <code>User Keymap</code> as the first result, and press enter to open it.  When editing your keymappings, it may be beneficial to open up the default keymap in a new tabset (a pane in the Light Table window with its own tabs) so that you may look at both files side by side to ensure you place things in the right locations for proper overriding.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/keymap.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap.png" /></p>
         
         <p>With both keymaps side by side I can see that I need to add a new entry to the <code>app</code> map, adding my preferred keybinding of <code>alt-space</code> to the keyword <code>:show-commandbar-transient</code>.  As soon as the cursor enters the vector area (<code>[]</code>), we start seeing options for autocompletion since Light Table is able to analyze and present options for items in its running environment that it knows about.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/keymap-completion.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-completion.png" /></p>
         
         <p>After a few keystrokes I found the option I needed and complete it.  After completion I now see an explanation of what my keymap does to the right, courtesy of Light Table and Clojure/ClojureScripts inline documentation in function declarations.  This is quite an awesome feature if you're in either of these languages.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/keymap-info.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-info.png" /></p>
         
         <p>Upon saving the keymap will be evaluated into Light Table, so if we click the <code>View</code> menu in the menubar we can now see that <code>Commands</code> has our new keybinding added.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/keymap-change.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-change.png" /></p>
         
         <p>That was pretty simple!  I mapped a few other things you can see in the screenshot or in my <a href="https://github.com/machuga/dotfiles">dotfiles</a>.</p>
         
@@ -126,7 +126,7 @@
         <p>With my fresh new keymapping for opening the Command Bar, I can select <code>Show Plugin Manager</code> and open up a list of my Installed and other Available plugins.
         As you can imagine, the first thing I want to install is the <code>Vim</code> plugin so I can get my Vim keybindings in place. When I hover over plugins I get the option to install them or view the source of the plugin on GitHub.  I figured I could check out the source later so selected <code>Install</code> and waited for it to complete.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/plugin-manager.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/plugin-manager.png" /></p>
         
         <p>Since Light Table will automatically start up new plugins I was somewhat surprised to discover that I didn't have any Vim bindings ready yet.  After reloading to be sure, I headed back into the plugin manager and clicked on <code>Source</code> to see if there was any information.</p>
         
@@ -135,7 +135,7 @@
         <p>Setting up the Vim plugin is incredibly easy though, only requiring copying and pasting a single line into the <code>:editor</code> key of my user behaviors file.
         So from the Command Bar I loaded my User Behaviors file and pasted the line into the <code>:editor</code> vector.  Upon save, viola; Vim bindings are active!  We also get to see a nice description that this line belongs to the Vim plugin and activates Vim.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/activate-vim.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/activate-vim.png" /></p>
         
         <p>Some of the other helpful plugins I've installed include:</p>
         
@@ -152,7 +152,7 @@
         
         <h5 id="markdown-plugin">Markdown Plugin</h5>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/markdown-plugin.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/markdown-plugin.png" /></p>
         
         <p>There are a good amount of plugins with a varying degree of functionality in the manager, ranging from extremely simple highlighting to new Instarepls for Ruby or other languages.  It's also possible to install new themes via the plugin manager, such as the <code>base-16</code> themes. There isn't a huge selection in the plugin manager and it's not immediately available how to find more, but the community is growing so I'm hoping to see a better manager UI and experience come along in the future.  Discoverability of good plugins is kind of challenging as-is, so there is definitely room for improvement.</p>
         
@@ -161,15 +161,15 @@
         
         <p>So I clicked inside of the <code>:editor</code> vector and typed <code>linenum</code> and got a two pretty specific completion options to either hide or show line numbers.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/linenum-completion.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/linenum-completion.png" /></p>
         
         <p>I selected the show option, pressed enter, and the text expanded into the correct keyword, <code>:lt.objs.editor/line-numbers</code>.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/linenum-info.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/linenum-info.png" /></p>
         
         <p>Next I wanted to change my font to use <code>Inconsolata-g</code>, so typed <code>font</code> as a new entry in the vector, pressed enter when it gave me the option to set the font of the editor, and then I was presented with a slightly different display than I was used to.</p>
         
-        <p><img alt="" src="/images/light-table-part-2-a-retrospective/font-settings.png" /></p>
+        <p><img alt="" src="/blog/2014/light-table-part-2-a-retrospective/font-settings.png" /></p>
         
         <p>While this doesn't seem entirely obvious, the screenshot of the display is telling us the order of the arguments.  As such, the font family is the first argument, font size is the second, and line height is the third.  This is form of inline documentation is wildly helpful, so I entered my values, saved, and the editor updated itself and was ready to go. I saw this as Light Table pulling some influence from Emacs and Elisp, but putting a better interface on a similar technique.</p>
         

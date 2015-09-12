@@ -5,10 +5,77 @@
   <id>http://matthewmachuga.com/blog</id>
   <link href="http://matthewmachuga.com/blog"/>
   <link href="http://matthewmachuga.com/blog/feed.xml" rel="self"/>
-  <updated>2015-01-09T14:57:00-05:00</updated>
+  <updated>2015-09-12T10:32:00-04:00</updated>
   <author>
     <name>Matthew Machuga</name>
   </author>
+  <entry>
+    <title>ActiveRecord and the Beauty Lost in Translation</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2015/activerecord-and-the-beauty-lost-in-translation.html"/>
+    <id>http://matthewmachuga.com/blog/2015/activerecord-and-the-beauty-lost-in-translation.html</id>
+    <published>2015-09-12T10:32:00-04:00</published>
+    <updated>2015-09-12T10:42:04-04:00</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;h2 id="the-endless-fight"&gt;The Endless Fight&lt;/h2&gt;
+
+&lt;p&gt;Sometime in 2014, PHP-land started to debate whether Active Record was a tolerable ORM pattern, and whether one should use Active Record or Data Mapper ORMs.  In PHP, this comes down to something like Laravel's Eloquent ORM as an Active Record implementation vs. Doctrine, the reigning mainstream (and probably only) PHP data mapper implementation.  After a surge of interest in Domain-Driven Design (DDD) and Hexagonal Architecture in the Laravel, and overall PHP communities, people began to detest one of the very things that drew them to the framework in the first place.  This was fueled by a number of vocal and notable Laravel community members learning Doctine, talking about it heavily, and some evangelizing it.  With outside influence from the PHP world providing the same judgement against the impure Active Record pattern, the pitchforks started to come out from all over.&lt;/p&gt;
+
+&lt;p&gt;The long and short of the argument is that the Active Record pattern is found by some to be inferior to the Data Mapper pattern.  Why?&lt;/p&gt;
+
+&lt;h3 id="entity--repository-separation"&gt;Entity / Repository Separation&lt;/h3&gt;
+
+&lt;p&gt;Active Record models know not only how to represent a row in a database, but also how to query and persist itself and other objects to the database. DDD, hexagonal architecture, and  most general OOD practices tell object-oriented developers that their objects should do &lt;em&gt;one thing&lt;/em&gt;.  Even though this rule can be easily overlooked in many cases, AR models know how to do a whole slew of things.  Depending on the AR implementation, this number of responsibilities an object may have can grow even larger.  This level of responsibility blending commonly makes things:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Harder to change&lt;/li&gt;
+  &lt;li&gt;Harder to isolate bugs&lt;/li&gt;
+  &lt;li&gt;Harder to test&lt;/li&gt;
+  &lt;li&gt;Harder to refactor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Along with the mixing of concerns, AR models are explicitly aware of their database representations.  The table fields are typically publicly exposed as properties or magic properties ont he object.  This can be disruptive to someone attempting to create a minimal entity with a very explicit interface that isn't one-to-one with the database.  This is analogous to creating an API over HTTP; sometimes you don't mind consumers knowing the schema of your database tables, but most often you'd like to give them access to that information in a more consumable, or more encapsulated way.  When you have very complex business logic in your domain, you may find Data Mapper providing a bit of an easier means to working with your data at the trade off of typically needing some extra work and boilerplate.&lt;/p&gt;
+
+&lt;h3 id="testing-is-meh"&gt;Testing is Meh&lt;/h3&gt;
+
+&lt;p&gt;Some of the hate on this level is largely just regurgitation of hearing others say it, but if you have tried testing AR objects from any implementation you are well aware it is not the most pleasant of experiences.  If you're doing integration or end-to-end level testing where you are interacting with the database already, then it's fairly painless to test if you avoid mocking.  However if you are unit testing your models, attempting to check some behavior you've placed on the entity, you may be in for some hurt if in anyway calls a method or property that relies on the database.  Frameworks like Rails and Laravel provide means for making unit testing models a bit easier, and honestly as long as you can stub out the model's database connection it's not terrible to test.  However, this must usually be done on each individual object so it is not the most pleasant of experiences.  It also makes integration testing objects that have AR models as collaborators a bit more challenging since you'll have to mock out the DB access before you pass it into the collaborator, which isn't ideal.&lt;/p&gt;
+
+&lt;p&gt;Compare this with the way that a Data Mapper's entities may be tested, they're usually just plain objects of whatever language is being used and don't need things mocked because the entities have no knowledge of the database.  An entity would be fetched from a repository object, meaning that the concerns are already separated.  One can then easily test all operations of the entity quite simply without the runaround.&lt;/p&gt;
+
+&lt;h3 id="community-pressure-shaming-and-perceived-inferiority"&gt;Community Pressure, Shaming, and Perceived Inferiority&lt;/h3&gt;
+
+&lt;p&gt;As a developer who is involved in a community, especially a newer developer, it is common to feel a sense of pressure in terms of trends and current "best practices".  If high praise or disdain for a practice or technology comes from more prominant members of a community, it becomes harder to ignore.  The voices then propagate from the top-down in a tree-like fashion, adding volume as it goes.  By the time it reaches new developers, it's nearly unavoidable and impossible to ignore.  However, part of the message is usually lost in translation somewhere along the way - the &lt;em&gt;when&lt;/em&gt; and &lt;em&gt;why&lt;/em&gt; something should be used.  Sometimes this reasoning is amplified because it's natural for us as developers to get excited to use a new concept or technology.  Somewhere along the way, though, we lose the reasoning by the time it reaches the next level in the tree.  This can often lead to the developers feeling like the &lt;em&gt;must&lt;/em&gt; use something like Data Mapper in all situations if they are told it is far better than ActiveRecord.&lt;/p&gt;
+
+&lt;p&gt;This will then lead to pressure and even shaming from community members to one another if one chooses to use ActiveRecord.  At this point, there is now a perceived inferiority of not only ActiveRecord, but also the developers who use to use it. By this point it should be obvious where the game "Telephone" originated, and why it is so silly.  Things lost in translation or modified over time somehow become grounds for judgement.  We're all guilty of it at some point, and probably far more often than we believe.&lt;/p&gt;
+
+&lt;h2 id="the-reality-of-active-record"&gt;The Reality of Active Record&lt;/h2&gt;
+
+&lt;p&gt;The points mentioned above have merit.  Testing ActiveRecord objects, or collaborators of said object, can be challenging.  Mixing concerns between persistance and domain logic can also make things muddier and harder to follow.  This can also make debugging code using AR models more challenging since the database may contacted at any time unintentionally.  However, do these cons always outweigh the benefits?  In my opinion, &lt;em&gt;no&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Admitting my contributions to this, on an episode of &lt;a href="https://itunes.apple.com/us/podcast/episode-14-dhh-domain-events/id653204183?i=328486884&amp;amp;mt=2"&gt;The Laravel Podcast&lt;/a&gt; I was quoted saying something along the lines of "I just don't like it anymore" when asked my thoughts on ActiveRecord.  Even today, this remains true.  &lt;strong&gt;However&lt;/strong&gt;, I still use ActiveRecord implementations &lt;strong&gt;every&lt;/strong&gt; &lt;strong&gt;single&lt;/strong&gt; &lt;strong&gt;day&lt;/strong&gt; and am quite content.  I still like it better than other options available at this point.  In the Rails world, ActiveRecord is still the de facto ORM, especially if you want to develop fast.  It does everything we need for the most part, and for the areas it doesn't we can drop down a level and optimize while still being within ActiveRecord.  It is &lt;em&gt;good enough&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h3 id="its-easy"&gt;It's Easy&lt;/h3&gt;
+
+&lt;p&gt;Getting many things done in an ActiveRecord implementation is wildly fast and easy, especially if the implementation has added some excellent features to help it along.  It's so easy to just call &lt;code&gt;save()&lt;/code&gt; on the object I'm working with and know that it'll be persisted if all went well.  It's convenient to be able to do something like &lt;code&gt;user.blog_posts &amp;lt;&amp;lt; Blog.new(attrs)&lt;/code&gt; to add a new associated blog post, knowing that foreign keys at the database level will be handled for me automatically.  In the event I need some sort of advanced query and do not want to fight the query builder directly, I can use &lt;code&gt;User.find_by_sql&lt;/code&gt; and pass in my hand-rolled SQL query.&lt;/p&gt;
+
+&lt;h3 id="domain-modeling-is-still-entirely-possible"&gt;Domain Modeling is Still Entirely Possible&lt;/h3&gt;
+
+&lt;p&gt;Nothing is explicitly halting you from modeling your domain effectively with ActiveRecord models.  Sure, you'll have some unrelated methods available on the objects themselves, but you can choose as a developer or as a team to not use them in certain contexts.  It takes more discipline for sure, but you can avoid exposing fetching or persisting logic outside of the model itself.  You can still create service classes to handle complex domain logic that use these methods as needed to model additional concepts.  The idea that you &lt;em&gt;can't&lt;/em&gt; model your domain properly with ActiveRecord is a myth, but it might indeed take a bit of extra effort.&lt;/p&gt;
+
+&lt;h3 id="activerecord-can-scale"&gt;ActiveRecord Can Scale&lt;/h3&gt;
+
+&lt;p&gt;At my day job we have a large Rails codebase that serves millions of users with some quite complex domain logic, and I'm going to let you in on a secret - we use ActiveRecord!  Sure, there are situations where we'd like cleaner entities or repositories, but in general we can usually just refactor some code or extract a new service object and still get a great result.  Even our data warehouse uses ActiveRecord with a number of custom queries.  It's wild how helpful it can be.  We don't need to worry about complex object hydration anywhere, we can quickly avoid N+1 issues, and most of our day-to-day operations are streamlined by the ActiveRecord internals.  We can pass &lt;code&gt;DateTime&lt;/code&gt; objects to queries and they'll be cast properly for us.  We can fetch related data quickly from relations, even nested relations.  We send a huge amount of business logic and traffic through our codebase without any crazy speed loss that you may have heard of when using ActiveRecord ORMs.  As long as you use some good practices and are dilligent as a developer, it is certainly possible to happily and successfully use ActiveRecord.&lt;/p&gt;
+
+&lt;h2 id="be-critical"&gt;Be Critical&lt;/h2&gt;
+
+&lt;p&gt;The next time you come across the ActiveRecord vs. Data Mapper argument, or ones like it, be critical of what is being said. If it impacts your work in some way, do some research to find out if what is being said is true or if it has been something lost in translation.  Don't feel bad for using a pattern that has spread across multiple languages and ecosystems successfully, and is probably the reason we have most of the web frameworks we do today.  While the ActiveRecord existed well before Rails, it was Rails that gave it a beautiful API and made other frameworks like CodeIgniter, Laravel, .NET, Fuel, Django, etc want to have something comparable.&lt;/p&gt;
+
+&lt;p&gt;If you use Eloquent, ActiveRecord for Rails, or any other AR ORM, make sure you know that you are not alone.  You are in good company of many, many developers who use it successfully day-to-day.  However, if one day you choose to use a Data Mapper implementation or something else, then you will still be in good company, and still deserve respect regardless of which side of the fence you fall.&lt;/p&gt;
+
+&lt;p&gt;Let's all be friends.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Code Review Processes</title>
     <link rel="alternate" href="http://matthewmachuga.com/blog/2015/code-review-processes.html"/>
@@ -113,31 +180,31 @@
 &lt;p&gt;Light table seems interesting upon first opening. It greets you with a brief splash-screen style intro before loading the "Welcome" tab which will give you some basic information on where to find the changelog, documentation, and the project on GitHub.  It is apparent right off the bat that the UI is custom (HTML and CSS), but in general it can be used &lt;em&gt;almost&lt;/em&gt; like an app native to the OS.&lt;/p&gt;
 
 &lt;p&gt;One thing that I found was a bit odd was that Light Table takes the standard &lt;code&gt;Cmd-o&lt;/code&gt; keybinding and maps that to its fuzzy-finder open-file menu, which is similar to &lt;code&gt;Cmd-t&lt;/code&gt; in TextMate or &lt;code&gt;Cmd-p&lt;/code&gt; in Sublime Text.  Typically Apple applications would use the native OS X file-finder with this keybinding, but rather &lt;code&gt;Cmd-Shift-o&lt;/code&gt; will toggle it.  This isn't a problem or anything, just a bit unexpected. It realistically probably makes more sense to keep the fuzzy-finder to less keystrokes, but I think the TextMate or Sublime Text bindings probably make more sense here.
-&lt;img alt="" src="/images/light-table-part-2-a-retrospective/fuzzyfile.png" /&gt;&lt;/p&gt;
+&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/fuzzyfile.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Workspaces are effectively Light Table's form of managing different projects in the environment.  You can search across multiple workspaces, but keep things organized under different top level directories.  This is also Light Table's version of a file tree, and while it performs largely the same as other file browsers it does offer the added benefit (or sometimes hinderance) that fuzzy-matching on opening files will cross multiple workspaces as added, and many workspaces may be visible at any given time.
-&lt;img alt="" src="/images/light-table-part-2-a-retrospective/workspaces.png" /&gt;&lt;/p&gt;
+&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/workspaces.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The next point of interest, and probably the primary point of access in Light Table, is the Command Bar.  It's quite similar to &lt;code&gt;Cmd-Shift-p&lt;/code&gt; in Sublime Text.  This will be how you find or access most everything other than the files you want to edit, including key mappings, editor behaviors, plugin actions, etc.  It's quite handy and also supports fuzzy matching like its file-searching partner.
-&lt;img alt="" src="/images/light-table-part-2-a-retrospective/command-bar.png" /&gt;&lt;/p&gt;
+&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/command-bar.png" /&gt;&lt;/p&gt;
 
 &lt;h3 id="tweaking-keymaps"&gt;Tweaking Keymaps&lt;/h3&gt;
 
 &lt;p&gt;The Command Bar is mapped to &lt;code&gt;Ctrl-Space&lt;/code&gt; by default.  Since I have Alfred mapped to that binding across the OS, I wanted to remap this immediately so I don't have to click menu options every time I need to access it (which is a lot).  So I open up the Command Bar by clicking on the menu and type in &lt;code&gt;uk&lt;/code&gt; which brings up the &lt;code&gt;User Keymap&lt;/code&gt; as the first result, and press enter to open it.  When editing your keymappings, it may be beneficial to open up the default keymap in a new tabset (a pane in the Light Table window with its own tabs) so that you may look at both files side by side to ensure you place things in the right locations for proper overriding.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;With both keymaps side by side I can see that I need to add a new entry to the &lt;code&gt;app&lt;/code&gt; map, adding my preferred keybinding of &lt;code&gt;alt-space&lt;/code&gt; to the keyword &lt;code&gt;:show-commandbar-transient&lt;/code&gt;.  As soon as the cursor enters the vector area (&lt;code&gt;[]&lt;/code&gt;), we start seeing options for autocompletion since Light Table is able to analyze and present options for items in its running environment that it knows about.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-completion.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-completion.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;After a few keystrokes I found the option I needed and complete it.  After completion I now see an explanation of what my keymap does to the right, courtesy of Light Table and Clojure/ClojureScripts inline documentation in function declarations.  This is quite an awesome feature if you're in either of these languages.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-info.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-info.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Upon saving the keymap will be evaluated into Light Table, so if we click the &lt;code&gt;View&lt;/code&gt; menu in the menubar we can now see that &lt;code&gt;Commands&lt;/code&gt; has our new keybinding added.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/keymap-change.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/keymap-change.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;That was pretty simple!  I mapped a few other things you can see in the screenshot or in my &lt;a href="https://github.com/machuga/dotfiles"&gt;dotfiles&lt;/a&gt;.&lt;/p&gt;
 
@@ -145,7 +212,7 @@
 &lt;p&gt;With my fresh new keymapping for opening the Command Bar, I can select &lt;code&gt;Show Plugin Manager&lt;/code&gt; and open up a list of my Installed and other Available plugins.
 As you can imagine, the first thing I want to install is the &lt;code&gt;Vim&lt;/code&gt; plugin so I can get my Vim keybindings in place. When I hover over plugins I get the option to install them or view the source of the plugin on GitHub.  I figured I could check out the source later so selected &lt;code&gt;Install&lt;/code&gt; and waited for it to complete.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/plugin-manager.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/plugin-manager.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Since Light Table will automatically start up new plugins I was somewhat surprised to discover that I didn't have any Vim bindings ready yet.  After reloading to be sure, I headed back into the plugin manager and clicked on &lt;code&gt;Source&lt;/code&gt; to see if there was any information.&lt;/p&gt;
 
@@ -154,7 +221,7 @@ As you can imagine, the first thing I want to install is the &lt;code&gt;Vim&lt;
 &lt;p&gt;Setting up the Vim plugin is incredibly easy though, only requiring copying and pasting a single line into the &lt;code&gt;:editor&lt;/code&gt; key of my user behaviors file.
 So from the Command Bar I loaded my User Behaviors file and pasted the line into the &lt;code&gt;:editor&lt;/code&gt; vector.  Upon save, viola; Vim bindings are active!  We also get to see a nice description that this line belongs to the Vim plugin and activates Vim.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/activate-vim.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/activate-vim.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Some of the other helpful plugins I've installed include:&lt;/p&gt;
 
@@ -171,7 +238,7 @@ So from the Command Bar I loaded my User Behaviors file and pasted the line into
 
 &lt;h5 id="markdown-plugin"&gt;Markdown Plugin&lt;/h5&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/markdown-plugin.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/markdown-plugin.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;There are a good amount of plugins with a varying degree of functionality in the manager, ranging from extremely simple highlighting to new Instarepls for Ruby or other languages.  It's also possible to install new themes via the plugin manager, such as the &lt;code&gt;base-16&lt;/code&gt; themes. There isn't a huge selection in the plugin manager and it's not immediately available how to find more, but the community is growing so I'm hoping to see a better manager UI and experience come along in the future.  Discoverability of good plugins is kind of challenging as-is, so there is definitely room for improvement.&lt;/p&gt;
 
@@ -180,15 +247,15 @@ So from the Command Bar I loaded my User Behaviors file and pasted the line into
 
 &lt;p&gt;So I clicked inside of the &lt;code&gt;:editor&lt;/code&gt; vector and typed &lt;code&gt;linenum&lt;/code&gt; and got a two pretty specific completion options to either hide or show line numbers.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/linenum-completion.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/linenum-completion.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I selected the show option, pressed enter, and the text expanded into the correct keyword, &lt;code&gt;:lt.objs.editor/line-numbers&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/linenum-info.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/linenum-info.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Next I wanted to change my font to use &lt;code&gt;Inconsolata-g&lt;/code&gt;, so typed &lt;code&gt;font&lt;/code&gt; as a new entry in the vector, pressed enter when it gave me the option to set the font of the editor, and then I was presented with a slightly different display than I was used to.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="" src="/images/light-table-part-2-a-retrospective/font-settings.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/blog/2014/light-table-part-2-a-retrospective/font-settings.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;While this doesn't seem entirely obvious, the screenshot of the display is telling us the order of the arguments.  As such, the font family is the first argument, font size is the second, and line height is the third.  This is form of inline documentation is wildly helpful, so I entered my values, saved, and the editor updated itself and was ready to go. I saw this as Light Table pulling some influence from Emacs and Elisp, but putting a better interface on a similar technique.&lt;/p&gt;
 
