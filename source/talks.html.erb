@@ -1,0 +1,27 @@
+---
+title: Matthew Machuga | Talks
+---
+
+<section class="talks">
+	<h1>Talks</h1>
+	<div class="talk-list grid">
+		<% data.talks.each do |talk| %>
+			<article class="talk cell">
+				<h2><%= link_to talk.title, talk.url %></h2>
+				<h4 class="info"><%= "#{talk.event} | #{talk.location} | #{talk.given_at.strftime('%m/%d/%Y')}" %></h4>
+				<div class="video">
+					<a href="<%= talk.url %>" target="_blank">
+						<%= image_tag talk.poster, title: talk.title, class: 'poster' %>
+					</a>
+				</div>
+				<p class="description">
+					<%= talk.description %>
+				</p>
+				<h4 class="topics-title">Topics Covered</h4>
+				<p class="topics">
+					<%= talk.topics.join(', ') unless talk.topics.nil? %>
+				</p>
+			</article>
+		<% end %>
+	</div>
+</section>

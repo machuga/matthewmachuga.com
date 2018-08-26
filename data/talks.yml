@@ -1,0 +1,67 @@
+- title: Maybes and Functors
+  event: Laracon US
+  location: New York City, NY
+  type: short-talk
+  description: |
+               A brief introductions to functors and the Maybe type, briefly touching on a tiny bit of Monadic properties
+  topics:
+    - Functors
+    - Maybes
+    - Monads
+  url: 'https://speakerdeck.com/machuga/maybes-and-functors'
+  embed_code: ''
+  poster: posters/maybes-and-functors.png
+  slide_deck: https://speakerdeck.com/machuga/maybes-and-functors
+  tags: [Testing, TDD, BDD]
+  published_at: 2018-08-25
+  given_at: 2017-07-26
+
+- title: Tests Should Tell a Story
+  event: Laracon US
+  location: Louisville, KY
+  type: talk
+  description: |
+               Through an analogy of storytelling, this talk aims to help you
+               be the hero of your testing story by giving new context and
+               perspective to the way a test suite should read to both your
+               colleagues and your future self. We'll demonstrate how proper
+               naming and assertions can lead to simpler, faster debugging.
+               We'll also see how an end-to-end test has a far more compelling
+               story when you focus on describing the feature and business
+               goals over describing a specific UI workflow in painful detail.
+  topics:
+    - Testing
+    - BDD
+    - Proper Naming
+  url: https://streamacon.com/video/laracon-us-2016/matthew-machuga-tests-should-tell-a-story
+  embed_code: ''
+  poster: posters/tests-should-tell-a-story.png
+  slide_deck: https://speakerdeck.com/machuga/tests-should-tell-a-story
+  tags: [Testing, TDD, BDD]
+  published_at: 2018-08-25
+  given_at: 2016-07-28
+
+- title: Objects, Testing and Responsibility
+  event: Laracon EU
+  location: Amsterdam, NL
+  type: talk
+  description: |
+               Object Oriented Design can add a lot to a project with just a little effort.
+               With a bit of OOD code flows more naturally, can be refactored easier and tests become simpler to write.
+               We will discuss these ideas as well as compare and contrast various design techniques.
+  topics:
+    - Laravel
+    - Object-Oriented Design
+    - Testing
+    - Responsibility
+    - PHP History
+    - Polymorphism
+    - Duck Typing
+    - Type Hinting
+  url: http://www.youtube.com/watch?v=EcBIzAHIYAw
+  embed_code: '<iframe width="500" height="281" src="//www.youtube.com/embed/EcBIzAHIYAw" frameborder="0" allowfullscreen></iframe>'
+  poster: posters/objects.png
+  slide_deck: https://speakerdeck.com/machuga/objects-testing-and-responsibility
+  tags: [Laravel, OOD, Testing, TDD, ducktyping]
+  published_at: 2013-10-21
+  given_at: 2013-08-31

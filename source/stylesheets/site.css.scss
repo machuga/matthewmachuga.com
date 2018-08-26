@@ -1,0 +1,467 @@
+$dark-blue: #2c3e50;
+$divider-color: #ddd;
+$section-margin: 5vh;
+$screen-min: 520px;
+
+// Colors
+$indigo: #042398;
+$deep-blue: #010D66;
+$muted-dark-blue: #0F5AB1;
+$purple: #074BDD;
+$light-blue: #14ADCD;
+//$white: #ECF3FC;
+//$black: #23172B;
+$orange: #EE5206;
+
+$white: white;
+$black: #333;
+
+$font: "Helvetica Neue", "Helvetica", "Fira Sans",
+    "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
+    "Franklin Gothic Medium", "Century Gothic", "Liberation Sans", sans-serif;
+
+.hidden {
+	display: none;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	background-color: $white;
+  color: $black;
+  font-family: $font;
+	line-height: 1.5rem;
+	font-size: 1rem;
+}
+
+h1 {
+	font-size: 1.5rem;
+}
+
+h2 {
+	font-size: 1.4rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+}
+
+h4, h5, h6 {
+	font-size: 1.1rem;
+}
+
+.site-header,
+.site-footer,
+.site-content {
+	max-width: 768px;
+	margin: 0 auto;
+}
+
+.site-content {
+	min-height: 20vh;
+	margin-top: $section-margin;
+	margin-bottom: $section-margin;
+	line-height: 1.6;
+}
+
+.site-footer {
+	border-top: 1px solid $divider-color;
+	padding-top: $section-margin;
+	padding-bottom: $section-margin;
+	display: flex;
+	justify-content: space-between;
+
+	.copyright-info {
+		flex: 1;
+
+		.copyright {
+			padding: 0;
+			margin: 0;
+		}
+	}
+
+	li {
+		list-style: none;
+	}
+
+	.nav-bar {
+		padding: 0;
+		margin: 0;
+	}
+
+	.social-nav {
+		font-size: 1.1rem;
+
+		.social-link {
+			display: inline-block;
+		}
+	}
+}
+
+@media only screen and (max-width: $screen-min) {
+	.site-footer {
+		flex-direction: column;
+
+		.copyright {
+			text-align: center;
+		}
+
+		.social-nav {
+			margin-top: 2vh;
+			text-align: center;
+		}
+	}
+}
+
+@media only screen and (min-width: $screen-min+1) {
+	.site-footer {
+		flex-direction: row;
+
+		.copyright {
+			text-align: left;
+		}
+
+		.social-nav {
+			margin-top: 0;
+			text-align: right;
+		}
+	}
+}
+
+a {
+  color: $muted-dark-blue;
+
+	&:visited {
+		color: $muted-dark-blue;
+	}
+
+	&:hover {
+		color: $indigo;
+		text-decoration: none;
+	}
+
+	&:active {
+		color: $purple;
+	}
+}
+
+.header-pic {
+	border-radius: 50%;
+	border: 5px solid white;
+	box-shadow: 0px 0px 5px 5px #ccc;
+	height: 150px;
+	width: 150px;
+}
+
+.site-header {
+	margin-top: 10vh;
+	border-bottom: 1px solid $divider-color;
+	text-align: center;
+
+	.site-title {
+		margin: 4vh auto;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	.nav-bar {
+		padding-left: 0;
+		padding: 0;
+		margin: $section-margin auto;
+	}
+
+	.social-nav {
+		font-size: 1.75rem;
+
+		.social-link {
+			display: inline-block;
+		}
+	}
+
+	.main-nav {
+		.nav-bar {
+			display: flex;
+		}
+
+		@media only screen and (max-width: $screen-min) {
+			.nav-bar {
+				flex-direction: column;
+			}
+		}
+
+		@media screen and (min-width: $screen-min+1) {
+			.nav-bar {
+				flex-direction: row;
+			}
+		}
+
+		.main-link {
+			flex: 1;
+			justify-content: space-evenly;
+			font-weight: 700;
+			font-size: 1.25rem;
+
+			a {
+				text-decoration: none;
+				color: $muted-dark-blue;
+
+				&:visited {
+					color: $muted-dark-blue;
+				}
+
+				&:hover {
+					color: $purple;
+					text-decoration: none;
+				}
+
+				&:active {
+					color: $purple;
+				}
+			}
+		}
+	}
+}
+
+.social-link {
+	font-weight: 500;
+
+	a {
+		text-decoration: none;
+		color: $muted-dark-blue;
+
+		&:visited {
+			color: $muted-dark-blue;
+		}
+
+		&:hover {
+			color: $purple;
+			text-decoration: none;
+		}
+
+		&:active {
+			color: $purple;
+		}
+	}
+}
+
+.newsletter {
+	margin: 0 auto;
+	text-align: center;
+
+	&--signup {
+		display: flex;
+		justify-content: center;
+	}
+
+	.email-group {
+		flex: 3;
+	}
+	.email-label {
+		display: none;
+	}
+
+	input {
+		height: 3rem;
+		font-size: 1rem;
+		padding: 15px;
+	}
+	.email {
+		//width: 75%;
+		margin: 0;
+		border: 1px solid $indigo;
+		background-color: #fefefe;
+		line-height: 1rem;
+		width: 100%;
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
+
+	.subscribe-btn {
+		flex: 1;
+
+		margin: 0;
+		border: 1px solid $muted-dark-blue;
+		background-color: $muted-dark-blue;
+		color: $white;
+		line-height: 1rem;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $purple;
+			border-color: $purple;
+		}
+
+		&:active {
+			background-color: lighten($purple, 10%);
+			border-color: lighten($purple, 10%);
+		}
+	}
+}
+
+@media only screen and (max-width: $screen-min) {
+	.newsletter {
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: $screen-min+1) {
+	.newsletter {
+		width: 75%;
+	}
+}
+
+.contact {
+	label {
+	}
+
+	input,
+	select
+	{
+		height: 3rem;
+		font-size: 1.1rem;
+		background-color: #fefefe;
+		border: 1px solid #ccc;
+		padding: 15px;
+		display: block;
+		width: 20rem;
+
+		&:focus {
+			border: 2px solid $muted-dark-blue;
+		}
+	}
+
+	textarea {
+		background-color: #fefefe;
+		border: 1px solid #ccc;
+		padding: 15px;
+		display: block;
+		font-family: $font;
+		font-size: 1.1rem;
+
+		&:focus {
+			border: 2px solid $muted-dark-blue;
+		}
+
+		height: 10rem;
+		width: 100%;
+		display: block;
+
+		&.hidden {
+			height: 0;
+			width: 0;
+			visibility: hidden;
+		}
+	}
+
+	select {
+		padding: 10px;
+	}
+
+	.send-btn {
+		border: 1px solid $muted-dark-blue;
+		background-color: $muted-dark-blue;
+		color: $white;
+		line-height: 1rem;
+		border-radius: 8px;
+		cursor: pointer;
+		width: auto;
+
+		&:hover {
+			background-color: $purple;
+			border-color: $purple;
+		}
+
+		&:active {
+			background-color: lighten($purple, 10%);
+			border-color: lighten($purple, 10%);
+		}
+	}
+
+	.required {
+		color: red;
+	}
+}
+
+.grid {
+	display: flex;
+	justify-content: space-between;
+
+	.cell {
+		flex: 1 50%;
+
+		h2 {
+			margin-top: 0;
+			margin-bottom: 10px;
+		}
+	}
+}
+
+@media only screen and (max-width: $screen-min) {
+	.grid {
+		flex-flow: column;
+
+		.cell {
+			width: 100%;
+		}
+	}
+}
+
+@media only screen and (min-width: $screen-min+1) {
+	.grid {
+		flex-flow: row wrap;
+
+		.cell {
+			//width: 500px;
+			max-width: 47%;
+			margin: 0 0 15px 0;
+		}
+	}
+}
+
+
+.talks {
+	h1 {
+		margin-bottom: 10px;
+	}
+
+	.talk-list {
+		.talk {
+			flex: 1 50%;
+			margin-bottom: 20px;
+
+			h2 {
+				margin-top: 0;
+				margin-bottom: 10px;
+			}
+
+			.info {
+				margin-top: 10px;
+				font-size: 1.0rem;
+			}
+
+			.topics {
+				font-size: 0.75rem;
+				color: #aaa;
+				margin: 0;
+			}
+
+			.topics-title {
+				margin: 0;
+			}
+
+			.poster {
+				width: 100%;
+			}
+		}
+	}
+}
