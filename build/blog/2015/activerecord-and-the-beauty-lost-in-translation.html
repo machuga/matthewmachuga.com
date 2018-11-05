@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      ActiveRecord and the Beauty Lost in Translation | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">ActiveRecord and the Beauty Lost in Translation</h1>
+        <h3 class="published-date">September 12, 2015</h3>
+      </header>
+
+      <h2>The Endless Fight</h2>
+
+<p>Sometime in 2014, PHP-land started to debate whether Active Record was a tolerable ORM pattern, and whether one should use Active Record or Data Mapper ORMs.  In PHP, this comes down to something like Laravel&rsquo;s Eloquent ORM as an Active Record implementation vs. Doctrine, the reigning mainstream (and probably only) PHP data mapper implementation.  After a surge of interest in Domain-Driven Design (DDD) and Hexagonal Architecture in the Laravel, and overall PHP communities, people began to detest one of the very things that drew them to the framework in the first place.  This was fueled by a number of vocal and notable Laravel community members learning Doctine, talking about it heavily, and some evangelizing it.  With outside influence from the PHP world providing the same judgement against the impure Active Record pattern, the pitchforks started to come out from all over.</p>
+
+<p>The long and short of the argument is that the Active Record pattern is found by some to be inferior to the Data Mapper pattern.  Why?</p>
+
+<h3>Entity / Repository Separation</h3>
+
+<p>Active Record models know not only how to represent a row in a database, but also how to query and persist itself and other objects to the database. DDD, hexagonal architecture, and  most general OOD practices tell object-oriented developers that their objects should do <em>one thing</em>.  Even though this rule can be easily overlooked in many cases, AR models know how to do a whole slew of things.  Depending on the AR implementation, this number of responsibilities an object may have can grow even larger.  This level of responsibility blending commonly makes things:</p>
+
+<ul>
+<li>Harder to change</li>
+<li>Harder to isolate bugs</li>
+<li>Harder to test</li>
+<li>Harder to refactor</li>
+</ul>
+
+<p>Along with the mixing of concerns, AR models are explicitly aware of their database representations.  The table fields are typically publicly exposed as properties or magic properties on the object.  This can be disruptive to someone attempting to create a minimal entity with a very explicit interface that isn&rsquo;t one-to-one with the database.  This is analogous to creating an API over HTTP; sometimes you don&rsquo;t mind consumers knowing the schema of your database tables, but most often you&rsquo;d like to give them access to that information in a more consumable, or more encapsulated way.  When you have very complex business logic in your domain, you may find Data Mapper providing a bit of an easier means to working with your data at the trade off of typically needing some extra work and boilerplate.</p>
+
+<h3>Testing is Meh</h3>
+
+<p>Some of the hate on this level is largely just regurgitation of hearing others say it, but if you have tried testing AR objects from any implementation you are well aware it is not the most pleasant of experiences.  If you&rsquo;re doing integration or end-to-end level testing where you are interacting with the database already, then it&rsquo;s fairly painless to test if you avoid mocking.  However if you are unit testing your models, attempting to check some behavior you&rsquo;ve placed on the entity, you may be in for some hurt if in anyway calls a method or property that relies on the database.  Frameworks like Rails and Laravel provide means for making unit testing models a bit easier, and honestly as long as you can stub out the model&rsquo;s database connection it&rsquo;s not terrible to test.  However, this must usually be done on each individual object so it is not the most pleasant of experiences.  It also makes integration testing objects that have AR models as collaborators a bit more challenging since you&rsquo;ll have to mock out the DB access before you pass it into the collaborator, which isn&rsquo;t ideal.</p>
+
+<p>Compare this with the way that a Data Mapper&rsquo;s entities may be tested, they&rsquo;re usually just plain objects of whatever language is being used and don&rsquo;t need things mocked because the entities have no knowledge of the database.  An entity would be fetched from a repository object, meaning that the concerns are already separated.  One can then easily test all operations of the entity quite simply without the runaround.</p>
+
+<h3>Community Pressure, Shaming, and Perceived Inferiority</h3>
+
+<p>As a developer who is involved in a community, especially a newer developer, it is common to feel a sense of pressure in terms of trends and current &ldquo;best practices&rdquo;.  If high praise or disdain for a practice or technology comes from more prominant members of a community, it becomes harder to ignore.  The voices then propagate from the top-down in a tree-like fashion, adding volume as it goes.  By the time it reaches new developers, it&rsquo;s nearly unavoidable and impossible to ignore.  However, part of the message is usually lost in translation somewhere along the way - the <em>when</em> and <em>why</em> something should be used.  Sometimes this reasoning is amplified because it&rsquo;s natural for us as developers to get excited to use a new concept or technology.  Somewhere along the way, though, we lose the reasoning by the time it reaches the next level in the tree.  This can often lead to the developers feeling like the <em>must</em> use something like Data Mapper in all situations if they are told it is far better than ActiveRecord.</p>
+
+<p>This will then lead to pressure and even shaming from community members to one another if one chooses to use ActiveRecord.  At this point, there is now a perceived inferiority of not only ActiveRecord, but also the developers who use to use it. By this point it should be obvious where the game &ldquo;Telephone&rdquo; originated, and why it is so silly.  Things lost in translation or modified over time somehow become grounds for judgement.  We&rsquo;re all guilty of it at some point, and probably far more often than we believe.</p>
+
+<h2>The Reality of Active Record</h2>
+
+<p>The points mentioned above have merit.  Testing ActiveRecord objects, or collaborators of said object, can be challenging.  Mixing concerns between persistance and domain logic can also make things muddier and harder to follow.  This can also make debugging code using AR models more challenging since the database may contacted at any time unintentionally.  However, do these cons always outweigh the benefits?  In my opinion, <em>no</em>.</p>
+
+<p>Admitting my contributions to this, on an episode of <a href="https://itunes.apple.com/us/podcast/episode-14-dhh-domain-events/id653204183?i=328486884&amp;mt=2">The Laravel Podcast</a> I was quoted saying something along the lines of &ldquo;I just don&rsquo;t like it anymore&rdquo; when asked my thoughts on ActiveRecord.  Even today, this remains true.  <strong>However</strong>, I still use ActiveRecord implementations <strong>every</strong> <strong>single</strong> <strong>day</strong> and am quite content.  I still like it better than other options available at this point.  In the Rails world, ActiveRecord is still the de facto ORM, especially if you want to develop fast.  It does everything we need for the most part, and for the areas it doesn&rsquo;t we can drop down a level and optimize while still being within ActiveRecord.  It is <em>good enough</em>.</p>
+
+<h3>It&rsquo;s Easy</h3>
+
+<p>Getting many things done in an ActiveRecord implementation is wildly fast and easy, especially if the implementation has added some excellent features to help it along.  It&rsquo;s so easy to just call <code>save()</code> on the object I&rsquo;m working with and know that it&rsquo;ll be persisted if all went well.  It&rsquo;s convenient to be able to do something like <code>user.blog_posts &lt;&lt; Blog.new(attrs)</code> to add a new associated blog post, knowing that foreign keys at the database level will be handled for me automatically.  In the event I need some sort of advanced query and do not want to fight the query builder directly, I can use <code>User.find_by_sql</code> and pass in my hand-rolled SQL query.</p>
+
+<h3>Domain Modeling is Still Entirely Possible</h3>
+
+<p>Nothing is explicitly halting you from modeling your domain effectively with ActiveRecord models.  Sure, you&rsquo;ll have some unrelated methods available on the objects themselves, but you can choose as a developer or as a team to not use them in certain contexts.  It takes more discipline for sure, but you can avoid exposing fetching or persisting logic outside of the model itself.  You can still create service classes to handle complex domain logic that use these methods as needed to model additional concepts.  The idea that you <em>can&rsquo;t</em> model your domain properly with ActiveRecord is a myth, but it might indeed take a bit of extra effort.</p>
+
+<h3>ActiveRecord Can Scale</h3>
+
+<p>At my day job we have a large Rails codebase that serves millions of users with some quite complex domain logic, and I&rsquo;m going to let you in on a secret - we use ActiveRecord!  Sure, there are situations where we&rsquo;d like cleaner entities or repositories, but in general we can usually just refactor some code or extract a new service object and still get a great result.  Even our data warehouse uses ActiveRecord with a number of custom queries.  It&rsquo;s wild how helpful it can be.  We don&rsquo;t need to worry about complex object hydration anywhere, we can quickly avoid N+1 issues, and most of our day-to-day operations are streamlined by the ActiveRecord internals.  We can pass <code>DateTime</code> objects to queries and they&rsquo;ll be cast properly for us.  We can fetch related data quickly from relations, even nested relations.  We send a huge amount of business logic and traffic through our codebase without any crazy speed loss that you may have heard of when using ActiveRecord ORMs.  As long as you use some good practices and are dilligent as a developer, it is certainly possible to happily and successfully use ActiveRecord.</p>
+
+<h2>Be Critical</h2>
+
+<p>The next time you come across the ActiveRecord vs. Data Mapper argument, or ones like it, be critical of what is being said. If it impacts your work in some way, do some research to find out if what is being said is true or if it has been something lost in translation.  Don&rsquo;t feel bad for using a pattern that has spread across multiple languages and ecosystems successfully, and is probably the reason we have most of the web frameworks we do today.  While the ActiveRecord existed well before Rails, it was Rails that gave it a beautiful API and made other frameworks like CodeIgniter, Laravel, .NET, Fuel, Django, etc want to have something comparable.</p>
+
+<p>If you use Eloquent, ActiveRecord for Rails, or any other AR ORM, make sure you know that you are not alone.  You are in good company of many, many developers who use it successfully day-to-day.  However, if one day you choose to use a Data Mapper implementation or something else, then you will still be in good company, and still deserve respect regardless of which side of the fence you fall.</p>
+
+<p>Let&rsquo;s all be friends.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/activerecord.html">activerecord</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/ruby.html">ruby</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/php.html">php</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/orm.html">orm</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/testing.html">testing</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

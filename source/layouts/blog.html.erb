@@ -1,0 +1,25 @@
+<% wrap_layout :layout do %>
+  <% if current_article %>
+    <article class="article">
+      <header class="header">
+        <h1 class="title"><%= current_article.title %></h1>
+        <h3 class="published-date"><%= current_article.date.strftime("%B %d, %Y") %></h3>
+      </header>
+
+      <%= yield %>
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+            <% current_article.tags.each do |tag, articles| %>
+              <li class="tag">
+                <%= link_to tag, tag_path(tag) %>
+              </li>
+            <% end %>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+  <% end %>
+<% end %>

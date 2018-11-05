@@ -1,0 +1,299 @@
+---
+
+title: Loss and Meaning
+date: 2018-04-28 00:00 UTC
+tags: personal, loss
+
+---
+
+I started writing pieces of this down a bit over a week ago, sitting alone in a
+calm hospital cafeteria of an out of town. My wife was waiting on her dinner in
+her room, and I was slowly and distantly chewing on my dinner.
+
+At this point it had been 28 hours after learning my unborn child no longer had
+a heartbeat.
+
+# Our Story
+
+The day before started off so jovial. I met a new employee at work and
+mentioned that I had 2 kids and my third on the way. I told her, in fact, I’d
+be going to find out the sex of the baby that afternoon. Evidently our newer
+doctor’s office favors anatomy scans after 20 weeks, so this was actually
+fairly late for us compared to our last two girls.
+
+At the appointment we got taken back nearly a half hour late and by this time
+were very anxious to find out if our baby was a girl or boy. The sonograph tech
+got everything set up, pressed the device against my wife’s belly, and there
+was our baby — so much bigger than our last sonogram 8 weeks prior! The images
+were a bit off, which I guess is normal if the bladder is full. After about a
+minute the tech asked my wife to empty her bladder. My wife and I laughed hard
+and she complied. As my wife went into the restroom, the tech mentioned she’d
+be back in a minute and left the room. My wife came back out shortly after, we
+joked around a bit more, and then after about 5 minutes started to get
+impatient and frustrated.
+
+We assumed that she started chatting with someone or took a smoke break. I
+peeked out into the hall and could hear her talking to someone. Then my wife
+wondered aloud from behind me something we hadn’t considered, “I wonder if
+something’s wrong…”
+
+The tech came back down the hall and was bringing a nurse or someone with
+her — I can’t remember who she was at this point. When they came into the room
+she introduced herself and I cut her short asking if something was wrong. The
+next time she opened her mouth she broke us.
+
+She told us the baby had no heartbeat.
+
+My wife started bawling and I don’t remember anything else she told us until I
+asked her to check again and held out hope that they were wrong. They scanned
+for quite a while. I could see my baby there on the screen — arms, legs, head,
+and ribs. But there was no familiar fluttering between those ribs or blood
+flowing. We were told we had to leave for Pittsburgh immediately to “evaluate
+our options for delivering” the baby. I made the out of town hospital check yet
+again and they got three doctors to confirm before I wholly accepted what had
+happened. That acceptance finally brought some tears for me.
+
+Our baby. Our hopes. Our dreams. Gone.
+
+# Your Story
+
+I intended to keep this largely private, and most details I will. However I
+want to make some of this public because this sort of thing happens far more
+often than I realized, and nothing can prepare you for the pain, sadness, and
+hopelessness in that moment and days to follow learning your child is
+stillborn. That being said, knowing what to face going in may help lessen the
+repeated blows as they tell you what to expect and remind you what decisions
+you have to make. My third child never got to see the world and leave their own
+mark, so I want to ensure that their short life makes some positive impact to
+honor them.
+
+# Hearing the News
+
+Nothing I can say hear will lessen the hit. It fucking sucks and it will always
+hurt, even when it’s just a memory. I can tell you that you and your partner
+are not alone. Many people learn they’ve had a miscarriage or a stillborn and
+will understand the pain you’re feeling. A surprising number of people you
+already know may have experienced it and you’ve never known. I’m fortunate (as
+fortunate as this sort of thing can be) in that I’ve known several people who
+have experienced this. Talking through it with my oldest and dearest friend,
+and hearing his experience, helped me greatly — I hope that you too have
+someone close. Some people keep this close to the chest and haven’t told you
+before they suffered this sort of loss; however, they may choose to open up to
+you in order to help you through the process.
+
+There are also many organizations and support groups both online and in person
+that you can reach out to and communicate with. These can be just as invaluable
+as someone in your personal network. You may even make some lifelong friends
+out of this experience.
+
+However you choose to do this, I cannot encourage you enough to not handle this
+alone. It may feel like all you want to do, but bottling up your emotions may
+prolong your grieving and pain. Please, please, talk to someone about what
+you’re going through. At bare minimum, please communicate openly with your
+partner.
+
+# Your Partner
+
+This section is targeted primarily to men who are suffering a loss with their
+partner, because I am highly under qualified to discuss this from the
+perspective of a woman.
+
+This time is insanely hard for both you and your partner. Our instinct seems to
+be to protect our partner, but when you both suffer the loss it’s important to
+accept that at some point you need to grieve as well. For me, along with the
+need to protect my wife, I didn’t feel justified in grieving nearly as hard as
+she did — she carried the baby inside her for 20 weeks. They were never apart,
+she would always talk to the baby, everything about her was changed in some way
+by the baby, and even after death, the baby was still there. I can’t fathom how
+hard this was on my wife and I’ve been with her every step of the way. From
+numerous accounts, articles, friends, and from my wife herself, I was reminded
+that I’m experiencing the loss as well and it’s okay and healthy to acknowledge
+it.
+
+For the first several hours I was rather stoic and blank, trying my hardest to
+comfort my wife and only trying to drive the process forward as we had to make
+decisions, arrangements, and communication throughout the day. In one of the
+hospital rooms my wife waiting for scans my wife and I were trying to research
+how we could try to break the news to our daughters that this happened, and I
+saw something mentioning that as the father I shouldn’t be afraid to show my
+emotions, and not doing so may signal to my wife that I don’t care.
+
+I immediately asked my wife if I’ve come off as indifferent throughout the day,
+not wanting to add to her pain if it was the case. My wife and I have been
+married for nearly 6 years and together for over 15, so she assured me that she
+knew I cared and knows how I get when situations go sideways. She did, however,
+affirm that I can’t bottle my emotions up and that she’s not that only one that
+suffered a loss. She told me to let myself grieve an not only be focused on
+her. When I finally shed some tears after another interaction with the doctors,
+she was there for me as I was for her — holding me tightly. It made her feel a
+bit better knowing that she could help comfort me in the situation.
+
+# Telling Others
+
+Adding to the pain of the situation is the fact that people may know you were
+expecting a baby, but don’t know the baby is gone. This information is yours,
+but unfortunately if people aren’t informed you’ll be hearing the questions
+“How are along are you?”, “When is the baby due?”, “Is it a boy or girl” and
+reliving it every time. We handled it by informing those closest to us and
+letting them spread the news. For neighbors and friends I make sure I’m the one
+they run into first so that I can give them the heads up so my wife doesn’t get
+put into the situation.
+
+Outside of word-of-mouth, you may choose to notify multiple people at once via
+Facebook or similar social networks (we opted not to). Or you may personally
+want to tell people case-by-case. Do what feels right to you. And this brings
+us to the hardest ones to tell.
+
+# Telling Your Children
+
+Along with actually hearing the news about the death, telling our kids was the
+hardest part. We agonized over how to tell them. Read countless articles
+online, and I read some of the books on grief they gave us while my wife
+napped. There are so many recommendations from different folk, but one theme
+seems to be consistent: don’t sugar coat it or use confusing terms because they
+will tend to take it literally. Things like “we lost the baby”, “the baby is
+asleep and can’t wake up”, “the baby went to heaven”, or similar phreases imply
+impermanent states. Most sources said to tell them and use real words, but
+don’t disclose more than what they ask.
+
+For us, our girls are 5 and almost 3. When we got home from the hospital we
+told them the baby wasn’t strong enough to be born and had died. I’m not going
+to go into details of reactions, but they understood what happened and largely
+handled the news well. Children are insanely resilient.
+
+Now, one thing I could never find was to how to tell children where the baby
+physically went. I was panicking about this part because I didn’t know how to
+answer it. I’m still unsure how they’ll react when we get the urn next week,
+and how we’ll explain it. At the moment I think I’m going to explain that when
+babies die and aren’t able to be born, they turn them into ash since their body
+can’t survive.  The answer to this will also greatly depend on how you handle
+the next part.
+
+Another thing I’ve read is to not shield them too much as they may come to
+resent being left out. They suffered a loss too (assuming you told them or were
+far enough to notice), and need to be able to grieve. If you do a memorial of
+any sort, let them be involved. Let them make something for the baby if that’s
+how they want to express themselves. It may seem hard, but it seems to really
+help.
+
+## Warning: These next sections have details that are not easy to read and may be upsetting. Either stop now or be ready to proceed.
+
+# How to Deliver
+
+As if mothers haven’t been through enough, they still need to get the baby and
+placenta out. I’m not going to tell you how we chose to handle it, because it’s
+important that you and your partner handle it either the way you want, or the
+way your health care provider tells you is medically safest. I am not qualified
+to give recommendations.
+
+There are different options based on your situation. I can tell you they seem
+very reluctant to perform a C-Section because despite it being performed
+commonly, it’s a risky surgery that is often done for the sake of the safety of
+the baby. Since the baby is no longer alive, they don’t want to risk the
+mother. So that leaves two more common options.
+
+## Vaginal Delivery
+
+A standard vaginal delivery is one of the options they’ll present as long as
+there are no blocking risks. They’ll certainly offer an epidural and other
+things to make the mother as comfortable as possible, but like any other option
+this is not an easy process. If you’d like a chance to hold your child before
+they are taken away, this is the most realistic option. Some people aren’t sure
+whether they’d like to. Think hard on it and discuss it with your partner.
+Decide whether this option is right for you and if the risks are worth it. This
+next part is a bit gruesome, but I want you to be aware of it in case your
+provider does not give you the warning. Make sure the sonography tech tells you
+an estimate on how far along the baby was when it passed way. The placenta
+doesn’t necessarily know the baby passed away right away, so delivering a
+stillborn that passed away a day ago vs one that passed away a couple weeks
+prior can be very different experiences. I know that’s not giving pleasant
+imagery, and the thoughts of it were horrifying when the hospital listed
+possibilities to us, but it’s important to know.
+
+They will likely offer to try to get you hand prints and foot prints for a
+memory box.
+
+## D & E
+
+This method is common for babies that pass away prior to 20 weeks, high-risk
+pregnancies, or women who have had prior C-sections. In this procedure, it is
+highly unlikely that you’ll be able to hold your child because they “evacuate
+the pregnancy”, implying that they will almost always need to remove everything
+from the uterus in pieces. This procedure is also extremely unpleasant to hear
+and imagine, but they will tell you it is the safest for the mother. While it
+is a short procedure (I think they said less than a half hour), it can take as
+long as labor and delivery because they need to dilate the cervix to 2–3cm over
+about a day and secure an operating room for the procedure.
+
+They will still offer you a memory box with handprints and footprints, and will
+try hard to make it possible, but they caveat it with the fact that it may not
+be possible to get the prints due to the way the procedure is done.
+
+# Autopsy
+
+This part is at least as hard to stomach as the decision on delivery. Often
+times the doctors have no idea why the baby passed away. They will take blood
+from the mother and tissue from the pregnancy to do some testing, but those are
+still not as conclusive as an autopsy. An autopsy will allow them to try to see
+what may have happened in two different ways. They can do an external autopsy,
+in which they will not harm the body (from what I can remember, I recommend
+searching the web to confirm or asking your physician), but will take samples
+that they can test further. This yields more information, but is still not as
+informative as an internal autopsy. This is exactly what you think it is, more
+or less like what you’ve seen on TV. They will cut into the body and examine
+each organ in ways I don’t want to think about too much. It’s hard to picture,
+but this is your best chance at finding out what happened to your baby.
+
+If you’re planning on having another baby, this kind of information can be
+helpful to understand your chances of it happening again or what you can do to
+prevent it (if anything). It can also be helpful in knowing if there is
+anything hereditary that you need to be concerned about with your existing or
+future children. The autopsy also helps research in discovering why some of
+these things happen, and what people and doctors can do to prevent them in the
+future.
+
+You need to choose what is right for you. It’s a hard choice with tradeoffs,
+and there’s no getting around it.
+
+# Disposal
+
+I’m sorry, that term sounds insensitive, but it is unfortunately the term that
+will be used. From what I’ve read and what doctors told us (within Pennsylvania
+at least), babies in the womb for less than 20 weeks have to be disposed of by
+the hospital per regulation. From what I understand, the remains will be
+cremated, but it will be done with others remain and buried together at a
+cemetery. Evidently babies will be buried in a specified area at many
+cemeteries. There will be no grave to visit in this situation. Above 20 weeks
+you can choose to allow the hospital to dispose of the remains or you can
+dispose of it. For fairly obvious reasons, if they perform a D & E they will
+only allow you to have the remains cremated to avoid further trauma. If you
+have a vaginal delivery you can decide whether to have a burial or cremation
+(which you can choose to inter later).
+
+You’ll need select a funeral home to handle the remains. They will continually
+ask you if you’ve decided on one — be sure to research and find one that will
+work with you for your needs. Many will offer a heavy discount for stillborns
+and deceased infants. The one we dealt with were incredibly kind, worked with
+us, and gave us a deep discount. Usually the hospital will send in a social
+worker to help you find a funeral home and tell you ones they partner with or
+are known to offer discounts. If you need help affording the costs, there are
+organizations like [Emma’s Footprints](http://emmasfootprints.com/) that are
+available to help you.
+
+# Conclusion
+
+I sincerely hope you never have to deal with this sort of loss. Losing a baby
+is hard no matter whether it’s an early miscarriage, half way through, or any
+further along. It’s an odd feeling grieving a child you’ve never seen, but that
+child is yours no matter what. You had hopes and dreams for that baby. You’ve
+undoubtedly pictured what life would be like, what their life would be like as
+they got older. You’ve thought about how he or she would play with their
+siblings as they grew up together. Take the time you need to mourn your loss
+the way you need to. The choices aren’t easy, especially given the pain you’ll
+be in, but those decisions stay with you. Think as carefully as you can and do
+what you think will be right for you and your family. My child had its life cut
+short, but I’m hoping this article written based on that short life and death
+will help you and others understand what is to come.
+
+I wish you all the best, and remember — you are not alone.
+

@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Setting up a Quick Dev Environment for React, ES2015, Babel, and Webpack | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Setting up a Quick Dev Environment for React, ES2015, Babel, and Webpack</h1>
+        <h3 class="published-date">November 01, 2015</h3>
+      </header>
+
+      <p>This is going to be short and sweet.  I couldn&rsquo;t find a tutorial that spelled out a way to get a barebones environment setup for React using webpack and ES2015 without something being missing.  This is due in part to the fact that Babel has recently integrated JSX into its core, split things out into more packages, etc.  So here are a list of steps and brief explanations I found from a number of tutorials, namely <a href="https://robots.thoughtbot.com/setting-up-webpack-for-react-and-hot-module-replacement">this one from Thoughtbot</a>, <a href="https://www.twilio.com/blog/2015/08/setting-up-react-for-es6-with-webpack-and-babel-2.html">this one from Twilio</a>, and finally by just reading Babel and React documentation.</p>
+
+<h2>Assumptions</h2>
+
+<p>You are running on OSX or Linux with node + npm installed, with node at at <em>least</em> version 0.12.x - I&rsquo;m running 4.2.1.</p>
+
+<h2>Create a new project</h2>
+
+<p>Create new directory <code>newapp</code> with a subdirectory named <code>app</code></p>
+
+<pre><code class="bash">mkdir -p newapp/app
+cd newapp
+npm init
+</code></pre>
+
+<p>When you run <code>npm init</code> it will prompt you to fill out information about your project.  You can just feed it nonsense for now if you&rsquo;d like to just get through it for test purposes.</p>
+
+<h2>Install dependencies</h2>
+
+<h3>Babel</h3>
+
+<pre><code class="bash">npm install babel-cli babel-core babel-preset-es2015 babel-preset-react --save-dev
+echo &#39;{\n  &quot;presets&quot;: [&quot;es2015&quot;, &quot;react&quot;]\n}&#39; &gt; .babelrc
+</code></pre>
+
+<p>Lots of Babel packages!  Let&rsquo;s run through these quickly:</p>
+
+<ul>
+<li><code>babel-core</code>: Installs Babel itself for usage by other libraries and apps</li>
+<li><code>babel-cli</code>: Installs the Babel CLI tool that you can use for compiling, debugging, etc.</li>
+<li><code>babel-preset-es2015</code>: Installs the plugins available for to compile ES2015 syntax and functionality into ES5.</li>
+<li><code>babel-preset-react</code>: Installs the plugins available for transforming JSX and Flow syntax/types into ES5. If you don&rsquo;t know what <a href="http://flowtype.org/">Flow</a> is, you can completely ignore that extra bit of info.</li>
+</ul>
+
+<p>I also include a snippet there to create a .babelrc file to load up the <code>es2015</code> and <code>react</code> plugins.  This could also just be done in the webpack config, but then it wouldn&rsquo;t be available from the CLI so I prefer this method.</p>
+
+<h3>Webpack</h3>
+
+<p>Run this next installation command</p>
+
+<pre><code class="bash">npm install webpack babel-loader file-loader webpack-dev-server --save-dev
+</code></pre>
+
+<p>This will install Webpack along with its Babel integration.  Next <code>file-loader</code> is a basic file loader for loading static assets into the <code>dist</code> directory so everything is one relative location.  Finally I loaded up the <code>webpack-dev-server</code> just to make things simple to play with.  You can really use any web server to serve from your <code>dist</code> directory, but to get up and running quickly go ahead and use this.</p>
+
+<p>Next create <code>webpack.config.js</code> in the root path next to <code>package.json</code>, and edit your config to look like this.</p>
+
+<pre><code class="javascript">module.exports = {
+  context: __dirname + &quot;/app&quot;,
+  entry: {
+    javascript: &quot;./app.js&quot;,
+    html: &quot;./index.html&quot;,
+  },
+  output: {
+    filename: &quot;app.js&quot;,
+    path: __dirname + &quot;/dist&quot;
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loaders: [&quot;babel-loader&quot;]
+      },
+      {
+          test: /\.html$/,
+          loader: &quot;file?name=[name].[ext]&quot;,
+      },
+    ]
+  }
+};
+</code></pre>
+
+<p>This makes the assumption you want to store your JS in <code>app</code> and want it to compile to <code>dist</code>.  If you&rsquo;d like to change this, feel free. We&rsquo;ve also told it to move <code>.html</code> files into the <code>dist</code> folder, and for <code>babel-loader</code> to be responsible for loading up and <code>js</code> or <code>jsx</code> files.</p>
+
+<p>We&rsquo;ll create the related files in a moment, but we have one more dependency installation step left.</p>
+
+<h3>React</h3>
+
+<pre><code class="bash">npm install react react-dom --save
+</code></pre>
+
+<p>As specified by the <a href="https://facebook.github.io/react/downloads.html#npm">React Documentation</a>, we need both the <code>react</code> and <code>react-dom</code> packages in order to utilize React, since <code>React.render</code>, amongst other things were moved out to the <code>react-dom</code> package.</p>
+
+<h2>Testing</h2>
+
+<p>Okay now that dependencies are installed, we can give some test runs.</p>
+
+<p>Create a new file <code>app/index.html</code> and copy/paste this HTML:</p>
+
+<pre><code class="html">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Webpack, Babel, and React!&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;&lt;/body&gt;
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Create a new file <code>app/app.js</code> and copy/paste the following:</p>
+
+<pre><code class="javascript">import React from &quot;react&quot;;
+import ReactDOM from &quot;react-dom&quot;;
+
+ReactDOM.render(
+  &lt;div&gt;Hello!&lt;/div&gt;,
+  document.body
+);
+</code></pre>
+
+<p>Now to verify that we have everything needed to use Babel and React, we&rsquo;re going to run</p>
+
+<pre><code class="bash">babel app/app.js --presets react
+</code></pre>
+
+<p>In the event <code>babel</code> can&rsquo;t be found because something got weird with your path, you can also invoke this with</p>
+
+<pre><code class="bash">./node_modules/babel-cli/bin/babel.js app/app.js --presets react
+</code></pre>
+
+<p>If everything worked as expected, you&rsquo;ll see a printout of the compiled file appear below the command in your shell.</p>
+
+<p>Next we can move on to trying out the whole thing.</p>
+
+<p>If you want to have the command available globally, you can install the <code>webpack-dev-server</code> globally by running <code>npm install -g webpack-dev-server</code>.  Otherwise, open up <code>package.json</code>, locate the <code>scripts</code> object, and add <code>&quot;start&quot;: &quot;webpack-dev-server --progress --colors&quot;</code> to it.  It should look something like this when you&rsquo;re done.</p>
+
+<pre><code class="json">&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;webpack-dev-server --progress --colors&quot;,
+  &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+}
+</code></pre>
+
+<p>So if you&rsquo;ve installed it globally, run <code>webpack-dev-server --progress --colors</code>, otherwise simply run <code>npm start</code>.  This will start the dev server, compiling everything and launching the server at <code>http://localhost:8080</code>, where once you navigate to in your browser, you should see &ldquo;Hello!&rdquo; displayed correctly.</p>
+
+<h3>Go Have Fun!</h3>
+
+<p>Now you have the barebones setup to start working with React and Babel via Webpack, so have fun and experiment.  Hopefully my morning of digging and trial-and-error can help you nail this on the first try.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/js.html">js</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/webpack.html">webpack</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/react.html">react</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/es2015.html">es2015</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/es6.html">es6</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/babel.html">babel</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

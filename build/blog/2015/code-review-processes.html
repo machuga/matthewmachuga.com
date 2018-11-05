@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Code Review Processes | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Code Review Processes</h1>
+        <h3 class="published-date">January 09, 2015</h3>
+      </header>
+
+      <p>Pushing code to production without a review process in place, to me, feels like a game of Jenga.  The code <em>could</em> be completely fine, but there&rsquo;s also that chance that someone&rsquo;s going to move the wrong piece and everything will come crashing down.  Having any sort of review process or tooling in place can greatly reduce the chance you&rsquo;re going to ship something risky, whether it&rsquo;s a continuous integration service, peer code reviews, quality assurance reviews, or a combination of all of these solutions.</p>
+
+<h2>The Program Smith has Grown Beyond Your Control</h2>
+
+<p>At my job at <a href="http://thinkthroughmath.com">Think Through Math</a> we have an engineering team of about 18 developers, two of which are QA specialists.  This is a lot of people (relatively speaking) to be working on code at the same time.  We have a few various different services in our architecture, so not everyone is intimately knowledgable of every corner of the code.  We have some people who prefer to work in the front-end, some who focus on data warehousing and reporting, and others who hack away at the back-end Ruby code.  We all tend to mix and match with pairs regularly to try to spread our knowledge around, but the fact remains that we still have a number of people working on different projects at any given time, and no one person can hold our entire system in their head.</p>
+
+<p>I know we aren&rsquo;t alone in this area - there are other developers out there in similar situations.  Some are simply trying to work on their app day-to-day, some are trying to break up their monolithic Rails app into smaller services, and some are on legacy rescue projects.  Regardless of the type of project, each one could greatly benefit from sort of review process being in place.  Day-to-day work could verify that everything is going to keep working while making changes or adding features, monorail breakups could ensure that each new service retains functionality but the code is of higher quality and separated correctly, and rescue projects can ensure that needed functionality persists while areas of the code beging to follow new guidelines.  Even better, under the right process some of these things can be automated.</p>
+
+<h2>The Current TTM Review Process</h2>
+
+<p>Throughout the numerous iterations of our review process at Think Through Math I can&rsquo;t remember a single one flat out &ldquo;not working&rdquo;, but some were more effective than others.  The latest iteration seems to be the best to date (as one would hope), but still could be improved.  In a later post I&rsquo;d love to explain our new method of coming to agreements and changes to our processes, but that&rsquo;s pretty out of scope for this post.  Here is a brief rundown of how our current review process works.</p>
+
+<h3>Code Review</h3>
+
+<p>First the developer, or typically a pair, completes a bugfix, feature, or refactor and pushes the code up to GitHub.  If they&rsquo;re pushing just to let our CI server run the test suite on their branch, they will use our <code>WIP</code> label to let other developers and bots know that no actions need to be taken at this time.  During this time (and anytime code is pushed to the PR) our Hound service will run and check our code styles to make sure that the code that has been submitted is up-to-par with the styles we&rsquo;ve selected.</p>
+
+<p>Once the code is ready to go the developer will attach a <code>Needs Code Review</code> label to the PR. She or he will also include complete instructions as a checklist on how QA should test the PR.  At given intervals our helpful chat bot, <code>mathbot</code> will come through to check for PR&rsquo;s with the <code>Needs Code Review</code> label, and then assign two other developers to review the code.  In the event that one of the reviewers isn&rsquo;t comfortable reviewing an area of code they haven&rsquo;t been in before, they simply request for someone else familiar with the code to swap PR&rsquo;s with them in our chat room.</p>
+
+<p>We typically ask our developers to review the code pretty thoroughly rather than simply acting as human linters or compilers. Straight from our process definition page, the requested style of review is:</p>
+
+<ul>
+<li>Be inquisitive and look into why the author of the PR did things certain ways</li>
+<li>Look for flaws in their logic; reversed booleans, potential bad selection of objects, type mismatches</li>
+<li>Look for clear naming and intent of code</li>
+<li>Look for areas that could be optimized.  Micro-optimizations aren&rsquo;t always needed, but some things should be avoided
+
+<ul>
+<li>Accidental DB calls inside of loops</li>
+<li>Heavy work inside of loops if it can be avoided</li>
+<li>Not caching or memoizing results of heavily used and expensive operations</li>
+</ul></li>
+</ul>
+
+<p>If one or both of the reviewers feel that the code could use some tweaks, they will leave inline comments in the Pull Request on GitHub so that the developer has a clear point of reference for which areas of code were questionable.  The reviewer will then remove the <code>Needs Code Review</code> label and replace it with our <code>Needs Work</code> label, signifying that the developer(s) should review the comments and either implement the needed changes or justify why they&rsquo;ve chosen to write the code that way.</p>
+
+<p>An important thing to note here is that all comments are done in a very respectful and positive manner.  We&rsquo;re never out to judge each other.  We&rsquo;re here to help each other write the best code possible and keep the integrity of our system together.  Self-improvement is a common goal we all share on the team, and being a company about learning, we&rsquo;re all about helping eachother new techniques and practices.</p>
+
+<p>After the requested changes have been made or justified, the developer will remove the <code>Needs Work</code> label and reflag it to <code>Needs Code Review</code> so that the reviewers know they have more work to do.  Once they both sign off on the changes, the <code>Needs Code Review</code> label will be appropriated flipped to <code>Passed Code Review</code> to signal that no more review is needed. The <code>Needs QA</code> flag will then be appended assuming that UX review is not needed.</p>
+
+<h3>UX Review</h3>
+
+<p>Our product hits a very diverse audience - students, school faculty, administrators, etc., so we are very conscious of our copy changes and UI/UX style changes.  As such, if we perform any changes to the front end of the system that could change the appearance of something on the site we need to apply a <code>Needs UX</code> label to our PR in order to have someone from the UX team review our changes.  This step is generally done simultaneously with the code review process since if UX needs something to be changed it may affect the code.  If changes need to be made they remove their label and set it to <code>Needs Work</code>, the same way that is done for code review.  Once all is well they will remove the <code>Needs UX</code> label and apply the <code>Needs QA</code> flag.</p>
+
+<h3>QA Review</h3>
+
+<p>The QA team is small, but heavily relied upon to ensure our code meets the requested business requirements and does not fall apart at first usage.  We link our PRs up to stories from our project management tool so that the person QA&#39;ing the PR can quickly reference what the acceptance criteria is, along with goals and nuances, while they try to break it.  They use the specs provided by the developers on what to test, then use their own abilities to try to creatively blow up the system.  If something broke or did not meet acceptance criteria, they&rsquo;ll once again remove all labels and apply the <code>Needs Work</code> label, which almost always will force a new code review (usually just on the changed parts) once the changes have been applied by the developer.  Once everything is complete and it functions properly, the code will receive the <code>Passed QA</code> label and then finally get merged into our release candidate branch.  From here it will eventually be promoted to master and pushed up to production once QA and the product team have determined what features and fixes should go into a release.</p>
+
+<p>Here is a flow chart if all of that label talk was confusing for you.</p>
+
+<p><img src="/blog/2015/code-review-processes/ttm-flow.png" alt="Review Process Flow Chart" /></p>
+
+<h1>Why?</h1>
+
+<p>If this seems like a lot of process, it&rsquo;s really pretty minimal in real world usage.  The entire workflow can even be completed in as little as ten minutes if it&rsquo;s a small review and a feature that needs pushed ASAP, but typically it&rsquo;s longer and not rushed.  Everything flows together naturally now and it ensures that we have three different people at least look at our code from different perspectives and ensure that it is high quality and does what it claims.  This helps us keep our codebase and tests clean, readable, and self-documenting.</p>
+
+<p>The benefits outweigh any potential cons of feeling like you have a <strong>Process</strong> with a capital <code>P</code>.  We release fewer bugs, we are happy with the code that goes into the repositories, and we have people help use improve daily.  I cannot stress how many times a second set of eyes has prevented a dumb error or performance degredation in my own code, and QA has saved me countless times in cases I hadn&rsquo;t checked.  I never feel like any comments or criticisms are made with malice or judgement, just genuine care in keeping the code clean and helping me fix mistakes, clean my code, or learn something new.</p>
+
+<h1>tl;dr</h1>
+
+<p>Create some of sort of review process at your job, or take time to analyze, review, and improve your existing strategy.  Iterate on it and be open to potential changes, because the next idea may improve your results even further.  Having both software and real humans review your code will save you from releasing silly mistakes to production or littering your codebase with unmanageable code.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/code-review.html">code-review</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/process.html">process</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/meta.html">meta</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

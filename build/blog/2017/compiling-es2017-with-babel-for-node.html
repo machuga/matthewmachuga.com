@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Compiling ES2017 with Babel for Node | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Compiling ES2017 with Babel for Node</h1>
+        <h3 class="published-date">August 07, 2017</h3>
+      </header>
+
+      <p>A long time ago I swore off compiling code I intended for NodeJS. I had
+originally done this with some production CoffeeScript code back in 2013 and it
+brought on a number of headaches — harder debugging, incompatibility with
+modules, and extra indirection. I’m not entirely sure I’d call it a mistake;
+CoffeeScript allowed us to move quickly with some advanced language features
+that weren’t yet available in Node and that helped us build our app quickly.
+However, those headaches I mentioned started to slow us down over time and I
+quickly became jaded on the topic. After noticing at Auth0 we compile some code
+at runtime with Babel, I figured I should open my mind and be willing to try
+again.</p>
+
+<p>Node has most modern features implemented; however, once you get used to the
+ES2015 module spec it can be challenging going back to the standard Node/Common
+<code>require</code>/<code>module.exports</code> way of doing things. At Auth0 we also may have our
+extensions running on an LTS version of NodeJS rather than the most recent
+release so I’d rather ensure that features I expect to be present are, in fact,
+available.</p>
+
+<p>Since some of our other extensions compile with Babel, I figured I’d fall in
+line and try to create a new extension using the same pipeline. While some only
+compile with the <code>es2015</code> preset, I figured I’d go for <code>es2017</code> because A: It’s
+2017, and B: I wanted to ensure the spread ( <code>...</code> ) operator was available in
+whichever version of Node the service used.</p>
+
+<h1>Babel Configuration</h1>
+
+<p>The important part of the configuration lies with the <code>presets</code> key. We use
+<code>.babelrc</code> for our Babel setup, so my file initially looked something like this:</p>
+
+<pre><code class="json">{
+  &quot;presets&quot;: [&quot;es2017&quot;]
+}
+</code></pre>
+
+<p>I then, from another extension, borrowed a chunk of code to make Babel
+transform things on the fly and shoved it into its own module at <code>lib/babel.js</code>.</p>
+
+<pre><code class="js">// Initialize Babel for the rest of the app
+
+module.exports = function loadBabel() {
+  require(&#39;babel-register&#39;)({
+    sourceMaps: !(process.env.NODE_ENV === &#39;production&#39;)
+  });
+  require(&#39;babel-polyfill&#39;);
+};
+</code></pre>
+
+<p>Since performing this operation has a global side-effect, I wanted to make sure
+I stuck it behind a function with an explicit name so that it was obvious what
+I was doing when I imported the module and ran the function with near the top
+of my <code>index.js</code> file:</p>
+
+<pre><code class="js">const loadBabel = require(&#39;./lib/babel&#39;);
+//...
+loadBabel();
+
+// Or, more condensed but less obvious:
+require(&#39;./lib/babel&#39;)();
+</code></pre>
+
+<p>With that loaded I assumed I was good to go and tried to import another module.
+We’ll say it was <code>import foo from &#39;./bar&#39;</code>. I expected great things, but when I
+ran the app with <code>node ./index.js</code> I was greeted with an error:
+<code>Syntax Error: Unexpected token import</code> — <code>import</code> wasn’t recognized and was invalid. This struck
+me as odd and I spent somewhere around a half hour jumping around in my code
+assuming I made a typo somewhere or wasn’t using <code>babel-register</code> or
+<code>babel-core/register</code> correctly. I’ll save you the same steps, but my salvation
+came in the form of a
+<a href="https://github.com/avajs/ava/issues/1139#issuecomment-264921916">GitHub issue comment</a>
+where a very logical, albeit not-obvious solution if you&rsquo;ve only used <code>es2015</code>, was given:
+<code>es2017</code> preset only compiles down to <code>es2016</code>.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*z0afYoDEuGcUyAc90zsGfw.gif" alt="Very logical, but not obvious" /></p>
+
+<p>If you’ve used Babel, this probably seems clear, at least after being stated. Or
+perhaps, like me, you assumed <code>es2017</code> to be packaged up to include <code>es2016</code>
+and <code>es2015</code> presets by default. However, it is more logical that <code>es2017</code> need
+only be composed of things to compile down to the next lowest target. What if
+the runtime supports <code>es2016</code> and we only need a few features from <code>es2017</code>?
+Running passes over the code for lower targets would start dropping the target
+to lower levels than what’s needed. No sense in doing more work, or potentially
+de-optimizing code for lower targets. As such, that makes the choices for
+<code>es2016</code> and higher very logical and almost obvious (once you expect it).</p>
+
+<p>So we then have two ways to solve the problem. One way, if your version of Node
+has all features from the ES2015 and ES2016 specs, is to simply import the
+Babel plugin to handle ES2015
+modules,babel-plugin-transform-es2015-modules-commonjs , and then add it to our
+.babelrc file like this:</p>
+
+<pre><code class="json">{
+  &quot;presets&quot;: [&quot;es2017&quot;, &quot;transform-es2015-modules-commonjs&quot;]
+}
+</code></pre>
+
+<p>Or we can take the more costly, but more inclusive, route of importing both
+<code>es2016</code> and <code>es2015</code> presets from npm and including those in our <code>.babelrc</code> file.</p>
+
+<pre><code class="json">{
+  &quot;presets&quot;: [
+    &quot;es2017&quot;,
+    &quot;es2016&quot;,
+    &quot;es2015&quot;
+  ]
+}
+</code></pre>
+
+<p>This will let all included presets perform their necessary duties and output
+some ES5-friendly code at the end. I opted for the latter until I could verify
+the version of Node on the servers, but once I reran my code with those presets
+in place, the existing code and imports executed perfectly fine and I was ready
+to write the rest of my modules as ES2015 ones.</p>
+
+<p>I hope this helps you debug your issue if you’ve landed here after searching
+for <code>Syntax Error: Unexpected token import</code>, or if you’re about to start a
+project in Node or Browser JS, that this will save you some running around.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/javascript.html">JavaScript</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/auth0.html">Auth0</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/node.html">Node</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/babel.html">Babel</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

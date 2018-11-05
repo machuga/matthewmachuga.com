@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Light Table Part 1: An Introduction | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Light Table Part 1: An Introduction</h1>
+        <h3 class="published-date">June 08, 2014</h3>
+      </header>
+
+      <h6>Continue to <a href="/blog/2014/light-table-part-2-a-retrospective.html">Part 2: A Retrospective</a></h6>
+
+<h2>Light Table</h2>
+
+<p>My text editor journey began with Light Table.  It&rsquo;s not my first experience with the editor by a long shot, but this was the longest continuous streak I&rsquo;ve spent exclusively editing with it (okay, technically I edited git messages in Vim because I forgot to assign <code>EDITOR</code> to the command line <code>light</code> app to launch the GUI). I&rsquo;ve enjoyed a number of things about this editor and the plugins I&rsquo;ve picked up, but we&rsquo;ll get to the pros and cons in a bit - let&rsquo;s start with basic information about the editor.</p>
+
+<h2>About Light Table</h2>
+
+<p>Light Table was initially developed by Chris Granger in 2012 - receiving over $316K in a Kickstarter program.  While initially rough around the edges and requiring boot from a Java jar file, Light Table is continuously being polished up and has a pretty solid UI.  It uses the node-webkit library as a foundation for the interface/application, and uses CodeMirror as the editor. Light Table is almost entirely written in ClojureScript.  As such, it does a <em>really</em> good job of providing an interactive environment for ClojureScript, JavaScript, and Clojure.  Despite being largely popular in, and targeted for, the Clojure community, the only component still written in Clojure is the set of bindings to load up a Clojure REPL.</p>
+
+<h2>Highlights</h2>
+
+<h3>Watchers and Connections</h3>
+
+<p>Light Table has watchers available in JavaScript, ClojureScript, and Python to track values in real time.  Choose a connection (what runtime you want to evaluate your watches/code), Set a watch, start making changes or run your application and the watchers will update the values as they run.  I personally had an issue with this working reliably in testing, but it was likely something I was doing wrong.</p>
+
+<p>The connections allow you to bind to different runtimes and environments to your REPLs or watches, as previously mentioned.  Some of the defaults include an embedded or external browser, a local or remote Clojure REPL, the Light Table UI itself, Node, or Python.  You can also include additional connections from the plugin manager or write your own for your favorite runtime.</p>
+
+<p><img src="/blog/2014/light-table-part-1-an-introduction/connections.png" alt="Connections" /></p>
+
+<h3>Embedded REPLs</h3>
+
+<p>Those familiar with Emacs will appreciate the fact of being able to fire up REPLs on the fly.  Light Table&rsquo;s REPLs are typically in Live mode - where you&rsquo;ll get inline evaluation without performing any commands to eval your code.  It&rsquo;s quite a nice way to write your code if you&rsquo;re working on an application in one of the supported languages.</p>
+
+<p><img src="/blog/2014/light-table-part-1-an-introduction/live-repl.png" alt="Live repl" /></p>
+
+<h3>Inline Evaluation</h3>
+
+<p>Rather than using console logging or a dedicated debugger, Light Table lets you evaluate a line of code right there in the editor with a simple keychord.  This is great for figuring out where your code is going to throw exceptions or return slightly incorrect values without breaking your focus. As mentioned before - just select the connection you want to eval against and it&rsquo;s good to go.</p>
+
+<p><img src="/blog/2014/light-table-part-1-an-introduction/inline-eval.png" alt="Inline eval" /></p>
+
+<h3>Embeded Webkit Browser</h3>
+
+<p>Since Light Table is built on <code>node-webkit</code>, it supports the ability to call up a browser right inside of the editor.  This is great for working on a JS/ClojureScript application since you can control nearly every aspect of your code without even leaving your editor.  The biggest caveat I&rsquo;ve found with this feature I want to document, which I should&rsquo;ve considered prior to attempting, was that if you enter a <code>debugger</code> statement in your JavaScript it will hang the entire editor since it will halt the JS runtime.  As such, you&rsquo;ll be forced to force quit Light Table and restart it.</p>
+
+<p><img src="/blog/2014/light-table-part-1-an-introduction/embedded-webkit.png" alt="Embedded webkit" /></p>
+
+<h3>Completely Flexible</h3>
+
+<p>Keybindings are super easy to manipulate for various parts of the editor, and the general behavior and functionality of the editor is just as easy to configure.  Light Table&rsquo;s architecture (and ClojureScript as a language) lend themselves well to creating an extensible and introspectable environment.  Since the functionality is treated as data, it makes reconfiguring or extending the editor or platform quite simple in any language that can compile down to JS.  Of course, you&rsquo;ll almost always need a bit of ClojureScript to hook it into the platform, but much of that can be copypasta&#39;ed from the web.</p>
+
+<p>LT seems to borrow partially from Emacs and partially from Sublime Text as far as keymapping and behavior goes.  Both keymapping and behaviors have <code>system</code> and <code>user</code> files where all of the configuation belongs, much like Sublime. Similarly, both keymappings and behaviors are using ClojureScript to configure, manly maps - this is similar to how all Emacs scripting is done in Emacs Lisp.
+<img src="/blog/2014/light-table-part-1-an-introduction/configs.png" alt="Configs" /></p>
+
+<h2>Plugins</h2>
+
+<p>Light Table&rsquo;s plugin ecosystem is still pretty small but it seems to be growing slowly. Its plugin manage is built into the OS and as such makes management and discoverability fairly easy.  That being said, the flat index listing of all packages and the search are not the greatest ways to find packages in my opinion, but it is better than what some other editors provide out of the box.  Additionally some of the packages have many unseen dependencies or behind-the-scenes gotchas; however, these issues could be made more obvious with some UI tweaks, although complete resolution may be more involved.</p>
+
+<p>One notable thing about the Light Table plugin system is that you also have access to any CodeMirror plugin, so long as there is a small adapter for it to be plugged into LT. Even Vim mode is one of these CodeMirror plugins; they&rsquo;re quite common since reinventing the wheel would be a bit unnecessary, and CodeMirror has quite a few plugins already.</p>
+
+<p><img src="/blog/2014/light-table-part-1-an-introduction/plugins.png" alt="Plugins" /></p>
+
+<h2>Overall</h2>
+
+<p>Light Table is largely capable and seems to contiously get more and more solid. Also, considering it was only open sourced a few months ago, it has made a lot of progress in a short time. If it continues picking up speed I have high hopes of LT becoming a premier choice for Clojure and ClojureScript development.  It has some loose ends to tie up, but I&rsquo;m looking forward to see what the future has in store for it.</p>
+
+<p>Next post I&rsquo;ll give a review of my experiences with Light Table, both good and bad.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/editors.html">editors</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/light-table.html">light table</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/foss-editors.html">foss editors</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

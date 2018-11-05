@@ -15,6 +15,7 @@ $orange: #EE5206;
 
 $white: white;
 $black: #333;
+$faint-gray: #f8f8f8;
 
 $font: "Helvetica Neue", "Helvetica", "Fira Sans",
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
@@ -462,6 +463,175 @@ a {
 			.poster {
 				width: 100%;
 			}
+		}
+	}
+}
+
+.blog-articles {
+	display: flex;
+
+	.listings {
+		flex: 2;
+
+		.articles .article blockquote.description {
+			margin-left: 2rem;
+
+			h1,h2,h3,h4,h5,h6 {
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
+		}
+	}
+
+	.archive {
+		flex: 1;
+		min-width: 30%;
+
+		.content {
+			background-color: $faint-gray;
+			padding: 1rem;
+		}
+
+		h1 {
+			margin: 0 auto 0 auto;
+		}
+
+		ul {
+			margin: 0;
+		}
+
+		section {
+			margin-bottom: 1rem;
+		}
+	}
+
+
+	.archive .tags {
+		.tag-list {
+			margin-left: 0;
+			padding-left: 0;
+		}
+
+		.tag {
+			display: inline;
+			font-size: 0.75rem;
+
+			&:after {
+				content: ', '
+			}
+
+			&:last-child:after {
+				content: ''
+			}
+		}
+	}
+}
+
+@media only screen and (max-width: $screen-min) {
+	.blog-articles {
+		flex-direction: column;
+	}
+}
+
+@media only screen and (min-width: $screen-min+1) {
+	.blog-articles {
+		flex-direction: row;
+	}
+}
+
+@media only screen and (max-width: $screen-min) {
+	.blog-articles .article {
+		.header {
+			flex-direction: column;
+
+			.published-date {
+				margin-top: 0rem;
+				text-align: left;
+			}
+		}
+
+		.description {
+			margin: 0 auto;
+		}
+	}
+}
+
+@media only screen and (min-width: $screen-min+1) {
+	.header {
+		flex-direction: row;
+		margin-right: 1rem;
+
+		.published-date {
+			margin-top: 1rem;
+			text-align: right;
+		}
+	}
+
+	.description {
+	}
+}
+
+// Listing page
+.articles .article .header {
+	flex-direction: column;
+
+	.title {
+		margin-bottom: 0.3rem;
+	}
+
+	.published-date {
+		margin-top: 0rem;
+		text-align: left;
+		font-size: 0.85rem;
+	}
+}
+
+.article {
+	.header {
+		display: flex;
+
+		.title {
+			margin-top: 1rem;
+			flex: 2;
+		}
+
+		.published-date {
+			flex: 1;
+
+			color: #999;
+			font-weight: normal;
+			margin-bottom: 0;
+		}
+	}
+
+	.article-footer {
+		margin-top: 2rem;
+		border-top: 2px dashed $divider-color;
+
+		dl {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 5vh;
+			margin-bottom: 5vh;
+		}
+
+		dt {
+			font-weight: bold;
+		}
+
+		dd {
+			margin-left: 1rem;
+		}
+
+		h1 {
+			font-size: 1rem;
+		}
+
+		.tag-list .tag {
+			display: inline-block;
+			background-color: #eee;
+			padding: 0.3rem;
+			font-size: 0.75rem;
 		}
 	}
 }

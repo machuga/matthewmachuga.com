@@ -324,3 +324,125 @@ a {
     margin: 0; }
   .talks .talk-list .talk .poster {
     width: 100%; }
+
+.blog-articles {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .blog-articles .listings {
+    -webkit-box-flex: 2;
+        -ms-flex: 2;
+            flex: 2; }
+    .blog-articles .listings .articles .article blockquote.description {
+      margin-left: 2rem; }
+      .blog-articles .listings .articles .article blockquote.description h1, .blog-articles .listings .articles .article blockquote.description h2, .blog-articles .listings .articles .article blockquote.description h3, .blog-articles .listings .articles .article blockquote.description h4, .blog-articles .listings .articles .article blockquote.description h5, .blog-articles .listings .articles .article blockquote.description h6 {
+        margin-top: 5px;
+        margin-bottom: 5px; }
+  .blog-articles .archive {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    min-width: 30%; }
+    .blog-articles .archive .content {
+      background-color: #f8f8f8;
+      padding: 1rem; }
+    .blog-articles .archive h1 {
+      margin: 0 auto 0 auto; }
+    .blog-articles .archive ul {
+      margin: 0; }
+    .blog-articles .archive section {
+      margin-bottom: 1rem; }
+  .blog-articles .archive .tags .tag-list {
+    margin-left: 0;
+    padding-left: 0; }
+  .blog-articles .archive .tags .tag {
+    display: inline;
+    font-size: 0.75rem; }
+    .blog-articles .archive .tags .tag:after {
+      content: ", "; }
+    .blog-articles .archive .tags .tag:last-child:after {
+      content: ""; }
+
+@media only screen and (max-width: 520px) {
+  .blog-articles {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column; } }
+@media only screen and (min-width: 521px) {
+  .blog-articles {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row; } }
+@media only screen and (max-width: 520px) {
+  .blog-articles .article .header {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column; }
+    .blog-articles .article .header .published-date {
+      margin-top: 0rem;
+      text-align: left; }
+  .blog-articles .article .description {
+    margin: 0 auto; } }
+@media only screen and (min-width: 521px) {
+  .header {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    margin-right: 1rem; }
+    .header .published-date {
+      margin-top: 1rem;
+      text-align: right; } }
+.articles .article .header {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+  .articles .article .header .title {
+    margin-bottom: 0.3rem; }
+  .articles .article .header .published-date {
+    margin-top: 0rem;
+    text-align: left;
+    font-size: 0.85rem; }
+
+.article .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .article .header .title {
+    margin-top: 1rem;
+    -webkit-box-flex: 2;
+        -ms-flex: 2;
+            flex: 2; }
+  .article .header .published-date {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    color: #999;
+    font-weight: normal;
+    margin-bottom: 0; }
+.article .article-footer {
+  margin-top: 2rem;
+  border-top: 2px dashed #ddd; }
+  .article .article-footer dl {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin-top: 5vh;
+    margin-bottom: 5vh; }
+  .article .article-footer dt {
+    font-weight: bold; }
+  .article .article-footer dd {
+    margin-left: 1rem; }
+  .article .article-footer h1 {
+    font-size: 1rem; }
+  .article .article-footer .tag-list .tag {
+    display: inline-block;
+    background-color: #eee;
+    padding: 0.3rem;
+    font-size: 0.75rem; }
