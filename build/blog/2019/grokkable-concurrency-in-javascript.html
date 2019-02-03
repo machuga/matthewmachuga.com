@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matthew Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Grokkable Concurrency in JavaScript | 
+      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Grokkable Concurrency in JavaScript</h1>
+        <h3 class="published-date">February 03, 2019</h3>
+      </header>
+
+      <p><strong>NOTE:</strong> This is the first post in a series on Concurrent Programming in JavaScript.</p>
+
+<h2>Introduction to the Problem</h2>
+
+<p><a href="http://callbackhell.com/">Callback Hell</a> is something you’ll hear many JavaScript developers refer to, and not endearingly. It is a very real place, and is to be feared, but it is fortunately something that can be avoided with a number of tactics. We will be reviewing a prime example of Callback Hell code to study and begin understanding its weaknesses so that we can begin to learn ways to clean it up. The logical place to starts seems to be with  focusing solely on callbacks, but there is so much more to learn!</p>
+
+<h2>Problems in the Inferno</h2>
+
+<pre><code class="javascript">const get = require(&#39;./get&#39;); // get(url, callback)
+
+const githubApi = &#39;https://api.github.com&#39;;
+const githubEventsUrlFor = username =&gt; `${githubApi}/users/${username}/events`;
+const githubRepoUrlFor = repo =&gt; `${githubApi}/repos/${repo}`;
+
+const fetchReposForLatestActivity = (user, callback) =&gt; {
+  let timeout = setTimeout(function() {
+    callback(new Error(&#39;Timed out&#39;));
+  }, 3000);
+
+  get(githubEventsUrlFor(user), (err, allEvents) =&gt; {
+    if (err) {
+      return callback(err);
+    }
+
+    const events = allEvents.slice(0, 3);
+    const repos = [];
+    let remainingCount = events.length;
+
+    events.forEach(event =&gt; {
+      get(githubRepoUrlFor(event.repo.name), (err, data) =&gt; {
+        if (err) {
+          return callback(err);
+        }
+
+        repos.push({
+          author: data.owner.login,
+          avatar: data.owner.avatar_url,
+          name: data.name,
+          full_name: data.full_name,
+          url: data.html_url,
+          description: data.description
+        });
+
+        remainingCount -= 1;
+
+        if (remainingCount &lt;= 0) {
+          clearTimeout(timeout);
+          callback(null, repos)
+        }
+      });
+    });
+  });
+};
+
+fetchReposForLatestActivity(&#39;machuga&#39;, (err, repos) =&gt; {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log(repos);
+});
+</code></pre>
+
+<p>The above figure is an example of  some code that starts pushing out to the right pretty quickly. What do I mean by pushing to the right?</p>
+
+<h2>Nesting</h2>
+
+<p>Look above at how the code starts indenting further and further to the right depending on which level of callback nesting we&rsquo;re at. At the deepest point, we are 3 callbacks deep, and there is even a bit of iteration involved to push it out further - which adds its own extra level of complexity we&rsquo;ll address in a moment. To be clear, it is not necessarily the number of spaces (that&rsquo;s right, not tabs, internet) from the left margin that cause conflict; though harder to read, the biggest issue it causes is nested context.
+The most deeply nested part in our code knows about and mutates the <code>timeout</code> variable we set in the upper-most <code>fetchReposForLatestActivity</code> function, and also knows about the original callback sent into that function. Even at the current length, but doubly so if this function was longer, it&rsquo;d be very easy to start losing mental context of what variable is declared where. It&rsquo;s hard to remember what variables are still in scope, what you&rsquo;ve accidentally changed, etc. from parent scopes. It is a very easy way to cause unexpected behavior and a good way to lose yourself in your code. Additionally, if you aren&rsquo;t cautious how you nest your scopes, letting variables from higher lexical scopes be used in lower ones, it can make extracting functions a bit of a challenge later.</p>
+
+<h2>Error Handling</h2>
+
+<p>Explicit error handling is a good thing. Go, for example, embraces it as a first class citizen, where functions can return an error along with the intended return value. However, in JavaScript, error handling is all conventional, and thus sometimes things can surprise you. For instance, with traditional NodeJS style error handling (used in this figure), when errors are thrown from a function, the error should be sent as the first argument of the callback. Another style that pops up is the <code>errback</code>, where there is a second, separate callback to handle the error case, and the success callback does not receive an error argument.
+Example:</p>
+
+<pre><code class="javascript">function doAThing(errback, callback) {
+  if(wrongThingHappens) {
+      return errback(new Error(&#39;oops&#39;));
+  }
+  callback(&#39;success&#39;);
+}
+
+doAThing(console.error, console.log)
+</code></pre>
+
+<p>There are other libraries that will, intentionally or unintentionally, throw the error in a destructive way (not sending it to the callback) if the error is thrown synchronously. This is a great way to cause unexpected behavior, and has caused me some grief over the years. This is definitely an area where consistency can help.</p>
+
+<h2>Only-Once</h2>
+
+<p>Let&rsquo;s take a look at how we call our <code>fetchReposForLatestActivity</code> function:</p>
+
+<pre><code class="javascript">fetchReposForLatestActivity(&#39;machuga&#39;, (err, repos) =&gt; {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log(repos);
+});
+</code></pre>
+
+<p>Despite the size of the underlying function and numerous HTTP calls it protects us from worrying about, it is a pretty simple function. We pass it a <code>username</code> and a callback, and it will either send us an error or a list of repositories back. Great! Now what if we want to cache those repositories for a bit to avoid needing to make extraneous calls over the network? I have seen this done in so many terrifying ways (and done a few myself when I started writing JS) that I will not enumerate in this post, but the gist of it: If you are using timeouts or setting a cache value in a higher scope without ensuring you have something like a lock to prevent updating a variable multiple times, you are probably on the wrong path.  Even our iteration over repos in the above examples isn&rsquo;t perfect.</p>
+
+<p>This can introduce challenges for structuring code because if you want to have any other code that uses the list of repos, they must be called from within the above callback to have the <code>repos</code> variable in scope. This comes right back to nesting. The solutions to these problems aren&rsquo;t hard, they just take a shift in thinking if you&rsquo;ve only done synchronous programming up until this point.</p>
+
+<h2>Iteration with Callbacks</h2>
+
+<p>Here be dragons.  Let&rsquo;s take a look at a shortened version of our iteration above:</p>
+
+<pre><code class="javascript">const repos = [];
+let remainingCount = 0;
+
+events.forEach(event =&gt; {
+  get(githubRepoUrlFor(event.repo.name), (err, data) =&gt; {
+    if (err) {
+      return callback(err);
+    }
+
+    repos.push(...);
+
+    remainingCount -= 1;
+
+    if (remainingCount &lt;= 0) {
+      clearTimeout(timeout);
+      callback(null, repos)
+    }
+  });
+});
+</code></pre>
+
+<p>What we do is set a variable, <code>remainingCount</code> to be equal to the length of the array we are using. In our case, we have 3 events. Then every time a callback from <code>get</code> gets executed we decrement the value of <code>remainingCount</code> by one, and then when <code>remainingCount</code> becomes <code>0</code>, we know all <code>get</code> requests have completed and can execute the callback passed into our <code>fetchReposForLatestActivity</code> function. We also clear the timeout set earlier in the function so that if any HTTP requests get stuck we can still abort the <code>fetchReposForLatestActivity</code>  function. If any HTTP requests come back with an error, then we have chosen to fail immediately and call  <code>callback</code> with the error we received. It should be noted that I did not handle any actual clean up of cancelling HTTP requests and other such things for brevity.</p>
+
+<h2>Cleaning up the Code</h2>
+
+<p>How can we clean up these various things? That’s what we’re going to cover over the next several blog posts - first with callbacks, then with Promises and other constructs. We’ll also go into more advanced patterns for handling common situations you’ll find yourself in when dealing with processing data, like sequential processing, concurrent processing, and more. I’d like to keep each one succinct enough to read quickly and search back through for quick references as you need them, so I will try to keep the amount of material to learn in each post limited. This will go from beginner to more advanced topics fairly quickly.</p>
+
+<p>If you want to keep up to date with updates, please subscribe to my <a href="https://matthewmachuga.com">mailing list</a> or <a href="https://matthewmachuga.com/blog/feed.xml">RSS feed</a>.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/javascript.html">javascript</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/callbacks.html">callbacks</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/series.html">series</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/gcj.html">gcj</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2018 Matthew Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>

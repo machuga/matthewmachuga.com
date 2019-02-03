@@ -5,16 +5,165 @@
   <id>http://matthewmachuga.com/blog</id>
   <link href="http://matthewmachuga.com/blog"/>
   <link href="http://matthewmachuga.com/blog/feed.xml" rel="self"/>
-  <updated>2018-04-27T20:00:00-04:00</updated>
+  <updated>2019-02-03T14:30:00-05:00</updated>
   <author>
     <name>Matthew Machuga</name>
   </author>
+  <entry>
+    <title>Grokkable Concurrency in JavaScript</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html"/>
+    <id>http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html</id>
+    <published>2019-02-03T14:30:00-05:00</published>
+    <updated>2019-02-03T14:27:29-05:00</updated>
+    <author>
+      <name>Matthew Machuga</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; This is the first post in a series on Concurrent Programming in JavaScript.&lt;/p&gt;
+
+&lt;h2&gt;Introduction to the Problem&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://callbackhell.com/"&gt;Callback Hell&lt;/a&gt; is something you’ll hear many JavaScript developers refer to, and not endearingly. It is a very real place, and is to be feared, but it is fortunately something that can be avoided with a number of tactics. We will be reviewing a prime example of Callback Hell code to study and begin understanding its weaknesses so that we can begin to learn ways to clean it up. The logical place to starts seems to be with  focusing solely on callbacks, but there is so much more to learn!&lt;/p&gt;
+
+&lt;h2&gt;Problems in the Inferno&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const get = require(&amp;#39;./get&amp;#39;); // get(url, callback)
+
+const githubApi = &amp;#39;https://api.github.com&amp;#39;;
+const githubEventsUrlFor = username =&amp;gt; `${githubApi}/users/${username}/events`;
+const githubRepoUrlFor = repo =&amp;gt; `${githubApi}/repos/${repo}`;
+
+const fetchReposForLatestActivity = (user, callback) =&amp;gt; {
+  let timeout = setTimeout(function() {
+    callback(new Error(&amp;#39;Timed out&amp;#39;));
+  }, 3000);
+
+  get(githubEventsUrlFor(user), (err, allEvents) =&amp;gt; {
+    if (err) {
+      return callback(err);
+    }
+
+    const events = allEvents.slice(0, 3);
+    const repos = [];
+    let remainingCount = events.length;
+
+    events.forEach(event =&amp;gt; {
+      get(githubRepoUrlFor(event.repo.name), (err, data) =&amp;gt; {
+        if (err) {
+          return callback(err);
+        }
+
+        repos.push({
+          author: data.owner.login,
+          avatar: data.owner.avatar_url,
+          name: data.name,
+          full_name: data.full_name,
+          url: data.html_url,
+          description: data.description
+        });
+
+        remainingCount -= 1;
+
+        if (remainingCount &amp;lt;= 0) {
+          clearTimeout(timeout);
+          callback(null, repos)
+        }
+      });
+    });
+  });
+};
+
+fetchReposForLatestActivity(&amp;#39;machuga&amp;#39;, (err, repos) =&amp;gt; {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log(repos);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above figure is an example of  some code that starts pushing out to the right pretty quickly. What do I mean by pushing to the right?&lt;/p&gt;
+
+&lt;h2&gt;Nesting&lt;/h2&gt;
+
+&lt;p&gt;Look above at how the code starts indenting further and further to the right depending on which level of callback nesting we&amp;rsquo;re at. At the deepest point, we are 3 callbacks deep, and there is even a bit of iteration involved to push it out further - which adds its own extra level of complexity we&amp;rsquo;ll address in a moment. To be clear, it is not necessarily the number of spaces (that&amp;rsquo;s right, not tabs, internet) from the left margin that cause conflict; though harder to read, the biggest issue it causes is nested context.
+The most deeply nested part in our code knows about and mutates the &lt;code&gt;timeout&lt;/code&gt; variable we set in the upper-most &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt; function, and also knows about the original callback sent into that function. Even at the current length, but doubly so if this function was longer, it&amp;rsquo;d be very easy to start losing mental context of what variable is declared where. It&amp;rsquo;s hard to remember what variables are still in scope, what you&amp;rsquo;ve accidentally changed, etc. from parent scopes. It is a very easy way to cause unexpected behavior and a good way to lose yourself in your code. Additionally, if you aren&amp;rsquo;t cautious how you nest your scopes, letting variables from higher lexical scopes be used in lower ones, it can make extracting functions a bit of a challenge later.&lt;/p&gt;
+
+&lt;h2&gt;Error Handling&lt;/h2&gt;
+
+&lt;p&gt;Explicit error handling is a good thing. Go, for example, embraces it as a first class citizen, where functions can return an error along with the intended return value. However, in JavaScript, error handling is all conventional, and thus sometimes things can surprise you. For instance, with traditional NodeJS style error handling (used in this figure), when errors are thrown from a function, the error should be sent as the first argument of the callback. Another style that pops up is the &lt;code&gt;errback&lt;/code&gt;, where there is a second, separate callback to handle the error case, and the success callback does not receive an error argument.
+Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;function doAThing(errback, callback) {
+  if(wrongThingHappens) {
+      return errback(new Error(&amp;#39;oops&amp;#39;));
+  }
+  callback(&amp;#39;success&amp;#39;);
+}
+
+doAThing(console.error, console.log)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are other libraries that will, intentionally or unintentionally, throw the error in a destructive way (not sending it to the callback) if the error is thrown synchronously. This is a great way to cause unexpected behavior, and has caused me some grief over the years. This is definitely an area where consistency can help.&lt;/p&gt;
+
+&lt;h2&gt;Only-Once&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at how we call our &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt; function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;fetchReposForLatestActivity(&amp;#39;machuga&amp;#39;, (err, repos) =&amp;gt; {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log(repos);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Despite the size of the underlying function and numerous HTTP calls it protects us from worrying about, it is a pretty simple function. We pass it a &lt;code&gt;username&lt;/code&gt; and a callback, and it will either send us an error or a list of repositories back. Great! Now what if we want to cache those repositories for a bit to avoid needing to make extraneous calls over the network? I have seen this done in so many terrifying ways (and done a few myself when I started writing JS) that I will not enumerate in this post, but the gist of it: If you are using timeouts or setting a cache value in a higher scope without ensuring you have something like a lock to prevent updating a variable multiple times, you are probably on the wrong path.  Even our iteration over repos in the above examples isn&amp;rsquo;t perfect.&lt;/p&gt;
+
+&lt;p&gt;This can introduce challenges for structuring code because if you want to have any other code that uses the list of repos, they must be called from within the above callback to have the &lt;code&gt;repos&lt;/code&gt; variable in scope. This comes right back to nesting. The solutions to these problems aren&amp;rsquo;t hard, they just take a shift in thinking if you&amp;rsquo;ve only done synchronous programming up until this point.&lt;/p&gt;
+
+&lt;h2&gt;Iteration with Callbacks&lt;/h2&gt;
+
+&lt;p&gt;Here be dragons.  Let&amp;rsquo;s take a look at a shortened version of our iteration above:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const repos = [];
+let remainingCount = 0;
+
+events.forEach(event =&amp;gt; {
+  get(githubRepoUrlFor(event.repo.name), (err, data) =&amp;gt; {
+    if (err) {
+      return callback(err);
+    }
+
+    repos.push(...);
+
+    remainingCount -= 1;
+
+    if (remainingCount &amp;lt;= 0) {
+      clearTimeout(timeout);
+      callback(null, repos)
+    }
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What we do is set a variable, &lt;code&gt;remainingCount&lt;/code&gt; to be equal to the length of the array we are using. In our case, we have 3 events. Then every time a callback from &lt;code&gt;get&lt;/code&gt; gets executed we decrement the value of &lt;code&gt;remainingCount&lt;/code&gt; by one, and then when &lt;code&gt;remainingCount&lt;/code&gt; becomes &lt;code&gt;0&lt;/code&gt;, we know all &lt;code&gt;get&lt;/code&gt; requests have completed and can execute the callback passed into our &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt; function. We also clear the timeout set earlier in the function so that if any HTTP requests get stuck we can still abort the &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt;  function. If any HTTP requests come back with an error, then we have chosen to fail immediately and call  &lt;code&gt;callback&lt;/code&gt; with the error we received. It should be noted that I did not handle any actual clean up of cancelling HTTP requests and other such things for brevity.&lt;/p&gt;
+
+&lt;h2&gt;Cleaning up the Code&lt;/h2&gt;
+
+&lt;p&gt;How can we clean up these various things? That’s what we’re going to cover over the next several blog posts - first with callbacks, then with Promises and other constructs. We’ll also go into more advanced patterns for handling common situations you’ll find yourself in when dealing with processing data, like sequential processing, concurrent processing, and more. I’d like to keep each one succinct enough to read quickly and search back through for quick references as you need them, so I will try to keep the amount of material to learn in each post limited. This will go from beginner to more advanced topics fairly quickly.&lt;/p&gt;
+
+&lt;p&gt;If you want to keep up to date with updates, please subscribe to my &lt;a href="https://matthewmachuga.com"&gt;mailing list&lt;/a&gt; or &lt;a href="https://matthewmachuga.com/blog/feed.xml"&gt;RSS feed&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Loss and Meaning</title>
     <link rel="alternate" href="http://matthewmachuga.com/blog/2018/loss-and-meaning.html"/>
     <id>http://matthewmachuga.com/blog/2018/loss-and-meaning.html</id>
     <published>2018-04-27T20:00:00-04:00</published>
-    <updated>2018-11-04T05:38:57-05:00</updated>
+    <updated>2018-11-04T21:51:01-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -315,7 +464,7 @@ will help you and others understand what is to come.&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2017/taking-a-step-back-scratching-an-itch.html"/>
     <id>http://matthewmachuga.com/blog/2017/taking-a-step-back-scratching-an-itch.html</id>
     <published>2017-08-13T20:00:00-04:00</published>
-    <updated>2018-11-04T04:38:11-05:00</updated>
+    <updated>2018-11-04T21:51:01-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -385,7 +534,7 @@ $ canirequire request
     <link rel="alternate" href="http://matthewmachuga.com/blog/2017/compiling-es2017-with-babel-for-node.html"/>
     <id>http://matthewmachuga.com/blog/2017/compiling-es2017-with-babel-for-node.html</id>
     <published>2017-08-06T20:00:00-04:00</published>
-    <updated>2018-11-04T04:32:58-05:00</updated>
+    <updated>2018-11-04T21:51:01-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -512,7 +661,7 @@ project in Node or Browser JS, that this will save you some running around.&lt;/
     <link rel="alternate" href="http://matthewmachuga.com/blog/2017/the-end-of-an-era.html"/>
     <id>http://matthewmachuga.com/blog/2017/the-end-of-an-era.html</id>
     <published>2017-05-29T20:00:00-04:00</published>
-    <updated>2018-11-03T08:17:22-04:00</updated>
+    <updated>2018-11-04T21:51:01-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -591,7 +740,7 @@ Purpose&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2015/setting-up-a-quick-dev-environment-for-react-es2015-babel-and-webpack.html"/>
     <id>http://matthewmachuga.com/blog/2015/setting-up-a-quick-dev-environment-for-react-es2015-babel-and-webpack.html</id>
     <published>2015-11-01T06:51:00-05:00</published>
-    <updated>2018-08-26T14:17:38-04:00</updated>
+    <updated>2018-11-04T21:51:01-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -734,73 +883,6 @@ ReactDOM.render(
 &lt;h3&gt;Go Have Fun!&lt;/h3&gt;
 
 &lt;p&gt;Now you have the barebones setup to start working with React and Babel via Webpack, so have fun and experiment.  Hopefully my morning of digging and trial-and-error can help you nail this on the first try.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>ActiveRecord and the Beauty Lost in Translation</title>
-    <link rel="alternate" href="http://matthewmachuga.com/blog/2015/activerecord-and-the-beauty-lost-in-translation.html"/>
-    <id>http://matthewmachuga.com/blog/2015/activerecord-and-the-beauty-lost-in-translation.html</id>
-    <published>2015-09-12T10:32:00-04:00</published>
-    <updated>2018-08-26T14:17:38-04:00</updated>
-    <author>
-      <name>Matthew Machuga</name>
-    </author>
-    <content type="html">&lt;h2&gt;The Endless Fight&lt;/h2&gt;
-
-&lt;p&gt;Sometime in 2014, PHP-land started to debate whether Active Record was a tolerable ORM pattern, and whether one should use Active Record or Data Mapper ORMs.  In PHP, this comes down to something like Laravel&amp;rsquo;s Eloquent ORM as an Active Record implementation vs. Doctrine, the reigning mainstream (and probably only) PHP data mapper implementation.  After a surge of interest in Domain-Driven Design (DDD) and Hexagonal Architecture in the Laravel, and overall PHP communities, people began to detest one of the very things that drew them to the framework in the first place.  This was fueled by a number of vocal and notable Laravel community members learning Doctine, talking about it heavily, and some evangelizing it.  With outside influence from the PHP world providing the same judgement against the impure Active Record pattern, the pitchforks started to come out from all over.&lt;/p&gt;
-
-&lt;p&gt;The long and short of the argument is that the Active Record pattern is found by some to be inferior to the Data Mapper pattern.  Why?&lt;/p&gt;
-
-&lt;h3&gt;Entity / Repository Separation&lt;/h3&gt;
-
-&lt;p&gt;Active Record models know not only how to represent a row in a database, but also how to query and persist itself and other objects to the database. DDD, hexagonal architecture, and  most general OOD practices tell object-oriented developers that their objects should do &lt;em&gt;one thing&lt;/em&gt;.  Even though this rule can be easily overlooked in many cases, AR models know how to do a whole slew of things.  Depending on the AR implementation, this number of responsibilities an object may have can grow even larger.  This level of responsibility blending commonly makes things:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Harder to change&lt;/li&gt;
-&lt;li&gt;Harder to isolate bugs&lt;/li&gt;
-&lt;li&gt;Harder to test&lt;/li&gt;
-&lt;li&gt;Harder to refactor&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Along with the mixing of concerns, AR models are explicitly aware of their database representations.  The table fields are typically publicly exposed as properties or magic properties on the object.  This can be disruptive to someone attempting to create a minimal entity with a very explicit interface that isn&amp;rsquo;t one-to-one with the database.  This is analogous to creating an API over HTTP; sometimes you don&amp;rsquo;t mind consumers knowing the schema of your database tables, but most often you&amp;rsquo;d like to give them access to that information in a more consumable, or more encapsulated way.  When you have very complex business logic in your domain, you may find Data Mapper providing a bit of an easier means to working with your data at the trade off of typically needing some extra work and boilerplate.&lt;/p&gt;
-
-&lt;h3&gt;Testing is Meh&lt;/h3&gt;
-
-&lt;p&gt;Some of the hate on this level is largely just regurgitation of hearing others say it, but if you have tried testing AR objects from any implementation you are well aware it is not the most pleasant of experiences.  If you&amp;rsquo;re doing integration or end-to-end level testing where you are interacting with the database already, then it&amp;rsquo;s fairly painless to test if you avoid mocking.  However if you are unit testing your models, attempting to check some behavior you&amp;rsquo;ve placed on the entity, you may be in for some hurt if in anyway calls a method or property that relies on the database.  Frameworks like Rails and Laravel provide means for making unit testing models a bit easier, and honestly as long as you can stub out the model&amp;rsquo;s database connection it&amp;rsquo;s not terrible to test.  However, this must usually be done on each individual object so it is not the most pleasant of experiences.  It also makes integration testing objects that have AR models as collaborators a bit more challenging since you&amp;rsquo;ll have to mock out the DB access before you pass it into the collaborator, which isn&amp;rsquo;t ideal.&lt;/p&gt;
-
-&lt;p&gt;Compare this with the way that a Data Mapper&amp;rsquo;s entities may be tested, they&amp;rsquo;re usually just plain objects of whatever language is being used and don&amp;rsquo;t need things mocked because the entities have no knowledge of the database.  An entity would be fetched from a repository object, meaning that the concerns are already separated.  One can then easily test all operations of the entity quite simply without the runaround.&lt;/p&gt;
-
-&lt;h3&gt;Community Pressure, Shaming, and Perceived Inferiority&lt;/h3&gt;
-
-&lt;p&gt;As a developer who is involved in a community, especially a newer developer, it is common to feel a sense of pressure in terms of trends and current &amp;ldquo;best practices&amp;rdquo;.  If high praise or disdain for a practice or technology comes from more prominant members of a community, it becomes harder to ignore.  The voices then propagate from the top-down in a tree-like fashion, adding volume as it goes.  By the time it reaches new developers, it&amp;rsquo;s nearly unavoidable and impossible to ignore.  However, part of the message is usually lost in translation somewhere along the way - the &lt;em&gt;when&lt;/em&gt; and &lt;em&gt;why&lt;/em&gt; something should be used.  Sometimes this reasoning is amplified because it&amp;rsquo;s natural for us as developers to get excited to use a new concept or technology.  Somewhere along the way, though, we lose the reasoning by the time it reaches the next level in the tree.  This can often lead to the developers feeling like the &lt;em&gt;must&lt;/em&gt; use something like Data Mapper in all situations if they are told it is far better than ActiveRecord.&lt;/p&gt;
-
-&lt;p&gt;This will then lead to pressure and even shaming from community members to one another if one chooses to use ActiveRecord.  At this point, there is now a perceived inferiority of not only ActiveRecord, but also the developers who use to use it. By this point it should be obvious where the game &amp;ldquo;Telephone&amp;rdquo; originated, and why it is so silly.  Things lost in translation or modified over time somehow become grounds for judgement.  We&amp;rsquo;re all guilty of it at some point, and probably far more often than we believe.&lt;/p&gt;
-
-&lt;h2&gt;The Reality of Active Record&lt;/h2&gt;
-
-&lt;p&gt;The points mentioned above have merit.  Testing ActiveRecord objects, or collaborators of said object, can be challenging.  Mixing concerns between persistance and domain logic can also make things muddier and harder to follow.  This can also make debugging code using AR models more challenging since the database may contacted at any time unintentionally.  However, do these cons always outweigh the benefits?  In my opinion, &lt;em&gt;no&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Admitting my contributions to this, on an episode of &lt;a href="https://itunes.apple.com/us/podcast/episode-14-dhh-domain-events/id653204183?i=328486884&amp;amp;mt=2"&gt;The Laravel Podcast&lt;/a&gt; I was quoted saying something along the lines of &amp;ldquo;I just don&amp;rsquo;t like it anymore&amp;rdquo; when asked my thoughts on ActiveRecord.  Even today, this remains true.  &lt;strong&gt;However&lt;/strong&gt;, I still use ActiveRecord implementations &lt;strong&gt;every&lt;/strong&gt; &lt;strong&gt;single&lt;/strong&gt; &lt;strong&gt;day&lt;/strong&gt; and am quite content.  I still like it better than other options available at this point.  In the Rails world, ActiveRecord is still the de facto ORM, especially if you want to develop fast.  It does everything we need for the most part, and for the areas it doesn&amp;rsquo;t we can drop down a level and optimize while still being within ActiveRecord.  It is &lt;em&gt;good enough&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h3&gt;It&amp;rsquo;s Easy&lt;/h3&gt;
-
-&lt;p&gt;Getting many things done in an ActiveRecord implementation is wildly fast and easy, especially if the implementation has added some excellent features to help it along.  It&amp;rsquo;s so easy to just call &lt;code&gt;save()&lt;/code&gt; on the object I&amp;rsquo;m working with and know that it&amp;rsquo;ll be persisted if all went well.  It&amp;rsquo;s convenient to be able to do something like &lt;code&gt;user.blog_posts &amp;lt;&amp;lt; Blog.new(attrs)&lt;/code&gt; to add a new associated blog post, knowing that foreign keys at the database level will be handled for me automatically.  In the event I need some sort of advanced query and do not want to fight the query builder directly, I can use &lt;code&gt;User.find_by_sql&lt;/code&gt; and pass in my hand-rolled SQL query.&lt;/p&gt;
-
-&lt;h3&gt;Domain Modeling is Still Entirely Possible&lt;/h3&gt;
-
-&lt;p&gt;Nothing is explicitly halting you from modeling your domain effectively with ActiveRecord models.  Sure, you&amp;rsquo;ll have some unrelated methods available on the objects themselves, but you can choose as a developer or as a team to not use them in certain contexts.  It takes more discipline for sure, but you can avoid exposing fetching or persisting logic outside of the model itself.  You can still create service classes to handle complex domain logic that use these methods as needed to model additional concepts.  The idea that you &lt;em&gt;can&amp;rsquo;t&lt;/em&gt; model your domain properly with ActiveRecord is a myth, but it might indeed take a bit of extra effort.&lt;/p&gt;
-
-&lt;h3&gt;ActiveRecord Can Scale&lt;/h3&gt;
-
-&lt;p&gt;At my day job we have a large Rails codebase that serves millions of users with some quite complex domain logic, and I&amp;rsquo;m going to let you in on a secret - we use ActiveRecord!  Sure, there are situations where we&amp;rsquo;d like cleaner entities or repositories, but in general we can usually just refactor some code or extract a new service object and still get a great result.  Even our data warehouse uses ActiveRecord with a number of custom queries.  It&amp;rsquo;s wild how helpful it can be.  We don&amp;rsquo;t need to worry about complex object hydration anywhere, we can quickly avoid N+1 issues, and most of our day-to-day operations are streamlined by the ActiveRecord internals.  We can pass &lt;code&gt;DateTime&lt;/code&gt; objects to queries and they&amp;rsquo;ll be cast properly for us.  We can fetch related data quickly from relations, even nested relations.  We send a huge amount of business logic and traffic through our codebase without any crazy speed loss that you may have heard of when using ActiveRecord ORMs.  As long as you use some good practices and are dilligent as a developer, it is certainly possible to happily and successfully use ActiveRecord.&lt;/p&gt;
-
-&lt;h2&gt;Be Critical&lt;/h2&gt;
-
-&lt;p&gt;The next time you come across the ActiveRecord vs. Data Mapper argument, or ones like it, be critical of what is being said. If it impacts your work in some way, do some research to find out if what is being said is true or if it has been something lost in translation.  Don&amp;rsquo;t feel bad for using a pattern that has spread across multiple languages and ecosystems successfully, and is probably the reason we have most of the web frameworks we do today.  While the ActiveRecord existed well before Rails, it was Rails that gave it a beautiful API and made other frameworks like CodeIgniter, Laravel, .NET, Fuel, Django, etc want to have something comparable.&lt;/p&gt;
-
-&lt;p&gt;If you use Eloquent, ActiveRecord for Rails, or any other AR ORM, make sure you know that you are not alone.  You are in good company of many, many developers who use it successfully day-to-day.  However, if one day you choose to use a Data Mapper implementation or something else, then you will still be in good company, and still deserve respect regardless of which side of the fence you fall.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s all be friends.&lt;/p&gt;
 </content>
   </entry>
 </feed>
