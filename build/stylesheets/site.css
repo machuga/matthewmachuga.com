@@ -1,3 +1,11 @@
+code {
+  background-color: #efefef;
+  padding: 5px; }
+
+pre.highlight code {
+  background-color: #fff;
+  padding: 0; }
+
 .hidden {
   display: none; }
 

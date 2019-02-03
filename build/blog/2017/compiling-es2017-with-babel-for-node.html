@@ -14,6 +14,7 @@
       Matthew Machuga: Software Engineer / Engineering Lead / Educator
     </title>
     <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link href="/stylesheets/highlighting.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
     <script src="/javascripts/site.js"></script>
@@ -102,38 +103,32 @@ whichever version of Node the service used.</p>
 
 <p>The important part of the configuration lies with the <code>presets</code> key. We use
 <code>.babelrc</code> for our Babel setup, so my file initially looked something like this:</p>
-
-<pre><code class="json">{
-  &quot;presets&quot;: [&quot;es2017&quot;]
-}
-</code></pre>
-
+<div class="highlight"><pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"es2017"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>I then, from another extension, borrowed a chunk of code to make Babel
 transform things on the fly and shoved it into its own module at <code>lib/babel.js</code>.</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="c1">// Initialize Babel for the rest of the app</span>
 
-<pre><code class="js">// Initialize Babel for the rest of the app
-
-module.exports = function loadBabel() {
-  require(&#39;babel-register&#39;)({
-    sourceMaps: !(process.env.NODE_ENV === &#39;production&#39;)
-  });
-  require(&#39;babel-polyfill&#39;);
-};
-</code></pre>
-
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">loadBabel</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-register'</span><span class="p">)({</span>
+    <span class="na">sourceMaps</span><span class="p">:</span> <span class="o">!</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="s1">'production'</span><span class="p">)</span>
+  <span class="p">});</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">'babel-polyfill'</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
 <p>Since performing this operation has a global side-effect, I wanted to make sure
 I stuck it behind a function with an explicit name so that it was obvious what
 I was doing when I imported the module and ran the function with near the top
 of my <code>index.js</code> file:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">loadBabel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./lib/babel'</span><span class="p">);</span>
+<span class="c1">//...</span>
+<span class="nx">loadBabel</span><span class="p">();</span>
 
-<pre><code class="js">const loadBabel = require(&#39;./lib/babel&#39;);
-//...
-loadBabel();
-
-// Or, more condensed but less obvious:
-require(&#39;./lib/babel&#39;)();
-</code></pre>
-
+<span class="c1">// Or, more condensed but less obvious:</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">'./lib/babel'</span><span class="p">)();</span>
+</code></pre></div>
 <p>With that loaded I assumed I was good to go and tried to import another module.
 We’ll say it was <code>import foo from &#39;./bar&#39;</code>. I expected great things, but when I
 ran the app with <code>node ./index.js</code> I was greeted with an error:
@@ -163,24 +158,20 @@ has all features from the ES2015 and ES2016 specs, is to simply import the
 Babel plugin to handle ES2015
 modules,babel-plugin-transform-es2015-modules-commonjs , and then add it to our
 .babelrc file like this:</p>
-
-<pre><code class="json">{
-  &quot;presets&quot;: [&quot;es2017&quot;, &quot;transform-es2015-modules-commonjs&quot;]
-}
-</code></pre>
-
+<div class="highlight"><pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"es2017"</span><span class="p">,</span><span class="w"> </span><span class="s2">"transform-es2015-modules-commonjs"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>Or we can take the more costly, but more inclusive, route of importing both
 <code>es2016</code> and <code>es2015</code> presets from npm and including those in our <code>.babelrc</code> file.</p>
-
-<pre><code class="json">{
-  &quot;presets&quot;: [
-    &quot;es2017&quot;,
-    &quot;es2016&quot;,
-    &quot;es2015&quot;
-  ]
-}
-</code></pre>
-
+<div class="highlight"><pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"es2017"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"es2016"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"es2015"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>This will let all included presets perform their necessary duties and output
 some ES5-friendly code at the end. I opted for the latter until I could verify
 the version of Node on the servers, but once I reran my code with those presets

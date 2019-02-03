@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html"/>
     <id>http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html</id>
     <published>2019-02-03T14:30:00-05:00</published>
-    <updated>2019-02-03T14:27:29-05:00</updated>
+    <updated>2019-02-03T14:31:46-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -25,63 +25,61 @@
 &lt;p&gt;&lt;a href="http://callbackhell.com/"&gt;Callback Hell&lt;/a&gt; is something you’ll hear many JavaScript developers refer to, and not endearingly. It is a very real place, and is to be feared, but it is fortunately something that can be avoided with a number of tactics. We will be reviewing a prime example of Callback Hell code to study and begin understanding its weaknesses so that we can begin to learn ways to clean it up. The logical place to starts seems to be with  focusing solely on callbacks, but there is so much more to learn!&lt;/p&gt;
 
 &lt;h2&gt;Problems in the Inferno&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="kd"&gt;get&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./get'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// get(url, callback)&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;const get = require(&amp;#39;./get&amp;#39;); // get(url, callback)
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;githubApi&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'https://api.github.com'&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;githubEventsUrlFor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;username&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;`&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;githubApi&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/users/&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;username&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/events`&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;githubRepoUrlFor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;repo&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;`&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;githubApi&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/repos/&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;repo&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;`&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-const githubApi = &amp;#39;https://api.github.com&amp;#39;;
-const githubEventsUrlFor = username =&amp;gt; `${githubApi}/users/${username}/events`;
-const githubRepoUrlFor = repo =&amp;gt; `${githubApi}/repos/${repo}`;
+&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;fetchReposForLatestActivity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;timeout&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Timed out'&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 
-const fetchReposForLatestActivity = (user, callback) =&amp;gt; {
-  let timeout = setTimeout(function() {
-    callback(new Error(&amp;#39;Timed out&amp;#39;));
-  }, 3000);
+  &lt;span class="kd"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;githubEventsUrlFor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;allEvents&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
 
-  get(githubEventsUrlFor(user), (err, allEvents) =&amp;gt; {
-    if (err) {
-      return callback(err);
-    }
+    &lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;events&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;allEvents&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;slice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[];&lt;/span&gt;
+    &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;events&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-    const events = allEvents.slice(0, 3);
-    const repos = [];
-    let remainingCount = events.length;
+    &lt;span class="nx"&gt;events&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;forEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kd"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;githubRepoUrlFor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;repo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
 
-    events.forEach(event =&amp;gt; {
-      get(githubRepoUrlFor(event.repo.name), (err, data) =&amp;gt; {
-        if (err) {
-          return callback(err);
-        }
+        &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+          &lt;span class="na"&gt;author&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;owner&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;login&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;avatar&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;owner&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;avatar_url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;full_name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;full_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;html_url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;description&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;description&lt;/span&gt;
+        &lt;span class="p"&gt;});&lt;/span&gt;
 
-        repos.push({
-          author: data.owner.login,
-          avatar: data.owner.avatar_url,
-          name: data.name,
-          full_name: data.full_name,
-          url: data.html_url,
-          description: data.description
-        });
+        &lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-        remainingCount -= 1;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nx"&gt;clearTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;timeout&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
 
-        if (remainingCount &amp;lt;= 0) {
-          clearTimeout(timeout);
-          callback(null, repos)
-        }
-      });
-    });
-  });
-};
+&lt;span class="nx"&gt;fetchReposForLatestActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'machuga'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
 
-fetchReposForLatestActivity(&amp;#39;machuga&amp;#39;, (err, repos) =&amp;gt; {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(repos);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
+  &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;The above figure is an example of  some code that starts pushing out to the right pretty quickly. What do I mean by pushing to the right?&lt;/p&gt;
 
 &lt;h2&gt;Nesting&lt;/h2&gt;
@@ -93,33 +91,29 @@ The most deeply nested part in our code knows about and mutates the &lt;code&gt;
 
 &lt;p&gt;Explicit error handling is a good thing. Go, for example, embraces it as a first class citizen, where functions can return an error along with the intended return value. However, in JavaScript, error handling is all conventional, and thus sometimes things can surprise you. For instance, with traditional NodeJS style error handling (used in this figure), when errors are thrown from a function, the error should be sent as the first argument of the callback. Another style that pops up is the &lt;code&gt;errback&lt;/code&gt;, where there is a second, separate callback to handle the error case, and the success callback does not receive an error argument.
 Example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;doAThing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;errback&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;wrongThingHappens&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;errback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'oops'&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'success'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;function doAThing(errback, callback) {
-  if(wrongThingHappens) {
-      return errback(new Error(&amp;#39;oops&amp;#39;));
-  }
-  callback(&amp;#39;success&amp;#39;);
-}
-
-doAThing(console.error, console.log)
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;span class="nx"&gt;doAThing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;There are other libraries that will, intentionally or unintentionally, throw the error in a destructive way (not sending it to the callback) if the error is thrown synchronously. This is a great way to cause unexpected behavior, and has caused me some grief over the years. This is definitely an area where consistency can help.&lt;/p&gt;
 
 &lt;h2&gt;Only-Once&lt;/h2&gt;
 
 &lt;p&gt;Let&amp;rsquo;s take a look at how we call our &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt; function:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;fetchReposForLatestActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'machuga'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;fetchReposForLatestActivity(&amp;#39;machuga&amp;#39;, (err, repos) =&amp;gt; {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(repos);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
+  &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Despite the size of the underlying function and numerous HTTP calls it protects us from worrying about, it is a pretty simple function. We pass it a &lt;code&gt;username&lt;/code&gt; and a callback, and it will either send us an error or a list of repositories back. Great! Now what if we want to cache those repositories for a bit to avoid needing to make extraneous calls over the network? I have seen this done in so many terrifying ways (and done a few myself when I started writing JS) that I will not enumerate in this post, but the gist of it: If you are using timeouts or setting a cache value in a higher scope without ensuring you have something like a lock to prevent updating a variable multiple times, you are probably on the wrong path.  Even our iteration over repos in the above examples isn&amp;rsquo;t perfect.&lt;/p&gt;
 
 &lt;p&gt;This can introduce challenges for structuring code because if you want to have any other code that uses the list of repos, they must be called from within the above callback to have the &lt;code&gt;repos&lt;/code&gt; variable in scope. This comes right back to nesting. The solutions to these problems aren&amp;rsquo;t hard, they just take a shift in thinking if you&amp;rsquo;ve only done synchronous programming up until this point.&lt;/p&gt;
@@ -127,28 +121,26 @@ doAThing(console.error, console.log)
 &lt;h2&gt;Iteration with Callbacks&lt;/h2&gt;
 
 &lt;p&gt;Here be dragons.  Let&amp;rsquo;s take a look at a shortened version of our iteration above:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[];&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;const repos = [];
-let remainingCount = 0;
+&lt;span class="nx"&gt;events&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;forEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;githubRepoUrlFor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;repo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;name&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;err&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
 
-events.forEach(event =&amp;gt; {
-  get(githubRepoUrlFor(event.repo.name), (err, data) =&amp;gt; {
-    if (err) {
-      return callback(err);
-    }
+    &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;push&lt;/span&gt;&lt;span class="p"&gt;(...);&lt;/span&gt;
 
-    repos.push(...);
+    &lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-    remainingCount -= 1;
-
-    if (remainingCount &amp;lt;= 0) {
-      clearTimeout(timeout);
-      callback(null, repos)
-    }
-  });
-});
-&lt;/code&gt;&lt;/pre&gt;
-
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;clearTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;timeout&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;repos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;What we do is set a variable, &lt;code&gt;remainingCount&lt;/code&gt; to be equal to the length of the array we are using. In our case, we have 3 events. Then every time a callback from &lt;code&gt;get&lt;/code&gt; gets executed we decrement the value of &lt;code&gt;remainingCount&lt;/code&gt; by one, and then when &lt;code&gt;remainingCount&lt;/code&gt; becomes &lt;code&gt;0&lt;/code&gt;, we know all &lt;code&gt;get&lt;/code&gt; requests have completed and can execute the callback passed into our &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt; function. We also clear the timeout set earlier in the function so that if any HTTP requests get stuck we can still abort the &lt;code&gt;fetchReposForLatestActivity&lt;/code&gt;  function. If any HTTP requests come back with an error, then we have chosen to fail immediately and call  &lt;code&gt;callback&lt;/code&gt; with the error we received. It should be noted that I did not handle any actual clean up of cancelling HTTP requests and other such things for brevity.&lt;/p&gt;
 
 &lt;h2&gt;Cleaning up the Code&lt;/h2&gt;
@@ -502,32 +494,30 @@ and ends.&lt;/p&gt;
 and scratch my own itch.&lt;/p&gt;
 
 &lt;p&gt;If you want to put some code up on Webtask.io, give the package a try:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ npm install -g canirequire-cli
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ npm install -g canirequire-cli
 $ canirequire request
 {
- &amp;quot;request&amp;quot;: [
-  &amp;quot;2.67.0&amp;quot;,
-  &amp;quot;2.55.0&amp;quot;,
-  &amp;quot;2.56.0&amp;quot;,
-  &amp;quot;2.81.0&amp;quot;,
-  &amp;quot;2.27.0&amp;quot;
+ "request": [
+  "2.67.0",
+  "2.55.0",
+  "2.56.0",
+  "2.81.0",
+  "2.27.0"
  ],
- &amp;quot;request-progress&amp;quot;: [
-  &amp;quot;0.3.1&amp;quot;
+ "request-progress": [
+  "0.3.1"
  ],
- &amp;quot;request-promise&amp;quot;: [
-  &amp;quot;1.0.2&amp;quot;
+ "request-promise": [
+  "1.0.2"
  ],
- &amp;quot;request-replay&amp;quot;: [
-  &amp;quot;0.3.0&amp;quot;
+ "request-replay": [
+  "0.3.0"
  ],
- &amp;quot;xmlhttprequest&amp;quot;: [
-  &amp;quot;1.7.0&amp;quot;
+ "xmlhttprequest": [
+  "1.7.0"
  ]
 }
-&lt;/code&gt;&lt;/pre&gt;
-</content>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
   </entry>
   <entry>
     <title>Compiling ES2017 with Babel for Node</title>
@@ -566,38 +556,32 @@ whichever version of Node the service used.&lt;/p&gt;
 
 &lt;p&gt;The important part of the configuration lies with the &lt;code&gt;presets&lt;/code&gt; key. We use
 &lt;code&gt;.babelrc&lt;/code&gt; for our Babel setup, so my file initially looked something like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;{
-  &amp;quot;presets&amp;quot;: [&amp;quot;es2017&amp;quot;]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;I then, from another extension, borrowed a chunk of code to make Babel
 transform things on the fly and shoved it into its own module at &lt;code&gt;lib/babel.js&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="c1"&gt;// Initialize Babel for the rest of the app&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="js"&gt;// Initialize Babel for the rest of the app
-
-module.exports = function loadBabel() {
-  require(&amp;#39;babel-register&amp;#39;)({
-    sourceMaps: !(process.env.NODE_ENV === &amp;#39;production&amp;#39;)
-  });
-  require(&amp;#39;babel-polyfill&amp;#39;);
-};
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;loadBabel&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'babel-register'&lt;/span&gt;&lt;span class="p"&gt;)({&lt;/span&gt;
+    &lt;span class="na"&gt;sourceMaps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;NODE_ENV&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;'production'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'babel-polyfill'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Since performing this operation has a global side-effect, I wanted to make sure
 I stuck it behind a function with an explicit name so that it was obvious what
 I was doing when I imported the module and ran the function with near the top
 of my &lt;code&gt;index.js&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;loadBabel&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./lib/babel'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="c1"&gt;//...&lt;/span&gt;
+&lt;span class="nx"&gt;loadBabel&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="js"&gt;const loadBabel = require(&amp;#39;./lib/babel&amp;#39;);
-//...
-loadBabel();
-
-// Or, more condensed but less obvious:
-require(&amp;#39;./lib/babel&amp;#39;)();
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;span class="c1"&gt;// Or, more condensed but less obvious:&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./lib/babel'&lt;/span&gt;&lt;span class="p"&gt;)();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;With that loaded I assumed I was good to go and tried to import another module.
 We’ll say it was &lt;code&gt;import foo from &amp;#39;./bar&amp;#39;&lt;/code&gt;. I expected great things, but when I
 ran the app with &lt;code&gt;node ./index.js&lt;/code&gt; I was greeted with an error:
@@ -627,24 +611,20 @@ has all features from the ES2015 and ES2016 specs, is to simply import the
 Babel plugin to handle ES2015
 modules,babel-plugin-transform-es2015-modules-commonjs , and then add it to our
 .babelrc file like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;{
-  &amp;quot;presets&amp;quot;: [&amp;quot;es2017&amp;quot;, &amp;quot;transform-es2015-modules-commonjs&amp;quot;]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"transform-es2015-modules-commonjs"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Or we can take the more costly, but more inclusive, route of importing both
 &lt;code&gt;es2016&lt;/code&gt; and &lt;code&gt;es2015&lt;/code&gt; presets from npm and including those in our &lt;code&gt;.babelrc&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;{
-  &amp;quot;presets&amp;quot;: [
-    &amp;quot;es2017&amp;quot;,
-    &amp;quot;es2016&amp;quot;,
-    &amp;quot;es2015&amp;quot;
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"es2016"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;"es2015"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This will let all included presets perform their necessary duties and output
 some ES5-friendly code at the end. I opted for the latter until I could verify
 the version of Node on the servers, but once I reran my code with those presets
@@ -753,22 +733,18 @@ Purpose&lt;/p&gt;
 &lt;h2&gt;Create a new project&lt;/h2&gt;
 
 &lt;p&gt;Create new directory &lt;code&gt;newapp&lt;/code&gt; with a subdirectory named &lt;code&gt;app&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;mkdir -p newapp/app
-cd newapp
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;mkdir &lt;span class="nt"&gt;-p&lt;/span&gt; newapp/app
+&lt;span class="nb"&gt;cd &lt;/span&gt;newapp
 npm init
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;When you run &lt;code&gt;npm init&lt;/code&gt; it will prompt you to fill out information about your project.  You can just feed it nonsense for now if you&amp;rsquo;d like to just get through it for test purposes.&lt;/p&gt;
 
 &lt;h2&gt;Install dependencies&lt;/h2&gt;
 
 &lt;h3&gt;Babel&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;npm install babel-cli babel-core babel-preset-es2015 babel-preset-react --save-dev
-echo &amp;#39;{\n  &amp;quot;presets&amp;quot;: [&amp;quot;es2015&amp;quot;, &amp;quot;react&amp;quot;]\n}&amp;#39; &amp;gt; .babelrc
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;npm install babel-cli babel-core babel-preset-es2015 babel-preset-react &lt;span class="nt"&gt;--save-dev&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'{\n  "presets": ["es2015", "react"]\n}'&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; .babelrc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Lots of Babel packages!  Let&amp;rsquo;s run through these quickly:&lt;/p&gt;
 
 &lt;ul&gt;
@@ -783,49 +759,43 @@ echo &amp;#39;{\n  &amp;quot;presets&amp;quot;: [&amp;quot;es2015&amp;quot;, &am
 &lt;h3&gt;Webpack&lt;/h3&gt;
 
 &lt;p&gt;Run this next installation command&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;npm install webpack babel-loader file-loader webpack-dev-server --save-dev
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;npm install webpack babel-loader file-loader webpack-dev-server &lt;span class="nt"&gt;--save-dev&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This will install Webpack along with its Babel integration.  Next &lt;code&gt;file-loader&lt;/code&gt; is a basic file loader for loading static assets into the &lt;code&gt;dist&lt;/code&gt; directory so everything is one relative location.  Finally I loaded up the &lt;code&gt;webpack-dev-server&lt;/code&gt; just to make things simple to play with.  You can really use any web server to serve from your &lt;code&gt;dist&lt;/code&gt; directory, but to get up and running quickly go ahead and use this.&lt;/p&gt;
 
 &lt;p&gt;Next create &lt;code&gt;webpack.config.js&lt;/code&gt; in the root path next to &lt;code&gt;package.json&lt;/code&gt;, and edit your config to look like this.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;module.exports = {
-  context: __dirname + &amp;quot;/app&amp;quot;,
-  entry: {
-    javascript: &amp;quot;./app.js&amp;quot;,
-    html: &amp;quot;./index.html&amp;quot;,
-  },
-  output: {
-    filename: &amp;quot;app.js&amp;quot;,
-    path: __dirname + &amp;quot;/dist&amp;quot;
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: [&amp;quot;babel-loader&amp;quot;]
-      },
-      {
-          test: /\.html$/,
-          loader: &amp;quot;file?name=[name].[ext]&amp;quot;,
-      },
-    ]
-  }
-};
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="na"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;__dirname&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"/app"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="na"&gt;entry&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;javascript&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"./app.js"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="na"&gt;html&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"./index.html"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="na"&gt;output&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;filename&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"app.js"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="na"&gt;path&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;__dirname&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;"/dist"&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="na"&gt;module&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="na"&gt;loaders&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="na"&gt;test&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="sr"&gt;/&lt;/span&gt;&lt;span class="se"&gt;\.&lt;/span&gt;&lt;span class="sr"&gt;jsx&lt;/span&gt;&lt;span class="se"&gt;?&lt;/span&gt;&lt;span class="sr"&gt;$/&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;exclude&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="sr"&gt;/node_modules/&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="na"&gt;loaders&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"babel-loader"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="p"&gt;},&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="na"&gt;test&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="sr"&gt;/&lt;/span&gt;&lt;span class="se"&gt;\.&lt;/span&gt;&lt;span class="sr"&gt;html$/&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="na"&gt;loader&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"file?name=[name].[ext]"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This makes the assumption you want to store your JS in &lt;code&gt;app&lt;/code&gt; and want it to compile to &lt;code&gt;dist&lt;/code&gt;.  If you&amp;rsquo;d like to change this, feel free. We&amp;rsquo;ve also told it to move &lt;code&gt;.html&lt;/code&gt; files into the &lt;code&gt;dist&lt;/code&gt; folder, and for &lt;code&gt;babel-loader&lt;/code&gt; to be responsible for loading up and &lt;code&gt;js&lt;/code&gt; or &lt;code&gt;jsx&lt;/code&gt; files.&lt;/p&gt;
 
 &lt;p&gt;We&amp;rsquo;ll create the related files in a moment, but we have one more dependency installation step left.&lt;/p&gt;
 
 &lt;h3&gt;React&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;npm install react react-dom --save
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;npm install react react-dom &lt;span class="nt"&gt;--save&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;As specified by the &lt;a href="https://facebook.github.io/react/downloads.html#npm"&gt;React Documentation&lt;/a&gt;, we need both the &lt;code&gt;react&lt;/code&gt; and &lt;code&gt;react-dom&lt;/code&gt; packages in order to utilize React, since &lt;code&gt;React.render&lt;/code&gt;, amongst other things were moved out to the &lt;code&gt;react-dom&lt;/code&gt; package.&lt;/p&gt;
 
 &lt;h2&gt;Testing&lt;/h2&gt;
@@ -833,51 +803,41 @@ echo &amp;#39;{\n  &amp;quot;presets&amp;quot;: [&amp;quot;es2015&amp;quot;, &am
 &lt;p&gt;Okay now that dependencies are installed, we can give some test runs.&lt;/p&gt;
 
 &lt;p&gt;Create a new file &lt;code&gt;app/index.html&lt;/code&gt; and copy/paste this HTML:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;Webpack, Babel, and React!&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;&amp;lt;/body&amp;gt;
-  &amp;lt;script src=&amp;quot;app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight html"&gt;&lt;code&gt;&lt;span class="cp"&gt;&amp;lt;!doctype html&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;meta&lt;/span&gt; &lt;span class="na"&gt;charset=&lt;/span&gt;&lt;span class="s"&gt;"utf-8"&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Webpack, Babel, and React!&lt;span class="nt"&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;body&amp;gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;script &lt;/span&gt;&lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;"app.js"&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Create a new file &lt;code&gt;app/app.js&lt;/code&gt; and copy/paste the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;React&lt;/span&gt; &lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="s2"&gt;"react"&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;import&lt;/span&gt; &lt;span class="nx"&gt;ReactDOM&lt;/span&gt; &lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="s2"&gt;"react-dom"&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;import React from &amp;quot;react&amp;quot;;
-import ReactDOM from &amp;quot;react-dom&amp;quot;;
-
-ReactDOM.render(
-  &amp;lt;div&amp;gt;Hello!&amp;lt;/div&amp;gt;,
-  document.body
-);
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;span class="nx"&gt;ReactDOM&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;render&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;div&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;Hello&lt;/span&gt;&lt;span class="o"&gt;!&amp;lt;&lt;/span&gt;&lt;span class="sr"&gt;/div&amp;gt;&lt;/span&gt;&lt;span class="err"&gt;,
+&lt;/span&gt;  &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;body&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now to verify that we have everything needed to use Babel and React, we&amp;rsquo;re going to run&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;babel app/app.js --presets react
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;babel app/app.js &lt;span class="nt"&gt;--presets&lt;/span&gt; react
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;In the event &lt;code&gt;babel&lt;/code&gt; can&amp;rsquo;t be found because something got weird with your path, you can also invoke this with&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;./node_modules/babel-cli/bin/babel.js app/app.js --presets react
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;./node_modules/babel-cli/bin/babel.js app/app.js &lt;span class="nt"&gt;--presets&lt;/span&gt; react
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;If everything worked as expected, you&amp;rsquo;ll see a printout of the compiled file appear below the command in your shell.&lt;/p&gt;
 
 &lt;p&gt;Next we can move on to trying out the whole thing.&lt;/p&gt;
 
 &lt;p&gt;If you want to have the command available globally, you can install the &lt;code&gt;webpack-dev-server&lt;/code&gt; globally by running &lt;code&gt;npm install -g webpack-dev-server&lt;/code&gt;.  Otherwise, open up &lt;code&gt;package.json&lt;/code&gt;, locate the &lt;code&gt;scripts&lt;/code&gt; object, and add &lt;code&gt;&amp;quot;start&amp;quot;: &amp;quot;webpack-dev-server --progress --colors&amp;quot;&lt;/code&gt; to it.  It should look something like this when you&amp;rsquo;re done.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;&amp;quot;scripts&amp;quot;: {
-  &amp;quot;start&amp;quot;: &amp;quot;webpack-dev-server --progress --colors&amp;quot;,
-  &amp;quot;test&amp;quot;: &amp;quot;echo \&amp;quot;Error: no test specified\&amp;quot; &amp;amp;&amp;amp; exit 1&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
+&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="s2"&gt;"scripts"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"start"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"webpack-dev-server --progress --colors"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"test"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"echo &lt;/span&gt;&lt;span class="se"&gt;\"&lt;/span&gt;&lt;span class="s2"&gt;Error: no test specified&lt;/span&gt;&lt;span class="se"&gt;\"&lt;/span&gt;&lt;span class="s2"&gt; &amp;amp;&amp;amp; exit 1"&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;So if you&amp;rsquo;ve installed it globally, run &lt;code&gt;webpack-dev-server --progress --colors&lt;/code&gt;, otherwise simply run &lt;code&gt;npm start&lt;/code&gt;.  This will start the dev server, compiling everything and launching the server at &lt;code&gt;http://localhost:8080&lt;/code&gt;, where once you navigate to in your browser, you should see &amp;ldquo;Hello!&amp;rdquo; displayed correctly.&lt;/p&gt;
 
 &lt;h3&gt;Go Have Fun!&lt;/h3&gt;

@@ -14,6 +14,7 @@
       Matthew Machuga: Software Engineer / Engineering Lead / Educator
     </title>
     <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link href="/stylesheets/highlighting.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
     <script src="/javascripts/site.js"></script>
@@ -83,22 +84,18 @@
 <h2>Create a new project</h2>
 
 <p>Create new directory <code>newapp</code> with a subdirectory named <code>app</code></p>
-
-<pre><code class="bash">mkdir -p newapp/app
-cd newapp
+<div class="highlight"><pre class="highlight shell"><code>mkdir <span class="nt">-p</span> newapp/app
+<span class="nb">cd </span>newapp
 npm init
-</code></pre>
-
+</code></pre></div>
 <p>When you run <code>npm init</code> it will prompt you to fill out information about your project.  You can just feed it nonsense for now if you&rsquo;d like to just get through it for test purposes.</p>
 
 <h2>Install dependencies</h2>
 
 <h3>Babel</h3>
-
-<pre><code class="bash">npm install babel-cli babel-core babel-preset-es2015 babel-preset-react --save-dev
-echo &#39;{\n  &quot;presets&quot;: [&quot;es2015&quot;, &quot;react&quot;]\n}&#39; &gt; .babelrc
-</code></pre>
-
+<div class="highlight"><pre class="highlight shell"><code>npm install babel-cli babel-core babel-preset-es2015 babel-preset-react <span class="nt">--save-dev</span>
+<span class="nb">echo</span> <span class="s1">'{\n  "presets": ["es2015", "react"]\n}'</span> <span class="o">&gt;</span> .babelrc
+</code></pre></div>
 <p>Lots of Babel packages!  Let&rsquo;s run through these quickly:</p>
 
 <ul>
@@ -113,49 +110,43 @@ echo &#39;{\n  &quot;presets&quot;: [&quot;es2015&quot;, &quot;react&quot;]\n}&#
 <h3>Webpack</h3>
 
 <p>Run this next installation command</p>
-
-<pre><code class="bash">npm install webpack babel-loader file-loader webpack-dev-server --save-dev
-</code></pre>
-
+<div class="highlight"><pre class="highlight shell"><code>npm install webpack babel-loader file-loader webpack-dev-server <span class="nt">--save-dev</span>
+</code></pre></div>
 <p>This will install Webpack along with its Babel integration.  Next <code>file-loader</code> is a basic file loader for loading static assets into the <code>dist</code> directory so everything is one relative location.  Finally I loaded up the <code>webpack-dev-server</code> just to make things simple to play with.  You can really use any web server to serve from your <code>dist</code> directory, but to get up and running quickly go ahead and use this.</p>
 
 <p>Next create <code>webpack.config.js</code> in the root path next to <code>package.json</code>, and edit your config to look like this.</p>
-
-<pre><code class="javascript">module.exports = {
-  context: __dirname + &quot;/app&quot;,
-  entry: {
-    javascript: &quot;./app.js&quot;,
-    html: &quot;./index.html&quot;,
-  },
-  output: {
-    filename: &quot;app.js&quot;,
-    path: __dirname + &quot;/dist&quot;
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: [&quot;babel-loader&quot;]
-      },
-      {
-          test: /\.html$/,
-          loader: &quot;file?name=[name].[ext]&quot;,
-      },
-    ]
-  }
-};
-</code></pre>
-
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">context</span><span class="p">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/app"</span><span class="p">,</span>
+  <span class="na">entry</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">javascript</span><span class="p">:</span> <span class="s2">"./app.js"</span><span class="p">,</span>
+    <span class="na">html</span><span class="p">:</span> <span class="s2">"./index.html"</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">filename</span><span class="p">:</span> <span class="s2">"app.js"</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/dist"</span>
+  <span class="p">},</span>
+  <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">loaders</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">jsx</span><span class="se">?</span><span class="sr">$/</span><span class="p">,</span>
+        <span class="na">exclude</span><span class="p">:</span> <span class="sr">/node_modules/</span><span class="p">,</span>
+        <span class="na">loaders</span><span class="p">:</span> <span class="p">[</span><span class="s2">"babel-loader"</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+          <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">html$/</span><span class="p">,</span>
+          <span class="na">loader</span><span class="p">:</span> <span class="s2">"file?name=[name].[ext]"</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
 <p>This makes the assumption you want to store your JS in <code>app</code> and want it to compile to <code>dist</code>.  If you&rsquo;d like to change this, feel free. We&rsquo;ve also told it to move <code>.html</code> files into the <code>dist</code> folder, and for <code>babel-loader</code> to be responsible for loading up and <code>js</code> or <code>jsx</code> files.</p>
 
 <p>We&rsquo;ll create the related files in a moment, but we have one more dependency installation step left.</p>
 
 <h3>React</h3>
-
-<pre><code class="bash">npm install react react-dom --save
-</code></pre>
-
+<div class="highlight"><pre class="highlight shell"><code>npm install react react-dom <span class="nt">--save</span>
+</code></pre></div>
 <p>As specified by the <a href="https://facebook.github.io/react/downloads.html#npm">React Documentation</a>, we need both the <code>react</code> and <code>react-dom</code> packages in order to utilize React, since <code>React.render</code>, amongst other things were moved out to the <code>react-dom</code> package.</p>
 
 <h2>Testing</h2>
@@ -163,51 +154,41 @@ echo &#39;{\n  &quot;presets&quot;: [&quot;es2015&quot;, &quot;react&quot;]\n}&#
 <p>Okay now that dependencies are installed, we can give some test runs.</p>
 
 <p>Create a new file <code>app/index.html</code> and copy/paste this HTML:</p>
-
-<pre><code class="html">&lt;!doctype html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;title&gt;Webpack, Babel, and React!&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;&lt;/body&gt;
-  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
-&lt;/html&gt;
-</code></pre>
-
+<div class="highlight"><pre class="highlight html"><code><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Webpack, Babel, and React!<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;&lt;/body&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
 <p>Create a new file <code>app/app.js</code> and copy/paste the following:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s2">"react"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s2">"react-dom"</span><span class="p">;</span>
 
-<pre><code class="javascript">import React from &quot;react&quot;;
-import ReactDOM from &quot;react-dom&quot;;
-
-ReactDOM.render(
-  &lt;div&gt;Hello!&lt;/div&gt;,
-  document.body
-);
-</code></pre>
-
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">Hello</span><span class="o">!&lt;</span><span class="sr">/div&gt;</span><span class="err">,
+</span>  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span>
+<span class="p">);</span>
+</code></pre></div>
 <p>Now to verify that we have everything needed to use Babel and React, we&rsquo;re going to run</p>
-
-<pre><code class="bash">babel app/app.js --presets react
-</code></pre>
-
+<div class="highlight"><pre class="highlight shell"><code>babel app/app.js <span class="nt">--presets</span> react
+</code></pre></div>
 <p>In the event <code>babel</code> can&rsquo;t be found because something got weird with your path, you can also invoke this with</p>
-
-<pre><code class="bash">./node_modules/babel-cli/bin/babel.js app/app.js --presets react
-</code></pre>
-
+<div class="highlight"><pre class="highlight shell"><code>./node_modules/babel-cli/bin/babel.js app/app.js <span class="nt">--presets</span> react
+</code></pre></div>
 <p>If everything worked as expected, you&rsquo;ll see a printout of the compiled file appear below the command in your shell.</p>
 
 <p>Next we can move on to trying out the whole thing.</p>
 
 <p>If you want to have the command available globally, you can install the <code>webpack-dev-server</code> globally by running <code>npm install -g webpack-dev-server</code>.  Otherwise, open up <code>package.json</code>, locate the <code>scripts</code> object, and add <code>&quot;start&quot;: &quot;webpack-dev-server --progress --colors&quot;</code> to it.  It should look something like this when you&rsquo;re done.</p>
-
-<pre><code class="json">&quot;scripts&quot;: {
-  &quot;start&quot;: &quot;webpack-dev-server --progress --colors&quot;,
-  &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
-}
-</code></pre>
-
+<div class="highlight"><pre class="highlight json"><code><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-dev-server --progress --colors"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo </span><span class="se">\"</span><span class="s2">Error: no test specified</span><span class="se">\"</span><span class="s2"> &amp;&amp; exit 1"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>So if you&rsquo;ve installed it globally, run <code>webpack-dev-server --progress --colors</code>, otherwise simply run <code>npm start</code>.  This will start the dev server, compiling everything and launching the server at <code>http://localhost:8080</code>, where once you navigate to in your browser, you should see &ldquo;Hello!&rdquo; displayed correctly.</p>
 
 <h3>Go Have Fun!</h3>

@@ -14,6 +14,7 @@
       Matthew Machuga: Software Engineer / Engineering Lead / Educator
     </title>
     <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link href="/stylesheets/highlighting.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
     <script src="/javascripts/site.js"></script>
@@ -81,63 +82,61 @@
 <p><a href="http://callbackhell.com/">Callback Hell</a> is something you’ll hear many JavaScript developers refer to, and not endearingly. It is a very real place, and is to be feared, but it is fortunately something that can be avoided with a number of tactics. We will be reviewing a prime example of Callback Hell code to study and begin understanding its weaknesses so that we can begin to learn ways to clean it up. The logical place to starts seems to be with  focusing solely on callbacks, but there is so much more to learn!</p>
 
 <h2>Problems in the Inferno</h2>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./get'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
 
-<pre><code class="javascript">const get = require(&#39;./get&#39;); // get(url, callback)
+<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubEventsUrlFor</span> <span class="o">=</span> <span class="nx">username</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/users/</span><span class="p">${</span><span class="nx">username</span><span class="p">}</span><span class="s2">/events`</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubRepoUrlFor</span> <span class="o">=</span> <span class="nx">repo</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/repos/</span><span class="p">${</span><span class="nx">repo</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
 
-const githubApi = &#39;https://api.github.com&#39;;
-const githubEventsUrlFor = username =&gt; `${githubApi}/users/${username}/events`;
-const githubRepoUrlFor = repo =&gt; `${githubApi}/repos/${repo}`;
+<span class="kd">const</span> <span class="nx">fetchReposForLatestActivity</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Timed out'</span><span class="p">));</span>
+  <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
 
-const fetchReposForLatestActivity = (user, callback) =&gt; {
-  let timeout = setTimeout(function() {
-    callback(new Error(&#39;Timed out&#39;));
-  }, 3000);
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubEventsUrlFor</span><span class="p">(</span><span class="nx">user</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">allEvents</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
 
-  get(githubEventsUrlFor(user), (err, allEvents) =&gt; {
-    if (err) {
-      return callback(err);
-    }
+    <span class="kd">const</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">allEvents</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">repos</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
-    const events = allEvents.slice(0, 3);
-    const repos = [];
-    let remainingCount = events.length;
+    <span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="kd">get</span><span class="p">(</span><span class="nx">githubRepoUrlFor</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
 
-    events.forEach(event =&gt; {
-      get(githubRepoUrlFor(event.repo.name), (err, data) =&gt; {
-        if (err) {
-          return callback(err);
-        }
+        <span class="nx">repos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+          <span class="na">author</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">login</span><span class="p">,</span>
+          <span class="na">avatar</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">avatar_url</span><span class="p">,</span>
+          <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+          <span class="na">full_name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">full_name</span><span class="p">,</span>
+          <span class="na">url</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">html_url</span><span class="p">,</span>
+          <span class="na">description</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span>
+        <span class="p">});</span>
 
-        repos.push({
-          author: data.owner.login,
-          avatar: data.owner.avatar_url,
-          name: data.name,
-          full_name: data.full_name,
-          url: data.html_url,
-          description: data.description
-        });
+        <span class="nx">remainingCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
 
-        remainingCount -= 1;
+        <span class="k">if</span> <span class="p">(</span><span class="nx">remainingCount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
 
-        if (remainingCount &lt;= 0) {
-          clearTimeout(timeout);
-          callback(null, repos)
-        }
-      });
-    });
-  });
-};
+<span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="s1">'machuga'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
 
-fetchReposForLatestActivity(&#39;machuga&#39;, (err, repos) =&gt; {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(repos);
-});
-</code></pre>
-
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">repos</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
 <p>The above figure is an example of  some code that starts pushing out to the right pretty quickly. What do I mean by pushing to the right?</p>
 
 <h2>Nesting</h2>
@@ -149,33 +148,29 @@ The most deeply nested part in our code knows about and mutates the <code>timeou
 
 <p>Explicit error handling is a good thing. Go, for example, embraces it as a first class citizen, where functions can return an error along with the intended return value. However, in JavaScript, error handling is all conventional, and thus sometimes things can surprise you. For instance, with traditional NodeJS style error handling (used in this figure), when errors are thrown from a function, the error should be sent as the first argument of the callback. Another style that pops up is the <code>errback</code>, where there is a second, separate callback to handle the error case, and the success callback does not receive an error argument.
 Example:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">doAThing</span><span class="p">(</span><span class="nx">errback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">wrongThingHappens</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">errback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'oops'</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="nx">callback</span><span class="p">(</span><span class="s1">'success'</span><span class="p">);</span>
+<span class="p">}</span>
 
-<pre><code class="javascript">function doAThing(errback, callback) {
-  if(wrongThingHappens) {
-      return errback(new Error(&#39;oops&#39;));
-  }
-  callback(&#39;success&#39;);
-}
-
-doAThing(console.error, console.log)
-</code></pre>
-
+<span class="nx">doAThing</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">,</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div>
 <p>There are other libraries that will, intentionally or unintentionally, throw the error in a destructive way (not sending it to the callback) if the error is thrown synchronously. This is a great way to cause unexpected behavior, and has caused me some grief over the years. This is definitely an area where consistency can help.</p>
 
 <h2>Only-Once</h2>
 
 <p>Let&rsquo;s take a look at how we call our <code>fetchReposForLatestActivity</code> function:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="s1">'machuga'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
 
-<pre><code class="javascript">fetchReposForLatestActivity(&#39;machuga&#39;, (err, repos) =&gt; {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(repos);
-});
-</code></pre>
-
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">repos</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
 <p>Despite the size of the underlying function and numerous HTTP calls it protects us from worrying about, it is a pretty simple function. We pass it a <code>username</code> and a callback, and it will either send us an error or a list of repositories back. Great! Now what if we want to cache those repositories for a bit to avoid needing to make extraneous calls over the network? I have seen this done in so many terrifying ways (and done a few myself when I started writing JS) that I will not enumerate in this post, but the gist of it: If you are using timeouts or setting a cache value in a higher scope without ensuring you have something like a lock to prevent updating a variable multiple times, you are probably on the wrong path.  Even our iteration over repos in the above examples isn&rsquo;t perfect.</p>
 
 <p>This can introduce challenges for structuring code because if you want to have any other code that uses the list of repos, they must be called from within the above callback to have the <code>repos</code> variable in scope. This comes right back to nesting. The solutions to these problems aren&rsquo;t hard, they just take a shift in thinking if you&rsquo;ve only done synchronous programming up until this point.</p>
@@ -183,28 +178,26 @@ doAThing(console.error, console.log)
 <h2>Iteration with Callbacks</h2>
 
 <p>Here be dragons.  Let&rsquo;s take a look at a shortened version of our iteration above:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">repos</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-<pre><code class="javascript">const repos = [];
-let remainingCount = 0;
+<span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubRepoUrlFor</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
 
-events.forEach(event =&gt; {
-  get(githubRepoUrlFor(event.repo.name), (err, data) =&gt; {
-    if (err) {
-      return callback(err);
-    }
+    <span class="nx">repos</span><span class="p">.</span><span class="nx">push</span><span class="p">(...);</span>
 
-    repos.push(...);
+    <span class="nx">remainingCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
 
-    remainingCount -= 1;
-
-    if (remainingCount &lt;= 0) {
-      clearTimeout(timeout);
-      callback(null, repos)
-    }
-  });
-});
-</code></pre>
-
+    <span class="k">if</span> <span class="p">(</span><span class="nx">remainingCount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
 <p>What we do is set a variable, <code>remainingCount</code> to be equal to the length of the array we are using. In our case, we have 3 events. Then every time a callback from <code>get</code> gets executed we decrement the value of <code>remainingCount</code> by one, and then when <code>remainingCount</code> becomes <code>0</code>, we know all <code>get</code> requests have completed and can execute the callback passed into our <code>fetchReposForLatestActivity</code> function. We also clear the timeout set earlier in the function so that if any HTTP requests get stuck we can still abort the <code>fetchReposForLatestActivity</code>  function. If any HTTP requests come back with an error, then we have chosen to fail immediately and call  <code>callback</code> with the error we received. It should be noted that I did not handle any actual clean up of cancelling HTTP requests and other such things for brevity.</p>
 
 <h2>Cleaning up the Code</h2>

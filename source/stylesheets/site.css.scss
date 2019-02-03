@@ -21,6 +21,16 @@ $font: "Helvetica Neue", "Helvetica", "Fira Sans",
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
     "Franklin Gothic Medium", "Century Gothic", "Liberation Sans", sans-serif;
 
+code {
+  background-color: #efefef;
+  padding: 5px;
+}
+
+pre.highlight code {
+  background-color: #fff;
+  padding: 0;
+}
+
 .hidden {
 	display: none;
 }
