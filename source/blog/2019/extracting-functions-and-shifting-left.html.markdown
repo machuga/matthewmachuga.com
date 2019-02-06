@@ -262,3 +262,6 @@ teach you something, so this simply will not do.
 We'll start looking at some new techniques soon for flatting out our callbacks
 soon, but in the next post I think it'd be a good idea to explain how waiting
 for multiple callbacks to complete were handled in this app.
+
+You can get a before and after comparison of this as a [gist
+here](https://gist.github.com/machuga/e0dae53637be1ed6b3a97923cfadc775).
