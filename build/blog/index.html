@@ -7,11 +7,11 @@
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Use the title from a page's frontmatter if it has one -->
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="author" content="Matthew Machuga">
+    <meta name="author" content="Matt Machuga">
     <meta name="description" content="The website for Matthew Machuga.">
     <title>
       Blog | 
-      Matthew Machuga: Software Engineer / Engineering Lead / Educator
+      Matt Machuga: Software Engineer / Engineering Manager / Educator
     </title>
     <link href="/stylesheets/site.css" rel="stylesheet" />
     <link href="/stylesheets/highlighting.css" rel="stylesheet" />
@@ -72,6 +72,21 @@
       <div class="blog-articles">
   <div class="listings">
     <div class="articles">
+        <article class="article">
+					<header class="header">
+						<h1 class="title"><a href="/blog/2019/extracting-functions-and-shifting-left.html">Extracting Functions and Shifting Left</a></h1>
+						<h3 class="published-date">February 06, 2019</h3>
+					</header>
+
+          <blockquote class="description">
+            <p>Let’s take a look at our example from last time:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./get'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
+
+<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubEventsUrlFor</span> <span class="o">=</span> <span class="nx">username</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/users/</span><span class="p">${</span><span class="nx">username</span><span class="p">}</span><span class="s2">/events`</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubRepoUrlFor</span></code></pre></div>
+          </blockquote>
+        </article>
         <article class="article">
 					<header class="header">
 						<h1 class="title"><a href="/blog/2019/grokkable-concurrency-in-javascript.html">Grokkable Concurrency in JavaScript</a></h1>
@@ -235,7 +250,7 @@ modules, and extra indirection...</p>
   <aside class="archive">
 		<div class="content">
 			<section class="years">
-				<h1>Find Articles by Year (12)</h1>
+				<h1>Find Articles by Year (13)</h1>
 				<ul class="year-list">
 						<li>
 							<a href="/blog/2019.html">2019</a>
@@ -256,7 +271,7 @@ modules, and extra indirection...</p>
 			</section>
 
 			<section class="tags">
-				<h1>Find Articles by Tags (12)</h1>
+				<h1>Find Articles by Tags (13)</h1>
 				<ul class="tag-list">
 						<li class="tag">
 							<a href="/blog/tags/javascript.html">javascript</a>
@@ -380,7 +395,7 @@ modules, and extra indirection...</p>
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2018 Matthew Machuga
+          © 2019 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">

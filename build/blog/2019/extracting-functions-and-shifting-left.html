@@ -1,0 +1,381 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matt Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      Extracting Functions and Shifting Left | 
+      Matt Machuga: Software Engineer / Engineering Manager / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link href="/stylesheets/highlighting.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="http://podcast.bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">Extracting Functions and Shifting Left</h1>
+        <h3 class="published-date">February 06, 2019</h3>
+      </header>
+
+      <p>Let&rsquo;s take a look at our example from last time:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./get'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
+
+<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubEventsUrlFor</span> <span class="o">=</span> <span class="nx">username</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/users/</span><span class="p">${</span><span class="nx">username</span><span class="p">}</span><span class="s2">/events`</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubRepoUrlFor</span> <span class="o">=</span> <span class="nx">repo</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/repos/</span><span class="p">${</span><span class="nx">repo</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">fetchReposForLatestActivity</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Timed out'</span><span class="p">));</span>
+  <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubEventsUrlFor</span><span class="p">(</span><span class="nx">user</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">allEvents</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">allEvents</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">repos</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+    <span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="kd">get</span><span class="p">(</span><span class="nx">githubRepoUrlFor</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">repos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+          <span class="na">author</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">login</span><span class="p">,</span>
+          <span class="na">avatar</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">avatar_url</span><span class="p">,</span>
+          <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+          <span class="na">full_name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">full_name</span><span class="p">,</span>
+          <span class="na">url</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">html_url</span><span class="p">,</span>
+          <span class="na">description</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span>
+        <span class="p">});</span>
+
+        <span class="nx">remainingCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">remainingCount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="s1">'machuga'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">repos</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>We have a number of different nesting levels going on here and a lot of work
+happening in one named function. As with most other areas of programming, this
+code would probably do well to be broken apart into logical, well named
+functions. But asynchronous code, especially in languages that are lexically
+scoped like JavaScript, can sometimes be a bit more challenging to tease apart.
+We will start with some low hanging fruit and then move to more involved
+extractions in later posts.</p>
+
+<h2>Extract HTTP Requests</h2>
+
+<p>The first thing I want to do is extract the embedded HTTP requests into named
+functions, that way it is clear what they are doing, and they are easier for us
+to talk about. A win for both you the reader of this article and for people
+who will eventually read your asynchronous code.</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">fetchRepo</span> <span class="o">=</span> <span class="p">(</span><span class="nx">repoName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubRepoUrlFor</span><span class="p">(</span><span class="nx">repoName</span><span class="p">),</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">fetchEventsForUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubEventsUrlFor</span><span class="p">(</span><span class="nx">user</span><span class="p">),</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Something to note here is that I was able to pass the callback sent to our new
+functions directly to the <code>get</code> call without an intermediate callback. Why does
+this work? We left the invoking code expecting the same callback signature, and
+all of our callbacks expect <code>(error, result)</code> as an argument list. So we can
+save ourself a frame on the callstack (extra compute time and extra garbage to
+be collected), and skip over reduncancy that would look like:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">fetchRepo</span> <span class="o">=</span> <span class="p">(</span><span class="nx">repoName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">get</span><span class="p">(</span><span class="nx">githubRepoUrlFor</span><span class="p">(</span><span class="nx">repoName</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repo</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>This small set of extractions makes our main fetching function look like this:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">fetchReposForLatestActivity</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Timed out'</span><span class="p">));</span>
+  <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+
+  <span class="nx">fetchEventsForUser</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">allEvents</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">allEvents</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">repos</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+    <span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">fetchRepo</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">repos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+          <span class="na">author</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">login</span><span class="p">,</span>
+          <span class="na">avatar</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">avatar_url</span><span class="p">,</span>
+          <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+          <span class="na">full_name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">full_name</span><span class="p">,</span>
+          <span class="na">url</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">html_url</span><span class="p">,</span>
+          <span class="na">description</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span>
+        <span class="p">});</span>
+
+        <span class="nx">remainingCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">remainingCount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>That makes me feel a bit better. A small win, but the asynchronous patterns are
+still the same, as is the nesting level. Well until we think of something,
+let&rsquo;s just consider breaking our problem down into smaller logical chunks.</p>
+
+<h2>Encapsulating Logic</h2>
+
+<p>Let&rsquo;s start by separating the idea of fetching a user from the concept of
+making 3 additional requests for the individual repositories. I won&rsquo;t cover how
+the iteration works in this post, but will cover that bit more in the next.</p>
+
+<p>I think our best place to separate this code out into a new function is right
+after where the events are sliced into a subset of the collection. However, I
+am blocked by one thing:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+</code></pre></div>
+<p>In that line I&rsquo;m trying to clear out the timeout we set at the top of the
+<code>fetchReposForLatestActivity</code> function. We do this in case any of the HTTP
+requests take too long, error out, or our counter never reaches 0. Looking
+closely, this also includes the <code>fetchEventsForUser</code> request.</p>
+
+<p>This could be a blocker because I don&rsquo;t want to need to keep <code>timeout</code> from the
+lexical scope of the parent function. Thankfully, I don&rsquo;t notice any reason
+this timeout <em>needs</em> to be cleared at the end of particular requests, just that
+it needs to be cleared if all requests complete successfully. In fact&hellip;I think
+there is an error here. We want the timeout to be cleared on failure too!
+Cleaning up old crufty code can be a great way to uncover bugs. Well we can
+address that in a bit - one step at a time when refactoring.</p>
+
+<p>Back on topic, let&rsquo;s yank all is code into yet another asynchronous function
+and invoke it from the same place.</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">fetchReposForEvents</span> <span class="o">=</span> <span class="p">(</span><span class="nx">events</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">repos</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+  <span class="nx">events</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">fetchRepo</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="nx">repos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+        <span class="na">author</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">login</span><span class="p">,</span>
+        <span class="na">avatar</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">owner</span><span class="p">.</span><span class="nx">avatar_url</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+        <span class="na">full_name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">full_name</span><span class="p">,</span>
+        <span class="na">url</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">html_url</span><span class="p">,</span>
+        <span class="na">description</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span>
+      <span class="p">});</span>
+
+      <span class="nx">remainingCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nx">remainingCount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">fetchReposForLatestActivity</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Timed out'</span><span class="p">));</span>
+  <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+
+  <span class="nx">fetchEventsForUser</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">allEvents</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">fetchReposForEvents</span><span class="p">(</span><span class="nx">allEvents</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">repos</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>I like this a lot better for a few reasons:</p>
+
+<ol>
+<li>I don&rsquo;t have to care about how events are iterated over inside of the
+<code>fetchReposForLatestActivity</code> function anymore - I&rsquo;ve decoupled the concept.
+Instead, now it is the responsibility of <code>fetchReposForEvents</code> to care about
+the iteration over the multiple HTTP requests, and how repos are trimmed
+down.</li>
+<li>It shortens up the body of <code>fetchReposForLatestActivity</code> into a nice
+consumable chunk. I can see two main error cases right up front, see when
+the timeout gets cleared, and what gets sent back to the callback.</li>
+<li>That bug we found regarding the <code>timeout</code> not being cleared when errors
+occur does not need to interfere with the <code>fetchReposForEvents</code> inner
+workings, it will just deal with errors or success inside of the callback it
+fires upon completion.</li>
+</ol>
+
+<p>So did we lessen the nesting level? Technically we did, since the iteration is
+no longer within this function, but the callback nesting is still the same.</p>
+
+<p>This wouldn&rsquo;t inherently be a problem in a real codebase, but I&rsquo;m trying to
+teach you something, so this simply will not do.</p>
+
+<p>We&rsquo;ll start looking at some new techniques soon for flatting out our callbacks
+soon, but in the next post I think it&rsquo;d be a good idea to explain how waiting
+for multiple callbacks to complete were handled in this app.</p>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/javascript.html">javascript</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/callbacks.html">callbacks</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/series.html">series</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/gcj.html">gcj</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2019 Matt Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>
