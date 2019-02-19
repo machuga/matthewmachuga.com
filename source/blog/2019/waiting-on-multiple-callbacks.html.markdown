@@ -136,11 +136,6 @@ nested to wait in different ways.
 Let's see what this looks like:
 
 ```javascript
-const callbacks = [
-	(done) => { setTimeout(() => { done(null, '1') }, 500) },
-	(done) => { setTimeout(() => { done(null, '2') }, 200) },
-];
-
 const whenAllSettled = (fns, callback) => {
 	const results = [];
 	let remainingCount = fns.length;
@@ -168,6 +163,11 @@ const whenAllSettled = (fns, callback) => {
 	});
 }
 
+const callbacks = [
+	(done) => { setTimeout(() => { done(null, '1') }, 500) },
+	(done) => { setTimeout(() => { done(null, '2') }, 200) },
+];
+
 whenAllSettled(callbacks, (err, results) => {
 	console.log("All done with round 1!", results);
 
@@ -194,7 +194,7 @@ All done with round 2! [ { type: 'failure',
 ```
 
 So that's cool - our functions wait till the appropriate time to execute, and
-both successful and failures get returned properly. But if you are looking
+both successes and failures get returned properly. But if you are looking
 carefully, you'll notice something a bit out of place.
 
 ```javascript
