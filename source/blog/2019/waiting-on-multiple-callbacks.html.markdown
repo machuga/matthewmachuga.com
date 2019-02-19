@@ -275,8 +275,10 @@ some code with callbacks. Good news! There is an awesome library,
 magic with callbacks I'm going to demonstrate in this series! It's been battle tested
 for years, so it's ready for you to use in your production code.
 
-One thing you may be wondering: if this all happens asynchronously, how can I
+You may be wondering: if this all happens asynchronously, how can I
 be sure that `remainingCount` will ever reach `0`? Or will not go further than `0`?
-Can't a race condition occur? Next article I'm going to walk through the basics of the
-JavaScript event loop to ensure we have a solid working understanding before we continue
+Can't a race condition occur?
+
+In the next article I'm going to walk through the basics of the
+JavaScript event loop. We'll ensure we have a solid working understanding before we continue
 refactoring our asychronous code from earlier in the series.

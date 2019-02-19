@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html"/>
     <id>http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html</id>
     <published>2019-02-18T18:59:00-05:00</published>
-    <updated>2019-02-18T22:15:36-05:00</updated>
+    <updated>2019-02-18T22:20:14-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -250,10 +250,12 @@ some code with callbacks. Good news! There is an awesome library,
 magic with callbacks I&amp;rsquo;m going to demonstrate in this series! It&amp;rsquo;s been battle tested
 for years, so it&amp;rsquo;s ready for you to use in your production code.&lt;/p&gt;
 
-&lt;p&gt;One thing you may be wondering: if this all happens asynchronously, how can I
+&lt;p&gt;You may be wondering: if this all happens asynchronously, how can I
 be sure that &lt;code&gt;remainingCount&lt;/code&gt; will ever reach &lt;code&gt;0&lt;/code&gt;? Or will not go further than &lt;code&gt;0&lt;/code&gt;?
-Can&amp;rsquo;t a race condition occur? Next article I&amp;rsquo;m going to walk through the basics of the
-JavaScript event loop to ensure we have a solid working understanding before we continue
+Can&amp;rsquo;t a race condition occur?&lt;/p&gt;
+
+&lt;p&gt;In the next article I&amp;rsquo;m going to walk through the basics of the
+JavaScript event loop. We&amp;rsquo;ll ensure we have a solid working understanding before we continue
 refactoring our asychronous code from earlier in the series.&lt;/p&gt;
 </content>
   </entry>
