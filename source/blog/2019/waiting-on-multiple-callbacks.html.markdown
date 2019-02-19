@@ -14,7 +14,7 @@ setTimeout(() => {
 }, 1000);
 ```
 
-The above code will log "One second later" to the console after at least a one
+The above code will log `One second later` to the console after at least a one
 second delay (timing isn't precise in JS, but it'll usually be close...but I
 digress). `setTimeout` accepts a callback to be executed after a set number of
 milliseconds that are passed in as the second argument. We, the developer of a
@@ -26,8 +26,9 @@ Plenty simple! But what happens when you have a number of asynchronous actions
 you need completed before performing another action? Well in JavaScript proper,
 there are no primitives for handling this situation with callbacks. You are
 left to implement this logic on your own (or use a convenient library like
-`async`). But never fear! If you've read the past article you've already seen
-the code to handle this. This time we'll walk through how and why this works.
+`async`, which is linked at the bottom). But never fear! If you've read the
+past article you've already seen the code to handle this. This time we'll walk
+through how and why this works.
 
 Let's start off by assuming we have an array of four numbers representing
 milliseconds.
@@ -37,6 +38,7 @@ const durations = [250, 500, 750, 1000];
 ```
 
 Next we're going to create a function that:
+
 1. Takes an array of `n` numbers
 2. Creates `n` timeouts based on the values in the array
 3. Each timeout will output its duration upon completion
@@ -61,7 +63,7 @@ const createTimeouts = (durations, callback) => {
 ```
 
 Finally, we'll invoke the function and pass in a function that will write out
-to the console "We are all done!". So if we save the whole thing:
+to the console `We are all done!`. So if we save the whole thing:
 
 ```javascript
 const durations = [250, 500, 750, 1000];
@@ -110,7 +112,7 @@ Was that a bit underwhelming? Like most things in computer science, this
 potentially challenging problem could be solved with a little bit of math.
 Lucky for us!
 
-## Handling `N` Functions Generically (and Naively)
+## Handling `n` Functions Generically (and Naively)
 
 Maybe you don't want to write this looping code every time - maybe you are
 worried you may make a mistake, or you prefer not utilizing imperative
@@ -211,6 +213,7 @@ non-deterministic results from our function - we can't be sure which
 data comes from which function.
 
 ## How to Maintain Order
+
 So we know that if we have callbacks firing whenever they please, and then the
 results are being inserted into an array at that time, there is no guarantee on
 what order our callbacks will be in. So we need a way to track the order as we
@@ -273,7 +276,7 @@ magic with callbacks I'm going to demonstrate in this series! It's been battle t
 for years, so it's ready for you to use in your production code.
 
 One thing you may be wondering: if this all happens asynchronously, how can I
-be sure that `remainingCount` will ever reach 0? Or will not go further than 0?
+be sure that `remainingCount` will ever reach `0`? Or will not go further than `0`?
 Can't a race condition occur? Next article I'm going to walk through the basics of the
 JavaScript event loop to ensure we have a solid working understanding before we continue
 refactoring our asychronous code from earlier in the series.

@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html"/>
     <id>http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html</id>
     <published>2019-02-18T18:59:00-05:00</published>
-    <updated>2019-02-18T21:55:41-05:00</updated>
+    <updated>2019-02-18T22:02:08-05:00</updated>
     <author>
       <name>Matthew Machuga</name>
     </author>
@@ -23,7 +23,7 @@
     &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'One second later'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The above code will log &amp;ldquo;One second later&amp;rdquo; to the console after at least a one
+&lt;p&gt;The above code will log &lt;code&gt;One second later&lt;/code&gt; to the console after at least a one
 second delay (timing isn&amp;rsquo;t precise in JS, but it&amp;rsquo;ll usually be close&amp;hellip;but I
 digress). &lt;code&gt;setTimeout&lt;/code&gt; accepts a callback to be executed after a set number of
 milliseconds that are passed in as the second argument. We, the developer of a
@@ -35,18 +35,22 @@ continue running, and after &lt;code&gt;1000&lt;/code&gt; milliseconds our callb
 you need completed before performing another action? Well in JavaScript proper,
 there are no primitives for handling this situation with callbacks. You are
 left to implement this logic on your own (or use a convenient library like
-&lt;code&gt;async&lt;/code&gt;). But never fear! If you&amp;rsquo;ve read the past article you&amp;rsquo;ve already seen
-the code to handle this. This time we&amp;rsquo;ll walk through how and why this works.&lt;/p&gt;
+&lt;code&gt;async&lt;/code&gt;, which is linked at the bottom). But never fear! If you&amp;rsquo;ve read the
+past article you&amp;rsquo;ve already seen the code to handle this. This time we&amp;rsquo;ll walk
+through how and why this works.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s start off by assuming we have an array of four numbers representing
 milliseconds.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;durations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;750&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Next we&amp;rsquo;re going to create a function that:
-1. Takes an array of &lt;code&gt;n&lt;/code&gt; numbers
-2. Creates &lt;code&gt;n&lt;/code&gt; timeouts based on the values in the array
-3. Each timeout will output its duration upon completion
-4. Upon all timeouts completing, will execute a callback that was passed in.&lt;/p&gt;
+&lt;p&gt;Next we&amp;rsquo;re going to create a function that:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Takes an array of &lt;code&gt;n&lt;/code&gt; numbers&lt;/li&gt;
+&lt;li&gt;Creates &lt;code&gt;n&lt;/code&gt; timeouts based on the values in the array&lt;/li&gt;
+&lt;li&gt;Each timeout will output its duration upon completion&lt;/li&gt;
+&lt;li&gt;Upon all timeouts completing, will execute a callback that was passed in.&lt;/li&gt;
+&lt;/ol&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;createTimeouts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;durations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nx"&gt;remainingCount&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;durations&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
@@ -64,7 +68,7 @@ milliseconds.&lt;/p&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Finally, we&amp;rsquo;ll invoke the function and pass in a function that will write out
-to the console &amp;ldquo;We are all done!&amp;rdquo;. So if we save the whole thing:&lt;/p&gt;
+to the console &lt;code&gt;We are all done!&lt;/code&gt;. So if we save the whole thing:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;durations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;750&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 
 &lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;createTimeouts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;durations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
@@ -107,7 +111,7 @@ completed.&lt;/p&gt;
 potentially challenging problem could be solved with a little bit of math.
 Lucky for us!&lt;/p&gt;
 
-&lt;h2&gt;Handling &lt;code&gt;N&lt;/code&gt; Functions Generically (and Naively)&lt;/h2&gt;
+&lt;h2&gt;Handling &lt;code&gt;n&lt;/code&gt; Functions Generically (and Naively)&lt;/h2&gt;
 
 &lt;p&gt;Maybe you don&amp;rsquo;t want to write this looping code every time - maybe you are
 worried you may make a mistake, or you prefer not utilizing imperative
@@ -247,7 +251,7 @@ magic with callbacks I&amp;rsquo;m going to demonstrate in this series! It&amp;r
 for years, so it&amp;rsquo;s ready for you to use in your production code.&lt;/p&gt;
 
 &lt;p&gt;One thing you may be wondering: if this all happens asynchronously, how can I
-be sure that &lt;code&gt;remainingCount&lt;/code&gt; will ever reach 0? Or will not go further than 0?
+be sure that &lt;code&gt;remainingCount&lt;/code&gt; will ever reach &lt;code&gt;0&lt;/code&gt;? Or will not go further than &lt;code&gt;0&lt;/code&gt;?
 Can&amp;rsquo;t a race condition occur? Next article I&amp;rsquo;m going to walk through the basics of the
 JavaScript event loop to ensure we have a solid working understanding before we continue
 refactoring our asychronous code from earlier in the series.&lt;/p&gt;

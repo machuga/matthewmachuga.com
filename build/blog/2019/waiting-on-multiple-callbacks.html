@@ -80,7 +80,7 @@
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'One second later'</span><span class="p">);</span>
 <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
 </code></pre></div>
-<p>The above code will log &ldquo;One second later&rdquo; to the console after at least a one
+<p>The above code will log <code>One second later</code> to the console after at least a one
 second delay (timing isn&rsquo;t precise in JS, but it&rsquo;ll usually be close&hellip;but I
 digress). <code>setTimeout</code> accepts a callback to be executed after a set number of
 milliseconds that are passed in as the second argument. We, the developer of a
@@ -92,18 +92,22 @@ continue running, and after <code>1000</code> milliseconds our callback will be 
 you need completed before performing another action? Well in JavaScript proper,
 there are no primitives for handling this situation with callbacks. You are
 left to implement this logic on your own (or use a convenient library like
-<code>async</code>). But never fear! If you&rsquo;ve read the past article you&rsquo;ve already seen
-the code to handle this. This time we&rsquo;ll walk through how and why this works.</p>
+<code>async</code>, which is linked at the bottom). But never fear! If you&rsquo;ve read the
+past article you&rsquo;ve already seen the code to handle this. This time we&rsquo;ll walk
+through how and why this works.</p>
 
 <p>Let&rsquo;s start off by assuming we have an array of four numbers representing
 milliseconds.</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">durations</span> <span class="o">=</span> <span class="p">[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">1000</span><span class="p">];</span>
 </code></pre></div>
-<p>Next we&rsquo;re going to create a function that:
-1. Takes an array of <code>n</code> numbers
-2. Creates <code>n</code> timeouts based on the values in the array
-3. Each timeout will output its duration upon completion
-4. Upon all timeouts completing, will execute a callback that was passed in.</p>
+<p>Next we&rsquo;re going to create a function that:</p>
+
+<ol>
+<li>Takes an array of <code>n</code> numbers</li>
+<li>Creates <code>n</code> timeouts based on the values in the array</li>
+<li>Each timeout will output its duration upon completion</li>
+<li>Upon all timeouts completing, will execute a callback that was passed in.</li>
+</ol>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">createTimeouts</span> <span class="o">=</span> <span class="p">(</span><span class="nx">durations</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">remainingCount</span> <span class="o">=</span> <span class="nx">durations</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
@@ -121,7 +125,7 @@ milliseconds.</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>Finally, we&rsquo;ll invoke the function and pass in a function that will write out
-to the console &ldquo;We are all done!&rdquo;. So if we save the whole thing:</p>
+to the console <code>We are all done!</code>. So if we save the whole thing:</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">durations</span> <span class="o">=</span> <span class="p">[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">1000</span><span class="p">];</span>
 
 <span class="kd">const</span> <span class="nx">createTimeouts</span> <span class="o">=</span> <span class="p">(</span><span class="nx">durations</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -164,7 +168,7 @@ completed.</p>
 potentially challenging problem could be solved with a little bit of math.
 Lucky for us!</p>
 
-<h2>Handling <code>N</code> Functions Generically (and Naively)</h2>
+<h2>Handling <code>n</code> Functions Generically (and Naively)</h2>
 
 <p>Maybe you don&rsquo;t want to write this looping code every time - maybe you are
 worried you may make a mistake, or you prefer not utilizing imperative
@@ -304,7 +308,7 @@ magic with callbacks I&rsquo;m going to demonstrate in this series! It&rsquo;s b
 for years, so it&rsquo;s ready for you to use in your production code.</p>
 
 <p>One thing you may be wondering: if this all happens asynchronously, how can I
-be sure that <code>remainingCount</code> will ever reach 0? Or will not go further than 0?
+be sure that <code>remainingCount</code> will ever reach <code>0</code>? Or will not go further than <code>0</code>?
 Can&rsquo;t a race condition occur? Next article I&rsquo;m going to walk through the basics of the
 JavaScript event loop to ensure we have a solid working understanding before we continue
 refactoring our asychronous code from earlier in the series.</p>
