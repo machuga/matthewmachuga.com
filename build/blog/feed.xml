@@ -5,10 +5,161 @@
   <id>http://matthewmachuga.com/blog</id>
   <link href="http://matthewmachuga.com/blog"/>
   <link href="http://matthewmachuga.com/blog/feed.xml" rel="self"/>
-  <updated>2019-02-18T18:59:00-05:00</updated>
+  <updated>2019-03-21T20:00:00-04:00</updated>
   <author>
     <name>Matthew Machuga</name>
   </author>
+  <entry>
+    <title>The JavaScript Event Loop</title>
+    <link rel="alternate" href="http://matthewmachuga.com/blog/2019/the-javascript-event-loop.html"/>
+    <id>http://matthewmachuga.com/blog/2019/the-javascript-event-loop.html</id>
+    <published>2019-03-21T20:00:00-04:00</published>
+    <updated>2019-03-22T22:25:54-04:00</updated>
+    <author>
+      <name>Matthew Machuga</name>
+    </author>
+    <content type="html">&lt;p&gt;A wild JavaScript code snippet appears!&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;output&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;`--&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;output&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;--`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+
+&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"first"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;fifth&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"fifth"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;third&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"third"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;fourth&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"fourth"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"second"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For a boss-fight JavaScript code snippet that has more use cases, please
+&lt;a href="https://gist.github.com/machuga/e0dae53637be1ed6b3a97923cfadc775#file-eventloop-boss-fight-js"&gt;check out this
+gist&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Spoiler Alert / TL;DR&lt;/h2&gt;
+
+&lt;p&gt;I have the order of execution given out as &lt;code&gt;first&lt;/code&gt; through &lt;code&gt;fifth&lt;/code&gt; for clarity
+and to make it so readers can skim this and be on their way when they need a
+reference.&lt;/p&gt;
+
+&lt;h3&gt;Slightly More TL;DR&lt;/h3&gt;
+
+&lt;p&gt;JavaScript will run a function until completion (ignoring iterators), so there
+is no JS-level function interleaving. This means that you will not run into the
+same race conditions you may hit in C, C++, or other languages with threading.
+The JS engine under the hood is indeed using threads and waiting for
+asynchronous actions concurrently; however, JS-level code will run top-down
+sequentially in the current stack frame.&lt;/p&gt;
+
+&lt;h1&gt;Order Matters&lt;/h1&gt;
+
+&lt;p&gt;JavaScript, as mentioned in previous blog posts (and above in the second TL;DR
+section), executes from top to bottom. That means that in our above snippet,
+every line is going to get executed before any other JavaScript in the same
+process is executed. So on line 1, we define a function that we assign to the
+variable &lt;code&gt;log&lt;/code&gt; that adds some extra formatting to a standard &lt;code&gt;console.log&lt;/code&gt;
+call. Great! Now we can use that throughout our code.&lt;/p&gt;
+
+&lt;p&gt;So we proceed to line 3, which invokes this new function and passes along the
+string &lt;code&gt;first&lt;/code&gt; to be output to the console. Because both &lt;code&gt;log&lt;/code&gt; and &lt;code&gt;console.log&lt;/code&gt; are
+synchronous functions, meaning they do not escape the event loop, this code will
+first evaluate &lt;code&gt;log&lt;/code&gt;, enter the function, evaluate &lt;code&gt;console.log&lt;/code&gt; which is
+native code, and then return &lt;code&gt;undefined&lt;/code&gt; from both function because we do not
+specify a return value.&lt;/p&gt;
+
+&lt;p&gt;The JS runtime does not move onto anything else during this time, it only
+evaluates this code. After it returns it is free to move on to line 5:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;fifth&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"fifth"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;500&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is where things start to break down the 4th wall and start reaching
+into asynchronous territory. &lt;code&gt;setTimeout&lt;/code&gt; is a magical function (no, not
+really) that sets a timer with the JS runtime. The JS runtime effectively sets
+an eggtimer for &lt;code&gt;500&lt;/code&gt; milliseconds, puts it down on a counter, and then returns
+back to the calling function. Unlike my &lt;code&gt;log&lt;/code&gt; function, &lt;code&gt;setTimeout&lt;/code&gt; actually
+does have a return value - an identifier of the timer it just set. It&amp;rsquo;s outside
+of the scope of this demo, but if you wanted to cancel your timer, you could
+run &lt;code&gt;clearTimeout(idOfTimeout)&lt;/code&gt;, and the callback you passed would never be
+executed. But I digress.&lt;/p&gt;
+
+&lt;p&gt;Anyway, now we&amp;rsquo;ve returned from the first &lt;code&gt;setTimeout&lt;/code&gt; and proceed to the next.
+It is largely the same as the last call, except for one notable difference:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;third&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"third"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The timeout is set to &lt;code&gt;0&lt;/code&gt;. What does your gut tell you will happen here? The
+timeout is set to &lt;code&gt;0&lt;/code&gt; milliseconds, so hypothetically that could mean &lt;code&gt;run
+right now&lt;/code&gt;. However, that is not the case. &lt;code&gt;setTimeout&lt;/code&gt; sets a timer in the
+background, and those timers cannot be executed until the current block of
+JavaScript code has completed execution. So, the same metaphorical eggtimer
+gets set, with a time of &lt;code&gt;0&lt;/code&gt;. So even if the timer goes off by the time we
+return from this timeout, our friendly runtime can&amp;rsquo;t do anything about it
+because we are blocking the runloop with our pesky code. Well let&amp;rsquo;s carry on
+then.&lt;/p&gt;
+
+&lt;p&gt;The next line is the same as the one before, I just wanted to make a point of
+it to show that these messages get stacked up on a queue and will get executed
+in the order they&amp;rsquo;re dropped into the timer. So in this situation, these
+functions will be run in their respective numerical order. Perfect.&lt;/p&gt;
+
+&lt;p&gt;Finally we run into our last line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"second"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This call says &lt;code&gt;second&lt;/code&gt;, but is the last line of the file. And it is even
+correct! When this program runs, it will be the second line of code to write
+text to the console because it is synchronous, like the first call to &lt;code&gt;log&lt;/code&gt;. So
+it&amp;rsquo;s going to execute, write code to your console, return, and then this block
+of JavaScript has completed execution!&lt;/p&gt;
+
+&lt;p&gt;The console output at this point will look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;--first--
+--second--
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If this was run with NodeJS, and there
+were no timers or other event listeners configured, your program would now
+exit because its work is done.&lt;/p&gt;
+
+&lt;p&gt;However, we setup three different timers, so its work is not yet complete.
+Since there was a &lt;code&gt;0&lt;/code&gt; millisecond delay (remembering from previous posts that
+in JavaScript this means &lt;em&gt;at least&lt;/em&gt; &lt;code&gt;0&lt;/code&gt;, not exactly &lt;code&gt;0&lt;/code&gt;) from our second and
+third &lt;code&gt;setTimeout&lt;/code&gt; calls, our runtime can finally put those eggtimers away
+and will run the functions we passed into those &lt;code&gt;setTimeout&lt;/code&gt; calls. Our output
+will now look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;--first--
+--second--
+--third--
+--fourth--
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Our runtime is just going to hang out for a bit, waiting for something else to
+happen. In this sitation, there is nothing else waiting to run except for tour
+timer. So after a grueling &lt;code&gt;500&lt;/code&gt; milliseconds (at least &lt;code&gt;500&lt;/code&gt; from when it was
+set, our final timer will go off, and the callback passed in will execute,
+leaving us with the final console output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;--first--
+--second--
+--third--
+--fourth--
+--fifth--
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;At this point, the runtime&amp;rsquo;s work is done and as it bids you adieu the program
+will exit.&lt;/p&gt;
+
+&lt;p&gt;This is the basic formula for how asynchronous actions in the event loop
+functions. Network calls, file operations, event callbacks, etc.
+all behave similarly. They have functions implemented at the native level
+that allow access to a three underlying runtime&amp;rsquo;s thread pool and can dispatch
+actions outside of the main JS thread. When they call back, the JS runtime
+receives an event, and at the next tick, or iteration of the event loop, those
+events will have a chance to execute. I&amp;rsquo;ve included a link below to how
+NodeJS&amp;rsquo;s event loop runs, which covers the various phases it includes. Browser
+runtimes function similarly but may have different phases or timings.&lt;/p&gt;
+
+&lt;h1&gt;Resources and Citations&lt;/h1&gt;
+
+&lt;p&gt;There are many excellent resources for deep explanations of event loops.
+These two are my favorite:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop"&gt;MDN Concurrency model and Event Loop&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/"&gt;The NodeJS Event Loop Official Docs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Waiting on Multiple Callbacks</title>
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html"/>
@@ -1022,122 +1173,5 @@ $ canirequire request
  ]
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
-  </entry>
-  <entry>
-    <title>Compiling ES2017 with Babel for Node</title>
-    <link rel="alternate" href="http://matthewmachuga.com/blog/2017/compiling-es2017-with-babel-for-node.html"/>
-    <id>http://matthewmachuga.com/blog/2017/compiling-es2017-with-babel-for-node.html</id>
-    <published>2017-08-06T20:00:00-04:00</published>
-    <updated>2018-11-04T21:51:01-05:00</updated>
-    <author>
-      <name>Matthew Machuga</name>
-    </author>
-    <content type="html">&lt;p&gt;A long time ago I swore off compiling code I intended for NodeJS. I had
-originally done this with some production CoffeeScript code back in 2013 and it
-brought on a number of headaches — harder debugging, incompatibility with
-modules, and extra indirection. I’m not entirely sure I’d call it a mistake;
-CoffeeScript allowed us to move quickly with some advanced language features
-that weren’t yet available in Node and that helped us build our app quickly.
-However, those headaches I mentioned started to slow us down over time and I
-quickly became jaded on the topic. After noticing at Auth0 we compile some code
-at runtime with Babel, I figured I should open my mind and be willing to try
-again.&lt;/p&gt;
-
-&lt;p&gt;Node has most modern features implemented; however, once you get used to the
-ES2015 module spec it can be challenging going back to the standard Node/Common
-&lt;code&gt;require&lt;/code&gt;/&lt;code&gt;module.exports&lt;/code&gt; way of doing things. At Auth0 we also may have our
-extensions running on an LTS version of NodeJS rather than the most recent
-release so I’d rather ensure that features I expect to be present are, in fact,
-available.&lt;/p&gt;
-
-&lt;p&gt;Since some of our other extensions compile with Babel, I figured I’d fall in
-line and try to create a new extension using the same pipeline. While some only
-compile with the &lt;code&gt;es2015&lt;/code&gt; preset, I figured I’d go for &lt;code&gt;es2017&lt;/code&gt; because A: It’s
-2017, and B: I wanted to ensure the spread ( &lt;code&gt;...&lt;/code&gt; ) operator was available in
-whichever version of Node the service used.&lt;/p&gt;
-
-&lt;h1&gt;Babel Configuration&lt;/h1&gt;
-
-&lt;p&gt;The important part of the configuration lies with the &lt;code&gt;presets&lt;/code&gt; key. We use
-&lt;code&gt;.babelrc&lt;/code&gt; for our Babel setup, so my file initially looked something like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;I then, from another extension, borrowed a chunk of code to make Babel
-transform things on the fly and shoved it into its own module at &lt;code&gt;lib/babel.js&lt;/code&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="c1"&gt;// Initialize Babel for the rest of the app&lt;/span&gt;
-
-&lt;span class="nx"&gt;module&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;exports&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;loadBabel&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'babel-register'&lt;/span&gt;&lt;span class="p"&gt;)({&lt;/span&gt;
-    &lt;span class="na"&gt;sourceMaps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;NODE_ENV&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;'production'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="p"&gt;});&lt;/span&gt;
-  &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'babel-polyfill'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="p"&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Since performing this operation has a global side-effect, I wanted to make sure
-I stuck it behind a function with an explicit name so that it was obvious what
-I was doing when I imported the module and ran the function with near the top
-of my &lt;code&gt;index.js&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;loadBabel&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./lib/babel'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-&lt;span class="c1"&gt;//...&lt;/span&gt;
-&lt;span class="nx"&gt;loadBabel&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
-
-&lt;span class="c1"&gt;// Or, more condensed but less obvious:&lt;/span&gt;
-&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'./lib/babel'&lt;/span&gt;&lt;span class="p"&gt;)();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;With that loaded I assumed I was good to go and tried to import another module.
-We’ll say it was &lt;code&gt;import foo from &amp;#39;./bar&amp;#39;&lt;/code&gt;. I expected great things, but when I
-ran the app with &lt;code&gt;node ./index.js&lt;/code&gt; I was greeted with an error:
-&lt;code&gt;Syntax Error: Unexpected token import&lt;/code&gt; — &lt;code&gt;import&lt;/code&gt; wasn’t recognized and was invalid. This struck
-me as odd and I spent somewhere around a half hour jumping around in my code
-assuming I made a typo somewhere or wasn’t using &lt;code&gt;babel-register&lt;/code&gt; or
-&lt;code&gt;babel-core/register&lt;/code&gt; correctly. I’ll save you the same steps, but my salvation
-came in the form of a
-&lt;a href="https://github.com/avajs/ava/issues/1139#issuecomment-264921916"&gt;GitHub issue comment&lt;/a&gt;
-where a very logical, albeit not-obvious solution if you&amp;rsquo;ve only used &lt;code&gt;es2015&lt;/code&gt;, was given:
-&lt;code&gt;es2017&lt;/code&gt; preset only compiles down to &lt;code&gt;es2016&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="https://cdn-images-1.medium.com/max/1600/1*z0afYoDEuGcUyAc90zsGfw.gif" alt="Very logical, but not obvious" /&gt;&lt;/p&gt;
-
-&lt;p&gt;If you’ve used Babel, this probably seems clear, at least after being stated. Or
-perhaps, like me, you assumed &lt;code&gt;es2017&lt;/code&gt; to be packaged up to include &lt;code&gt;es2016&lt;/code&gt;
-and &lt;code&gt;es2015&lt;/code&gt; presets by default. However, it is more logical that &lt;code&gt;es2017&lt;/code&gt; need
-only be composed of things to compile down to the next lowest target. What if
-the runtime supports &lt;code&gt;es2016&lt;/code&gt; and we only need a few features from &lt;code&gt;es2017&lt;/code&gt;?
-Running passes over the code for lower targets would start dropping the target
-to lower levels than what’s needed. No sense in doing more work, or potentially
-de-optimizing code for lower targets. As such, that makes the choices for
-&lt;code&gt;es2016&lt;/code&gt; and higher very logical and almost obvious (once you expect it).&lt;/p&gt;
-
-&lt;p&gt;So we then have two ways to solve the problem. One way, if your version of Node
-has all features from the ES2015 and ES2016 specs, is to simply import the
-Babel plugin to handle ES2015
-modules,babel-plugin-transform-es2015-modules-commonjs , and then add it to our
-.babelrc file like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"transform-es2015-modules-commonjs"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Or we can take the more costly, but more inclusive, route of importing both
-&lt;code&gt;es2016&lt;/code&gt; and &lt;code&gt;es2015&lt;/code&gt; presets from npm and including those in our &lt;code&gt;.babelrc&lt;/code&gt; file.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="s2"&gt;"presets"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;"es2017"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;"es2016"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="s2"&gt;"es2015"&lt;/span&gt;&lt;span class="w"&gt;
-  &lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This will let all included presets perform their necessary duties and output
-some ES5-friendly code at the end. I opted for the latter until I could verify
-the version of Node on the servers, but once I reran my code with those presets
-in place, the existing code and imports executed perfectly fine and I was ready
-to write the rest of my modules as ES2015 ones.&lt;/p&gt;
-
-&lt;p&gt;I hope this helps you debug your issue if you’ve landed here after searching
-for &lt;code&gt;Syntax Error: Unexpected token import&lt;/code&gt;, or if you’re about to start a
-project in Node or Browser JS, that this will save you some running around.&lt;/p&gt;
-</content>
   </entry>
 </feed>

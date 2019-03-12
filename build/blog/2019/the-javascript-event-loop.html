@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="author" content="Matt Machuga">
+    <meta name="description" content="The website for Matthew Machuga.">
+    <title>
+      The JavaScript Event Loop | 
+      Matt Machuga: Software Engineer / Engineering Manager / Educator
+    </title>
+    <link href="/stylesheets/site.css" rel="stylesheet" />
+    <link href="/stylesheets/highlighting.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    <script src="/javascripts/site.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/">
+        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+      </a>
+      <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
+
+      <nav class="main-nav">
+        <ul class="nav-bar">
+          <li class="main-link"><a href="/blog">Blog</a></li>
+          <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
+          <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
+          <li class="main-link"><a href="/talks.html">Talks</a></li>
+          <li class="main-link"><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </header>
+
+    <main class="site-content">
+          <article class="article">
+      <header class="header">
+        <h1 class="title">The JavaScript Event Loop</h1>
+        <h3 class="published-date">March 22, 2019</h3>
+      </header>
+
+      <p>A wild JavaScript code snippet appears!</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="p">(</span><span class="nx">output</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`--</span><span class="p">${</span><span class="nx">output</span><span class="p">}</span><span class="s2">--`</span><span class="p">);</span> <span class="p">};</span>
+
+<span class="nx">log</span><span class="p">(</span><span class="s2">"first"</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fifth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"third"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fourth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fourth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="nx">log</span><span class="p">(</span><span class="s2">"second"</span><span class="p">);</span>
+</code></pre></div>
+<p>For a boss-fight JavaScript code snippet that has more use cases, please
+<a href="https://gist.github.com/machuga/e0dae53637be1ed6b3a97923cfadc775#file-eventloop-boss-fight-js">check out this
+gist</a></p>
+
+<h2>Spoiler Alert / TL;DR</h2>
+
+<p>I have the order of execution given out as <code>first</code> through <code>fifth</code> for clarity
+and to make it so readers can skim this and be on their way when they need a
+reference.</p>
+
+<h3>Slightly More TL;DR</h3>
+
+<p>JavaScript will run a function until completion (ignoring iterators), so there
+is no JS-level function interleaving. This means that you will not run into the
+same race conditions you may hit in C, C++, or other languages with threading.
+The JS engine under the hood is indeed using threads and waiting for
+asynchronous actions concurrently; however, JS-level code will run top-down
+sequentially in the current stack frame.</p>
+
+<h1>Order Matters</h1>
+
+<p>JavaScript, as mentioned in previous blog posts (and above in the second TL;DR
+section), executes from top to bottom. That means that in our above snippet,
+every line is going to get executed before any other JavaScript in the same
+process is executed. So on line 1, we define a function that we assign to the
+variable <code>log</code> that adds some extra formatting to a standard <code>console.log</code>
+call. Great! Now we can use that throughout our code.</p>
+
+<p>So we proceed to line 3, which invokes this new function and passes along the
+string <code>first</code> to be output to the console. Because both <code>log</code> and <code>console.log</code> are
+synchronous functions, meaning they do not escape the event loop, this code will
+first evaluate <code>log</code>, enter the function, evaluate <code>console.log</code> which is
+native code, and then return <code>undefined</code> from both function because we do not
+specify a return value.</p>
+
+<p>The JS runtime does not move onto anything else during this time, it only
+evaluates this code. After it returns it is free to move on to line 5:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fifth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+</code></pre></div>
+<p>This is where things start to break down the 4th wall and start reaching
+into asynchronous territory. <code>setTimeout</code> is a magical function (no, not
+really) that sets a timer with the JS runtime. The JS runtime effectively sets
+an eggtimer for <code>500</code> milliseconds, puts it down on a counter, and then returns
+back to the calling function. Unlike my <code>log</code> function, <code>setTimeout</code> actually
+does have a return value - an identifier of the timer it just set. It&rsquo;s outside
+of the scope of this demo, but if you wanted to cancel your timer, you could
+run <code>clearTimeout(idOfTimeout)</code>, and the callback you passed would never be
+executed. But I digress.</p>
+
+<p>Anyway, now we&rsquo;ve returned from the first <code>setTimeout</code> and proceed to the next.
+It is largely the same as the last call, except for one notable difference:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"third"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>The timeout is set to <code>0</code>. What does your gut tell you will happen here? The
+timeout is set to <code>0</code> milliseconds, so hypothetically that could mean <code>run
+right now</code>. However, that is not the case. <code>setTimeout</code> sets a timer in the
+background, and those timers cannot be executed until the current block of
+JavaScript code has completed execution. So, the same metaphorical eggtimer
+gets set, with a time of <code>0</code>. So even if the timer goes off by the time we
+return from this timeout, our friendly runtime can&rsquo;t do anything about it
+because we are blocking the runloop with our pesky code. Well let&rsquo;s carry on
+then.</p>
+
+<p>The next line is the same as the one before, I just wanted to make a point of
+it to show that these messages get stacked up on a queue and will get executed
+in the order they&rsquo;re dropped into the timer. So in this situation, these
+functions will be run in their respective numerical order. Perfect.</p>
+
+<p>Finally we run into our last line:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">log</span><span class="p">(</span><span class="s2">"second"</span><span class="p">);</span>
+</code></pre></div>
+<p>This call says <code>second</code>, but is the last line of the file. And it is even
+correct! When this program runs, it will be the second line of code to write
+text to the console because it is synchronous, like the first call to <code>log</code>. So
+it&rsquo;s going to execute, write code to your console, return, and then this block
+of JavaScript has completed execution!</p>
+
+<p>The console output at this point will look like this:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>--first--
+--second--
+</code></pre></div>
+<p>If this was run with NodeJS, and there
+were no timers or other event listeners configured, your program would now
+exit because its work is done.</p>
+
+<p>However, we setup three different timers, so its work is not yet complete.
+Since there was a <code>0</code> millisecond delay (remembering from previous posts that
+in JavaScript this means <em>at least</em> <code>0</code>, not exactly <code>0</code>) from our second and
+third <code>setTimeout</code> calls, our runtime can finally put those eggtimers away
+and will run the functions we passed into those <code>setTimeout</code> calls. Our output
+will now look like this:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>--first--
+--second--
+--third--
+--fourth--
+</code></pre></div>
+<p>Our runtime is just going to hang out for a bit, waiting for something else to
+happen. In this sitation, there is nothing else waiting to run except for tour
+timer. So after a grueling <code>500</code> milliseconds (at least <code>500</code> from when it was
+set, our final timer will go off, and the callback passed in will execute,
+leaving us with the final console output:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>--first--
+--second--
+--third--
+--fourth--
+--fifth--
+</code></pre></div>
+<p>At this point, the runtime&rsquo;s work is done and as it bids you adieu the program
+will exit.</p>
+
+<p>This is the basic formula for how asynchronous actions in the event loop
+functions. Network calls, file operations, event callbacks, etc.
+all behave similarly. They have functions implemented at the native level
+that allow access to a three underlying runtime&rsquo;s thread pool and can dispatch
+actions outside of the main JS thread. When they call back, the JS runtime
+receives an event, and at the next tick, or iteration of the event loop, those
+events will have a chance to execute. I&rsquo;ve included a link below to how
+NodeJS&rsquo;s event loop runs, which covers the various phases it includes. Browser
+runtimes function similarly but may have different phases or timings.</p>
+
+<h1>Resources and Citations</h1>
+
+<p>There are many excellent resources for deep explanations of event loops.
+These two are my favorite:</p>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop">MDN Concurrency model and Event Loop</a></li>
+<li><a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/">The NodeJS Event Loop Official Docs</a></li>
+</ul>
+
+
+      <footer class="article-footer">
+        <dl>
+          <dt>Tags:</dt>
+          <dd class="tag-list">
+              <li class="tag">
+                <a href="/blog/tags/javascript.html">javascript</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/callbacks.html">callbacks</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/series.html">series</a>
+              </li>
+              <li class="tag">
+                <a href="/blog/tags/gcj.html">gcj</a>
+              </li>
+          </dd>
+        </dl>
+      </footer>
+    </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="copyright-info">
+        <p class="copyright">
+          © 2019 Matt Machuga
+        </p>
+      </div>
+      <nav class="social-nav">
+	<ul class="nav-bar">
+		<li class="social-link">
+			<a href="https://medium.com/@machuga">
+				<i class="fab fa-fw fa-medium"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://twitter.com/machuga">
+				<i class="fab fa-fw fa-twitter-square"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://github.com/machuga">
+				<i class="fab fa-fw fa-github"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://linkedin.com/in/machuga">
+				<i class="fab fa-fw fa-linkedin"></i>
+			</a>
+		</li>
+		<li class="social-link">
+			<a href="https://mastodon.social/@machuga">
+				<i class="fab fa-fw fa-mastodon"></i>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+    </footer>
+  </body>
+</html>
