@@ -30,7 +30,7 @@ I have the order of execution given out as `first` through `fifth` for clarity
 and to make it so readers can skim this and be on their way when they need a
 reference.
 
-### Slightly More TL;DR
+## Slightly More TL;DR
 
 JavaScript will run a function until completion (ignoring iterators), so there
 is no JS-level function interleaving. This means that you will not run into the
@@ -39,12 +39,16 @@ The JS engine under the hood is indeed using threads and waiting for
 asynchronous actions concurrently; however, JS-level code will run top-down
 sequentially in the current stack frame.
 
-# Order Matters
+## Order Matters
 
 JavaScript, as mentioned in previous blog posts (and above in the second TL;DR
 section), executes from top to bottom. That means that in our above snippet,
 every line is going to get executed before any other JavaScript in the same
-process is executed. So on line 1, we define a function that we assign to the
+process is executed.
+
+## We're All JavaScript Runtimes
+
+So on line 1, we define a function that we assign to the
 variable `log` that adds some extra formatting to a standard `console.log`
 call. Great! Now we can use that throughout our code.
 
@@ -148,6 +152,8 @@ leaving us with the final console output:
 At this point, the runtime's work is done and as it bids you adieu the program
 will exit.
 
+## The More You Know
+
 This is the basic formula for how asynchronous actions in the event loop
 functions. Network calls, file operations, event callbacks, etc.
 all behave similarly. They have functions implemented at the native level
@@ -158,7 +164,7 @@ events will have a chance to execute. I've included a link below to how
 NodeJS's event loop runs, which covers the various phases it includes. Browser
 runtimes function similarly but may have different phases or timings.
 
-# Resources and Citations
+## Resources and Citations
 
 There are many excellent resources for deep explanations of event loops.
 These two are my favorite:
