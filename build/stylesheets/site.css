@@ -333,43 +333,45 @@ a {
   .talks .talk-list .talk .poster {
     width: 100%; }
 
-.blog-articles {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; }
-  .blog-articles .listings {
-    -webkit-box-flex: 2;
-        -ms-flex: 2;
-            flex: 2; }
-    .blog-articles .listings .articles .article blockquote.description {
-      margin-left: 2rem; }
-      .blog-articles .listings .articles .article blockquote.description h1, .blog-articles .listings .articles .article blockquote.description h2, .blog-articles .listings .articles .article blockquote.description h3, .blog-articles .listings .articles .article blockquote.description h4, .blog-articles .listings .articles .article blockquote.description h5, .blog-articles .listings .articles .article blockquote.description h6 {
-        margin-top: 5px;
-        margin-bottom: 5px; }
-  .blog-articles .archive {
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
-    min-width: 30%; }
-    .blog-articles .archive .content {
-      background-color: #f8f8f8;
-      padding: 1rem; }
-    .blog-articles .archive h1 {
-      margin: 0 auto 0 auto; }
-    .blog-articles .archive ul {
-      margin: 0; }
-    .blog-articles .archive section {
-      margin-bottom: 1rem; }
-  .blog-articles .archive .tags .tag-list {
+.blog-articles .listings .articles .article blockquote.description {
+  margin-left: 2rem; }
+  .blog-articles .listings .articles .article blockquote.description h1, .blog-articles .listings .articles .article blockquote.description h2, .blog-articles .listings .articles .article blockquote.description h3, .blog-articles .listings .articles .article blockquote.description h4, .blog-articles .listings .articles .article blockquote.description h5, .blog-articles .listings .articles .article blockquote.description h6 {
+    margin-top: 5px;
+    margin-bottom: 5px; }
+.blog-articles .archive {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 30%; }
+  .blog-articles .archive .content {
+    background-color: #f8f8f8;
+    padding: 1rem; }
+  .blog-articles .archive h1 {
+    margin: 0 auto 0 auto; }
+  .blog-articles .archive ul {
+    margin: 0; }
+  .blog-articles .archive section {
+    margin-bottom: 1rem; }
+  .blog-articles .archive .year-list {
     margin-left: 0;
     padding-left: 0; }
-  .blog-articles .archive .tags .tag {
-    display: inline;
-    font-size: 0.75rem; }
-    .blog-articles .archive .tags .tag:after {
-      content: ", "; }
-    .blog-articles .archive .tags .tag:last-child:after {
-      content: ""; }
+    .blog-articles .archive .year-list li {
+      display: inline-block;
+      font-size: 0.75rem; }
+      .blog-articles .archive .year-list li:after {
+        content: ", "; }
+      .blog-articles .archive .year-list li:last-child:after {
+        content: ""; }
+.blog-articles .archive .tags .tag-list {
+  margin-left: 0;
+  padding-left: 0; }
+.blog-articles .archive .tags .tag {
+  display: inline;
+  font-size: 0.75rem; }
+  .blog-articles .archive .tags .tag:after {
+    content: ", "; }
+  .blog-articles .archive .tags .tag:last-child:after {
+    content: ""; }
 
 @media only screen and (max-width: 520px) {
   .blog-articles {

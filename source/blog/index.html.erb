@@ -30,11 +30,11 @@ pageable: true
       <% end %>
     </nav>
   </div>
-
-  <aside class="archive">
+	<aside class="archive">
 		<div class="content">
+			<h1>Archive</h1>
 			<section class="years">
-				<h1>Find Articles by Year (<%= articles.size %>)</h1>
+				<h2>Years</h2>
 				<ul class="year-list">
 					<% blog.articles.group_by { |a| a.date.year }.each do |year, articles| %>
 						<li>
@@ -45,7 +45,7 @@ pageable: true
 			</section>
 
 			<section class="tags">
-				<h1>Find Articles by Tags (<%= articles.size %>)</h1>
+				<h2>Tags</h2>
 				<ul class="tag-list">
 					<% blog.tags.each_with_index do |(tag, articles), index| %>
 						<li class="tag">

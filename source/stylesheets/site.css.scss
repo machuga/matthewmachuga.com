@@ -478,11 +478,7 @@ a {
 }
 
 .blog-articles {
-	display: flex;
-
 	.listings {
-		flex: 2;
-
 		.articles .article blockquote.description {
 			margin-left: 2rem;
 
@@ -512,6 +508,24 @@ a {
 
 		section {
 			margin-bottom: 1rem;
+		}
+
+		.year-list {
+			margin-left: 0;
+			padding-left: 0;
+
+			li {
+			  display: inline-block;
+			  font-size: 0.75rem;
+
+			  &:after {
+			  	content: ', '
+			  }
+
+			  &:last-child:after {
+			  	content: ''
+			  }
+			}
 		}
 	}
 
