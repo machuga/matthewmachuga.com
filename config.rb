@@ -4,10 +4,6 @@ set :markdown_engine, :redcarpet
 set :markdown, fenced_code_blocks: true, smartypants: true
 activate :syntax, line_numbers: false
 
-activate :autoprefixer do |prefix|
-  prefix.browsers = 'last 2 versions'
-end
-
 # Layouts
 # https://middlemanapp.com/basics/layouts/
 
