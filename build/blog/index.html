@@ -22,7 +22,7 @@
   <body>
     <header class="site-header">
       <a href="/">
-        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+        <img src="/images/photo.jpg" class="header-pic" alt="" />
       </a>
       <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
 
@@ -32,7 +32,6 @@
           <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
           <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
           <li class="main-link"><a href="/talks.html">Talks</a></li>
-          <li class="main-link"><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
 
@@ -82,10 +81,10 @@
             <p>A wild JavaScript code snippet appears!</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="p">(</span><span class="nx">output</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`--</span><span class="p">${</span><span class="nx">output</span><span class="p">}</span><span class="s2">--`</span><span class="p">);</span> <span class="p">};</span>
 
-<span class="nx">log</span><span class="p">(</span><span class="s2">"first"</span><span class="p">);</span>
+<span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">first</span><span class="dl">"</span><span class="p">);</span>
 
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fifth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"third"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">fifth</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">third</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
 <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fourth</span><span class="p">()</span></code></pre></div>
           </blockquote>
         </article>
@@ -98,7 +97,7 @@
           <blockquote class="description">
             <p>First, a refresher on asynchronous functions utilizing callbacks:</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'One second later'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">One second later</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
 </code></pre></div>
 <p>The above code will log <code>One second later</code> to the console after at least a one
@@ -113,9 +112,9 @@ second delay (timing isn’t precise in...</p>
 
           <blockquote class="description">
             <p>Let’s take a look at our example from last time:</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./get'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./get</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
 
-<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">https://api.github.com</span><span class="dl">'</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">githubEventsUrlFor</span> <span class="o">=</span> <span class="nx">username</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/users/</span><span class="p">${</span><span class="nx">username</span><span class="p">}</span><span class="s2">/events`</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">githubRepoUrlFor</span></code></pre></div>
           </blockquote>
@@ -428,7 +427,7 @@ modules, and extra indirection...</p>
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2020 Matt Machuga
+          © 2023 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">

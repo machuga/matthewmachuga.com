@@ -22,7 +22,7 @@
   <body>
     <header class="site-header">
       <a href="/">
-        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+        <img src="/images/photo.jpg" class="header-pic" alt="" />
       </a>
       <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
 
@@ -32,7 +32,6 @@
           <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
           <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
           <li class="main-link"><a href="/talks.html">Talks</a></li>
-          <li class="main-link"><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
 
@@ -77,7 +76,7 @@
 
       <p>First, a refresher on asynchronous functions utilizing callbacks:</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'One second later'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">One second later</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
 </code></pre></div>
 <p>The above code will log <code>One second later</code> to the console after at least a one
@@ -145,7 +144,7 @@ to the console <code>We are all done!</code>. So if we save the whole thing:</p>
 <span class="p">}</span>
 
 <span class="nx">createTimeouts</span><span class="p">(</span><span class="nx">durations</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"We are all done!"</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">We are all done!</span><span class="dl">"</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 <p>and then execute the script, we&rsquo;ll see each timeout execute in order every
@@ -198,9 +197,9 @@ nested to wait in different ways.</p>
         <span class="kd">let</span> <span class="nx">resultObject</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">resultObject</span> <span class="o">=</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="s1">'failure'</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="nx">err</span> <span class="p">};</span>
+            <span class="nx">resultObject</span> <span class="o">=</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">failure</span><span class="dl">'</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="nx">err</span> <span class="p">};</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">resultObject</span> <span class="o">=</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="s1">'success'</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="nx">result</span> <span class="p">};</span>
+            <span class="nx">resultObject</span> <span class="o">=</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">,</span> <span class="na">value</span><span class="p">:</span> <span class="nx">result</span> <span class="p">};</span>
         <span class="p">}</span>
 
         <span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">resultObject</span><span class="p">);</span>
@@ -218,17 +217,17 @@ nested to wait in different ways.</p>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">callbacks</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">500</span><span class="p">)</span> <span class="p">},</span>
-    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">200</span><span class="p">)</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">500</span><span class="p">)</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">200</span><span class="p">)</span> <span class="p">},</span>
 <span class="p">];</span>
 
 <span class="nx">whenAllSettled</span><span class="p">(</span><span class="nx">callbacks</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"All done with round 1!"</span><span class="p">,</span> <span class="nx">results</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">All done with round 1!</span><span class="dl">"</span><span class="p">,</span> <span class="nx">results</span><span class="p">);</span>
 
     <span class="nx">whenAllSettled</span><span class="p">([</span>
-        <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">done</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'oops'</span><span class="p">)),</span> <span class="mi">500</span><span class="p">);</span> <span class="p">}</span>
+        <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">done</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">oops</span><span class="dl">'</span><span class="p">)),</span> <span class="mi">500</span><span class="p">);</span> <span class="p">}</span>
     <span class="p">],</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"All done with round 2!"</span><span class="p">,</span> <span class="nx">results</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">All done with round 2!</span><span class="dl">"</span><span class="p">,</span> <span class="nx">results</span><span class="p">);</span>
     <span class="p">})</span>
 <span class="p">});</span>
 
@@ -247,8 +246,8 @@ All done with round 2! [ { type: 'failure',
 both successes and failures get returned properly. But if you are looking
 carefully, you&rsquo;ll notice something a bit out of place.</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">callbacks</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">500</span><span class="p">)</span> <span class="p">},</span>
-    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">200</span><span class="p">)</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">500</span><span class="p">)</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">done</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">)</span> <span class="p">},</span> <span class="mi">200</span><span class="p">)</span> <span class="p">},</span>
 <span class="p">];</span>
 </code></pre></div>
 <p>At the top we defined the <code>callbacks</code> array with two functions, the first
@@ -342,7 +341,7 @@ refactoring our asychronous code from earlier in the series.</p>
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2020 Matt Machuga
+          © 2023 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">

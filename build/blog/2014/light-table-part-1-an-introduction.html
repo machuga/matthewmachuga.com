@@ -22,7 +22,7 @@
   <body>
     <header class="site-header">
       <a href="/">
-        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+        <img src="/images/photo.jpg" class="header-pic" alt="" />
       </a>
       <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
 
@@ -32,7 +32,6 @@
           <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
           <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
           <li class="main-link"><a href="/talks.html">Talks</a></li>
-          <li class="main-link"><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
 
@@ -93,32 +92,32 @@
 
 <p>The connections allow you to bind to different runtimes and environments to your REPLs or watches, as previously mentioned.  Some of the defaults include an embedded or external browser, a local or remote Clojure REPL, the Light Table UI itself, Node, or Python.  You can also include additional connections from the plugin manager or write your own for your favorite runtime.</p>
 
-<p><img src="/blog/2014/light-table-part-1-an-introduction/connections.png" alt="Connections" /></p>
+<p><img src="/blog/2014/light-table-part-1-an-introduction/connections.png" alt="" /></p>
 
 <h3>Embedded REPLs</h3>
 
 <p>Those familiar with Emacs will appreciate the fact of being able to fire up REPLs on the fly.  Light Table&rsquo;s REPLs are typically in Live mode - where you&rsquo;ll get inline evaluation without performing any commands to eval your code.  It&rsquo;s quite a nice way to write your code if you&rsquo;re working on an application in one of the supported languages.</p>
 
-<p><img src="/blog/2014/light-table-part-1-an-introduction/live-repl.png" alt="Live repl" /></p>
+<p><img src="/blog/2014/light-table-part-1-an-introduction/live-repl.png" alt="" /></p>
 
 <h3>Inline Evaluation</h3>
 
 <p>Rather than using console logging or a dedicated debugger, Light Table lets you evaluate a line of code right there in the editor with a simple keychord.  This is great for figuring out where your code is going to throw exceptions or return slightly incorrect values without breaking your focus. As mentioned before - just select the connection you want to eval against and it&rsquo;s good to go.</p>
 
-<p><img src="/blog/2014/light-table-part-1-an-introduction/inline-eval.png" alt="Inline eval" /></p>
+<p><img src="/blog/2014/light-table-part-1-an-introduction/inline-eval.png" alt="" /></p>
 
 <h3>Embeded Webkit Browser</h3>
 
 <p>Since Light Table is built on <code>node-webkit</code>, it supports the ability to call up a browser right inside of the editor.  This is great for working on a JS/ClojureScript application since you can control nearly every aspect of your code without even leaving your editor.  The biggest caveat I&rsquo;ve found with this feature I want to document, which I should&rsquo;ve considered prior to attempting, was that if you enter a <code>debugger</code> statement in your JavaScript it will hang the entire editor since it will halt the JS runtime.  As such, you&rsquo;ll be forced to force quit Light Table and restart it.</p>
 
-<p><img src="/blog/2014/light-table-part-1-an-introduction/embedded-webkit.png" alt="Embedded webkit" /></p>
+<p><img src="/blog/2014/light-table-part-1-an-introduction/embedded-webkit.png" alt="" /></p>
 
 <h3>Completely Flexible</h3>
 
 <p>Keybindings are super easy to manipulate for various parts of the editor, and the general behavior and functionality of the editor is just as easy to configure.  Light Table&rsquo;s architecture (and ClojureScript as a language) lend themselves well to creating an extensible and introspectable environment.  Since the functionality is treated as data, it makes reconfiguring or extending the editor or platform quite simple in any language that can compile down to JS.  Of course, you&rsquo;ll almost always need a bit of ClojureScript to hook it into the platform, but much of that can be copypasta&#39;ed from the web.</p>
 
 <p>LT seems to borrow partially from Emacs and partially from Sublime Text as far as keymapping and behavior goes.  Both keymapping and behaviors have <code>system</code> and <code>user</code> files where all of the configuation belongs, much like Sublime. Similarly, both keymappings and behaviors are using ClojureScript to configure, manly maps - this is similar to how all Emacs scripting is done in Emacs Lisp.
-<img src="/blog/2014/light-table-part-1-an-introduction/configs.png" alt="Configs" /></p>
+<img src="/blog/2014/light-table-part-1-an-introduction/configs.png" alt="" /></p>
 
 <h2>Plugins</h2>
 
@@ -126,7 +125,7 @@
 
 <p>One notable thing about the Light Table plugin system is that you also have access to any CodeMirror plugin, so long as there is a small adapter for it to be plugged into LT. Even Vim mode is one of these CodeMirror plugins; they&rsquo;re quite common since reinventing the wheel would be a bit unnecessary, and CodeMirror has quite a few plugins already.</p>
 
-<p><img src="/blog/2014/light-table-part-1-an-introduction/plugins.png" alt="Plugins" /></p>
+<p><img src="/blog/2014/light-table-part-1-an-introduction/plugins.png" alt="" /></p>
 
 <h2>Overall</h2>
 
@@ -158,7 +157,7 @@
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2020 Matt Machuga
+          © 2023 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">

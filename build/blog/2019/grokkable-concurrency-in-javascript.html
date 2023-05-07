@@ -22,7 +22,7 @@
   <body>
     <header class="site-header">
       <a href="/">
-        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+        <img src="/images/photo.jpg" class="header-pic" alt="" />
       </a>
       <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
 
@@ -32,7 +32,6 @@
           <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
           <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
           <li class="main-link"><a href="/talks.html">Talks</a></li>
-          <li class="main-link"><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
 
@@ -82,15 +81,15 @@
 <p><a href="http://callbackhell.com/">Callback Hell</a> is something you’ll hear many JavaScript developers refer to, and not endearingly. It is a very real place, and is to be feared, but it is fortunately something that can be avoided with a number of tactics. We will be reviewing a prime example of Callback Hell code to study and begin understanding its weaknesses so that we can begin to learn ways to clean it up. The logical place to starts seems to be with  focusing solely on callbacks, but there is so much more to learn!</p>
 
 <h2>Problems in the Inferno</h2>
-<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./get'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="kd">get</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./get</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// get(url, callback)</span>
 
-<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">githubApi</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">https://api.github.com</span><span class="dl">'</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">githubEventsUrlFor</span> <span class="o">=</span> <span class="nx">username</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/users/</span><span class="p">${</span><span class="nx">username</span><span class="p">}</span><span class="s2">/events`</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">githubRepoUrlFor</span> <span class="o">=</span> <span class="nx">repo</span> <span class="o">=&gt;</span> <span class="s2">`</span><span class="p">${</span><span class="nx">githubApi</span><span class="p">}</span><span class="s2">/repos/</span><span class="p">${</span><span class="nx">repo</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
 
 <span class="kd">const</span> <span class="nx">fetchReposForLatestActivity</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">let</span> <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Timed out'</span><span class="p">));</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Timed out</span><span class="dl">'</span><span class="p">));</span>
   <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
 
   <span class="kd">get</span><span class="p">(</span><span class="nx">githubEventsUrlFor</span><span class="p">(</span><span class="nx">user</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">allEvents</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -128,7 +127,7 @@
   <span class="p">});</span>
 <span class="p">};</span>
 
-<span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="s1">'machuga'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="dl">'</span><span class="s1">machuga</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
     <span class="k">return</span><span class="p">;</span>
@@ -150,9 +149,9 @@ The most deeply nested part in our code knows about and mutates the <code>timeou
 Example:</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">doAThing</span><span class="p">(</span><span class="nx">errback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">wrongThingHappens</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">errback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'oops'</span><span class="p">));</span>
+      <span class="k">return</span> <span class="nx">errback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">oops</span><span class="dl">'</span><span class="p">));</span>
   <span class="p">}</span>
-  <span class="nx">callback</span><span class="p">(</span><span class="s1">'success'</span><span class="p">);</span>
+  <span class="nx">callback</span><span class="p">(</span><span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">doAThing</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">,</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
@@ -162,7 +161,7 @@ Example:</p>
 <h2>Only-Once</h2>
 
 <p>Let&rsquo;s take a look at how we call our <code>fetchReposForLatestActivity</code> function:</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="s1">'machuga'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">fetchReposForLatestActivity</span><span class="p">(</span><span class="dl">'</span><span class="s1">machuga</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">repos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
     <span class="k">return</span><span class="p">;</span>
@@ -233,7 +232,7 @@ Example:</p>
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2020 Matt Machuga
+          © 2023 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">

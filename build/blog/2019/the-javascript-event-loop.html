@@ -22,7 +22,7 @@
   <body>
     <header class="site-header">
       <a href="/">
-        <img src="/images/photo.jpg" class="header-pic" alt="Photo" />
+        <img src="/images/photo.jpg" class="header-pic" alt="" />
       </a>
       <h1 class="site-title">Hi! I'm Matt Machuga.</h1>
 
@@ -32,7 +32,6 @@
           <li class="main-link"><a href="https://bitsandtrees.com">Podcast</a></li>
           <li class="main-link"><a href="/screencasts.html">Screencasts</a></li>
           <li class="main-link"><a href="/talks.html">Talks</a></li>
-          <li class="main-link"><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
 
@@ -78,13 +77,13 @@
       <p>A wild JavaScript code snippet appears!</p>
 <div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="p">(</span><span class="nx">output</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`--</span><span class="p">${</span><span class="nx">output</span><span class="p">}</span><span class="s2">--`</span><span class="p">);</span> <span class="p">};</span>
 
-<span class="nx">log</span><span class="p">(</span><span class="s2">"first"</span><span class="p">);</span>
+<span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">first</span><span class="dl">"</span><span class="p">);</span>
 
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fifth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"third"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
-<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fourth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fourth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">fifth</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">third</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fourth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">fourth</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
 
-<span class="nx">log</span><span class="p">(</span><span class="s2">"second"</span><span class="p">);</span>
+<span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">second</span><span class="dl">"</span><span class="p">);</span>
 </code></pre></div>
 <p>For a boss-fight JavaScript code snippet that has more use cases, please
 <a href="https://gist.github.com/machuga/e0dae53637be1ed6b3a97923cfadc775#file-eventloop-boss-fight-js">check out this
@@ -127,7 +126,7 @@ specify a return value.</p>
 
 <p>The JS runtime does not move onto anything else during this time, it only
 evaluates this code. After it returns it is free to move on to line 5:</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"fifth"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">fifth</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">fifth</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
 </code></pre></div>
 <p>This is where things start to break down the 4th wall and start reaching
 into asynchronous territory. <code>setTimeout</code> is a magical function (no, not
@@ -141,7 +140,7 @@ executed. But I digress.</p>
 
 <p>Anyway, now we&rsquo;ve returned from the first <code>setTimeout</code> and proceed to the next.
 It is largely the same as the last call, except for one notable difference:</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="s2">"third"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="nx">third</span><span class="p">()</span> <span class="p">{</span> <span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">third</span><span class="dl">"</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
 </code></pre></div>
 <p>The timeout is set to <code>0</code>. What does your gut tell you will happen here? The
 timeout is set to <code>0</code> milliseconds, so hypothetically that could mean <code>run
@@ -159,7 +158,7 @@ in the order they&rsquo;re dropped into the timer. So in this situation, these
 functions will be run in their respective numerical order. Perfect.</p>
 
 <p>Finally we run into our last line:</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="nx">log</span><span class="p">(</span><span class="s2">"second"</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">second</span><span class="dl">"</span><span class="p">);</span>
 </code></pre></div>
 <p>This call says <code>second</code>, but is the last line of the file. And it is even
 correct! When this program runs, it will be the second line of code to write
@@ -249,7 +248,7 @@ These two are my favorite:</p>
     <footer class="site-footer">
       <div class="copyright-info">
         <p class="copyright">
-          © 2020 Matt Machuga
+          © 2023 Matt Machuga
         </p>
       </div>
       <nav class="social-nav">
