@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Matthew Machuga</title>
+  <title>Matt Machuga</title>
   <subtitle>I like to build things and help people</subtitle>
   <id>http://matthewmachuga.com/blog</id>
   <link href="http://matthewmachuga.com/blog"/>
   <link href="http://matthewmachuga.com/blog/feed.xml" rel="self"/>
   <updated>2019-03-21T20:00:00-04:00</updated>
   <author>
-    <name>Matthew Machuga</name>
+    <name>Matt Machuga</name>
   </author>
   <entry>
     <title>The JavaScript Event Loop</title>
@@ -16,7 +16,7 @@
     <published>2019-03-21T20:00:00-04:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;A wild JavaScript code snippet appears!&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;log&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;output&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;`--&lt;/span&gt;&lt;span class="p"&gt;${&lt;/span&gt;&lt;span class="nx"&gt;output&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;--`&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
@@ -173,7 +173,7 @@ These two are my favorite:&lt;/p&gt;
     <published>2019-02-18T18:59:00-05:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;First, a refresher on asynchronous functions utilizing callbacks:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;setTimeout&lt;/span&gt;&lt;span class="p"&gt;(()&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
@@ -423,7 +423,7 @@ refactoring our asychronous code from earlier in the series.&lt;/p&gt;
     <published>2019-02-06T06:00:00-05:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;Let&amp;rsquo;s take a look at our example from last time:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="kd"&gt;const&lt;/span&gt; &lt;span class="kd"&gt;get&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="dl"&gt;'&lt;/span&gt;&lt;span class="s1"&gt;./get&lt;/span&gt;&lt;span class="dl"&gt;'&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// get(url, callback)&lt;/span&gt;
@@ -677,7 +677,7 @@ here&lt;/a&gt;.&lt;/p&gt;
     <published>2019-02-03T14:30:00-05:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; This is the first post in a series on Concurrent Programming in JavaScript.&lt;/p&gt;
 
@@ -818,7 +818,7 @@ Example:&lt;/p&gt;
     <published>2018-04-27T20:00:00-04:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;I started writing pieces of this down a bit over a week ago, sitting alone in a
 calm hospital cafeteria of an out of town. My wife was waiting on her dinner in
@@ -1119,7 +1119,7 @@ will help you and others understand what is to come.&lt;/p&gt;
     <published>2017-08-13T20:00:00-04:00</published>
     <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
-      <name>Matthew Machuga</name>
+      <name>Matt Machuga</name>
     </author>
     <content type="html">&lt;p&gt;I’ve been spending the past two weeks adjusting to working at Auth0. Thus far
 everything’s been great. The domain is interesting and challenging, the

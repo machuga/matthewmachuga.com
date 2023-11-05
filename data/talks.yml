@@ -1,3 +1,47 @@
+- title: Oh Crap, We're Popular!
+  event: Longhorn PHP 2023
+  location: Austin, TX
+  type: talk
+  description: |
+               A tale of scaling a production application rapidly to meet the needs of
+               a major new customer. Learn practical strategies of how, and when to scale
+               up, and when maybe some conversations could save you extra work and pain!
+  topics:
+    - Scaling
+    - High-availability
+    - DevOps
+    - Ops
+    - Leadership
+  url: 'https://speakerdeck.com/machuga/oh-crap-were-popular'
+  embed_code: ''
+  poster: posters/oh-crap-were-popular.png
+  slide_deck: https://speakerdeck.com/machuga/oh-crap-were-popular
+  tags: [Scaling, High-availability, DevOps, Ops, Leadership, AWS, Heroku]
+  published_at: 2023-11-15
+  given_at: 2023-11-03
+
+- title: Static in the Front, Dynamic in the Back
+  event: Lone Star PHP 2017
+  location: Dallas, TX
+  type: talk
+  description: |
+               An exploration of the benefits of the Elm language, how development style
+               changes when using it, and what learnings you can bring back with you to
+               JavaScript, React, or other libraries.
+  topics:
+    - Elm
+    - React
+    - JavaScript
+    - Functional Programming
+    - Frontend
+  url: '#'
+  embed_code: ''
+  poster: posters/static-in-the-front.jpg
+  slide_deck: https://speakerdeck.com/machuga/
+  tags: [Elm, React, JavaScript, FP, Frontend]
+  published_at: 2023-11-15
+  given_at: 2017-04-17
+
 - title: Maybes and Functors
   event: Laracon US
   location: New York City, NY
@@ -8,12 +52,13 @@
     - Functors
     - Maybes
     - Monads
+    - Functional Programming
   url: 'https://speakerdeck.com/machuga/maybes-and-functors'
   embed_code: ''
   poster: posters/maybes-and-functors.png
   slide_deck: https://speakerdeck.com/machuga/maybes-and-functors
-  tags: [Testing, TDD, BDD]
-  published_at: 2018-08-25
+  tags: [FP, Monads, Maybes]
+  published_at: 2023-11-05
   given_at: 2017-07-26
 
 - title: Tests Should Tell a Story
@@ -35,7 +80,7 @@
     - Proper Naming
   url: https://streamacon.com/video/laracon-us-2016/matthew-machuga-tests-should-tell-a-story
   embed_code: ''
-  poster: posters/tests-should-tell-a-story.png
+  poster: posters/tests-should-tell-a-story.jpg
   slide_deck: https://speakerdeck.com/machuga/tests-should-tell-a-story
   tags: [Testing, TDD, BDD]
   published_at: 2018-08-25
