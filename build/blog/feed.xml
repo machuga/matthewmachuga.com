@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/the-javascript-event-loop.html"/>
     <id>http://matthewmachuga.com/blog/2019/the-javascript-event-loop.html</id>
     <published>2019-03-21T20:00:00-04:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>
@@ -171,7 +171,7 @@ These two are my favorite:&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html"/>
     <id>http://matthewmachuga.com/blog/2019/waiting-on-multiple-callbacks.html</id>
     <published>2019-02-18T18:59:00-05:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>
@@ -421,7 +421,7 @@ refactoring our asychronous code from earlier in the series.&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/extracting-functions-and-shifting-left.html"/>
     <id>http://matthewmachuga.com/blog/2019/extracting-functions-and-shifting-left.html</id>
     <published>2019-02-06T06:00:00-05:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>
@@ -675,7 +675,7 @@ here&lt;/a&gt;.&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html"/>
     <id>http://matthewmachuga.com/blog/2019/grokkable-concurrency-in-javascript.html</id>
     <published>2019-02-03T14:30:00-05:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>
@@ -816,7 +816,7 @@ Example:&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2018/loss-and-meaning.html"/>
     <id>http://matthewmachuga.com/blog/2018/loss-and-meaning.html</id>
     <published>2018-04-27T20:00:00-04:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>
@@ -1117,7 +1117,7 @@ will help you and others understand what is to come.&lt;/p&gt;
     <link rel="alternate" href="http://matthewmachuga.com/blog/2017/taking-a-step-back-scratching-an-itch.html"/>
     <id>http://matthewmachuga.com/blog/2017/taking-a-step-back-scratching-an-itch.html</id>
     <published>2017-08-13T20:00:00-04:00</published>
-    <updated>2023-11-06T21:34:09-05:00</updated>
+    <updated>2023-05-07T09:06:50-04:00</updated>
     <author>
       <name>Matt Machuga</name>
     </author>

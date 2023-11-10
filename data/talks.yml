@@ -34,10 +34,10 @@
     - JavaScript
     - Functional Programming
     - Frontend
-  url: '#'
+  url: 'https://speakerdeck.com/machuga/static-in-the-front-dynamic-in-the-back'
   embed_code: ''
   poster: posters/static-in-the-front.jpg
-  slide_deck: https://speakerdeck.com/machuga/
+  slide_deck: https://speakerdeck.com/machuga/static-in-the-front-dynamic-in-the-back
   tags: [Elm, React, JavaScript, FP, Frontend]
   published_at: 2023-11-15
   given_at: 2017-04-17
