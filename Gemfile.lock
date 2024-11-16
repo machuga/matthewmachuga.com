@@ -85,8 +85,10 @@ GEM
     middleman-syntax (3.3.0)
       middleman-core (>= 3.2)
       rouge (~> 3.2)
+    mini_portile2 (2.8.8)
     minitest (5.18.0)
-    nokogiri (1.14.3-arm64-darwin)
+    nokogiri (1.14.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     padrino-helpers (0.15.3)
       i18n (>= 0.6.7, < 2)
@@ -122,6 +124,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
 
 DEPENDENCIES
   builder (~> 3.0)

@@ -1,3 +1,25 @@
+- title: Oh Crap, We're Popular! - Shortened
+  event: Laravel Worldwide Meetup - April 2024
+  location: Online
+  type: talk
+  description: |
+               A tale of scaling a production application rapidly to meet the needs of
+               a major new customer. Learn practical strategies of how, and when to scale
+               up, and when maybe some conversations could save you extra work and pain!
+  topics:
+    - Scaling
+    - High-availability
+    - DevOps
+    - Ops
+    - Leadership
+  url: 'https://www.youtube.com/live/8X1eVRAaVBM?si=ZPX4_WQlwKpLUSK_&t=336'
+  embed_code: ''
+  poster: posters/oh-crap-online-poster.png
+  slide_deck: https://speakerdeck.com/machuga/oh-crap-were-popular
+  tags: [Scaling, High-availability, DevOps, Ops, Leadership, AWS, Heroku]
+  published_at: 2024-11-16
+  given_at: 2024-04-30
+
 - title: Oh Crap, We're Popular!
   event: Longhorn PHP 2023
   location: Austin, TX
@@ -78,7 +100,7 @@
     - Testing
     - BDD
     - Proper Naming
-  url: https://streamacon.com/video/laracon-us-2016/matthew-machuga-tests-should-tell-a-story
+  url: https://www.youtube.com/watch?v=LbPx8gdgLFc
   embed_code: ''
   poster: posters/tests-should-tell-a-story.jpg
   slide_deck: https://speakerdeck.com/machuga/tests-should-tell-a-story
